@@ -1,3 +1,12 @@
+;; Dependencies on other Elisp packages:
+;;
+;; clang-format
+;; elm-mode
+;; go-mode
+;; js-format
+;; json-reformat
+;; py-autopep8
+
 (defun format-all-the-buffer-c ()
   (clang-format-buffer))
 
