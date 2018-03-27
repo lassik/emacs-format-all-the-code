@@ -12,37 +12,43 @@
       (goto-char (point-max))
       (insert "\n"))))
 
-(defun format-all-subprocess (executable &optional ok-statuses error-regexp
-                                         &rest args)
-  "Run a subprocess that reads messy code from stdin,
-writes pretty code to stdout, and writes errors/warnings to stderr."
+(defun format-all-buffer-thunk (thunk)
   (save-excursion
     (save-restriction
       (widen)
       (let ((inbuf (current-buffer))
             (input (buffer-substring-no-properties (point-min) (point-max))))
         (with-temp-buffer
-          (let* ((ok-statuses (or ok-statuses '(0)))
-                 (errfile (make-temp-file "format-all-"))
-                 (status (apply #'call-process-region input nil
-                                executable nil (list t errfile)
-                                nil args))
-                 (errput (with-temp-buffer
-                           (insert-file-contents errfile)
-                           (delete-file errfile)
-                           (unless (= (point-min) (point-max))
-                             (buffer-substring (point-min) (point-max)))))
-                 (errorp (or (not (member status ok-statuses))
-                             (and error-regexp errput
-                                  (save-match-data
-                                    (string-match error-regexp errput)))))
-                 (no-chg (or errorp
-                             (= 0 (compare-buffer-substrings inbuf nil nil
-                                                             nil nil nil))))
-                 (output (cond (errorp nil)
-                               (no-chg t)
-                               (t (buffer-substring (point-min) (point-max))))))
-            (list output errput)))))))
+          (cl-destructuring-bind (errorp errput) (funcall thunk input)
+            (let* ((no-chg (or errorp
+                               (= 0 (compare-buffer-substrings inbuf nil nil
+                                                               nil nil nil))))
+                   (output (cond (errorp nil)
+                                 (no-chg t)
+                                 (t (buffer-substring (point-min) (point-max))))))
+              (list output errput))))))))
+
+(defun format-all-subprocess
+    (executable &optional ok-statuses error-regexp &rest args)
+  "Run a subprocess that reads messy code from stdin,
+writes pretty code to stdout, and writes errors/warnings to stderr."
+  (let ((ok-statuses (or ok-statuses '(0))))
+    (format-all-buffer-thunk
+     (lambda (input)
+       (let* ((errfile (make-temp-file "format-all-"))
+              (status (apply #'call-process-region input nil
+                             executable nil (list t errfile)
+                             nil args))
+              (errput (with-temp-buffer
+                        (insert-file-contents errfile)
+                        (delete-file errfile)
+                        (unless (= (point-min) (point-max))
+                          (buffer-substring (point-min) (point-max)))))
+              (errorp (or (not (member status ok-statuses))
+                          (and error-regexp errput
+                               (save-match-data
+                                 (string-match error-regexp errput))))))
+         (list errorp errput))))))
 
 (defun format-all-the-buffer-autopep8 (executable)
   (format-all-subprocess executable nil nil "-"))
