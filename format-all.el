@@ -163,6 +163,14 @@ EXECUTABLE is the full path to the formatter."
                  (when (buffer-file-name)
                    (list "--filename" (buffer-file-name))))))
 
+(defun format-all-the-buffer-shfmt (executable)
+  "Format the current buffer as Shell using \"shfmt\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-subprocess
+   executable nil nil
+   "-ln" (case sh-shell (bash "bash") (mksh "mksh") (t "posix"))))
+
 (defun format-all-the-buffer-standard (executable)
   "Format the current buffer as JavaScript using standard.
 
@@ -210,6 +218,11 @@ EXECUTABLE is the full path to the formatter."
      (:install "gem install rufo")
      (:function format-all-the-buffer-rufo)
      (:modes ruby-mode enh-ruby-mode))
+    (shfmt
+     (:executable "shfmt")
+     (:install (darwin "brew install shfmt"))
+     (:function format-all-the-buffer-shfmt)
+     (:modes sh-mode))
     (standard
      (:executable "standard")
      (:install "npm install standard")
