@@ -23,16 +23,16 @@ From [MELPA](https://melpa.org/#/?q=format-all)
 Supported languages
 -------------------
 
-* C/C++ (clang-format)
-* D (dfmt)
-* Elm (elm-format)
-* Emacs Lisp (native)
-* Go (gofmt)
-* Haskell (hindent)
-* Js (standard)
-* Python (autopep8)
-* Ruby (rufo)
-* Shell script (shfmt)
+* **C/C++** (*clang-format*)
+* **D** (*dfmt*)
+* **Elm** (*elm-format*)
+* **Emacs Lisp** (native)
+* **Go** (*gofmt*)
+* **Haskell** (*hindent*)
+* **JavaScript** (*standard*)
+* **Python** (*autopep8*)
+* **Ruby** (*rufo*)
+* **Shell script** (*shfmt*)
 
 Adding new languages
 --------------------
