@@ -64,13 +64,9 @@ writes pretty code to stdout, and writes errors/warnings to stderr."
    (lambda (input)
      (emacs-lisp-mode)
      (insert input)
-     (let (errorp errput)
-       (condition-case errdata
-           (indent-region (point-min) (point-max))
-         (error (setq errput errdata)))
-       (format-all-fix-trailing-whitespace)
-       (setq errorp (not (null errput)))
-       (list errorp errput)))))
+     (indent-region (point-min) (point-max))
+     (format-all-fix-trailing-whitespace)
+     (list nil nil))))
 
 (defun format-all-the-buffer-gofmt (executable)
   (format-all-subprocess executable))
