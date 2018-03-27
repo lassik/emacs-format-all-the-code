@@ -1,4 +1,4 @@
-;;; format-all.el --- Auto-format source code in many languages with one command
+;;; format-all.el --- Auto-format source code in many languages
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
