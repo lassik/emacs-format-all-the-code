@@ -18,7 +18,7 @@ help with the formatting.  If you don't have the right program,
 How to install
 --------------
 
-From [MELPA](https://melpa.org/#/?q=format-all])
+From [MELPA](https://melpa.org/#/?q=format-all)
 
 Supported languages
 -------------------
