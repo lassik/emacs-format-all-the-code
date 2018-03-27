@@ -202,7 +202,7 @@ EXECUTABLE is the full path to the formatter."
      (:executable nil)
      (:install nil)
      (:function format-all-the-buffer-emacs-lisp)
-     (:modes emacs-lisp-mode))
+     (:modes emacs-lisp-mode lisp-interaction-mode))
     (gofmt
      (:executable "gofmt")
      (:install (darwin "brew install go"))
