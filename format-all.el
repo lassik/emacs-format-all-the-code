@@ -118,6 +118,12 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable))
 
+(defun format-all-the-buffer-dfmt (executable)
+  "Format the current buffer as D using \"dfmt\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-subprocess executable nil (regexp-quote "[error]")))
+
 (defun format-all-the-buffer-elm-format (executable)
   "Format the current buffer as Elm using elm-format.
 
@@ -174,6 +180,11 @@ EXECUTABLE is the full path to the formatter."
      (:install (darwin "brew install clang-format"))
      (:function format-all-the-buffer-clang-format)
      (:modes c-mode c++-mode))
+    (dfmt
+     (:executable "dfmt")
+     (:install (darwin "brew install dfmt"))
+     (:function format-all-the-buffer-dfmt)
+     (:modes d-mode))
     (elm-format
      (:executable "elm-format")
      (:install (darwin "brew install elm"))
