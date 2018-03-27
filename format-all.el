@@ -142,6 +142,12 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable))
 
+(defun format-all-the-buffer-hindent (executable)
+  "Format the current buffer as Haskell using \"hindent\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-subprocess executable))
+
 (defun format-all-the-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
 
@@ -183,6 +189,11 @@ EXECUTABLE is the full path to the formatter."
      (:install (darwin "brew install go"))
      (:function format-all-the-buffer-gofmt)
      (:modes go-mode))
+    (hindent
+     (:executable "hindent")
+     (:install "stack install hindent")
+     (:function format-all-the-buffer-hindent)
+     (:modes haskell-mode))
     (rufo
      (:executable "rufo")
      (:install "gem install rufo")
