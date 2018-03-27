@@ -142,6 +142,15 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable))
 
+(defun format-all-the-buffer-rufo (executable)
+  "Format the current buffer as Ruby using \"rufo\".
+
+EXECUTABLE is the full path to the formatter."
+  (apply 'format-all-subprocess executable nil nil
+         (append (list "--simple-exit")
+                 (when (buffer-file-name)
+                   (list "--filename" (buffer-file-name))))))
+
 (defun format-all-the-buffer-standard (executable)
   "Format the current buffer as JavaScript using standard.
 
@@ -174,6 +183,11 @@ EXECUTABLE is the full path to the formatter."
      (:install (darwin "brew install go"))
      (:function format-all-the-buffer-gofmt)
      (:modes go-mode))
+    (rufo
+     (:executable "rufo")
+     (:install "gem install rufo")
+     (:function format-all-the-buffer-rufo)
+     (:modes ruby-mode))
     (standard
      (:executable "standard")
      (:install "npm install standard")
