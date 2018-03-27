@@ -187,7 +187,7 @@ EXECUTABLE is the full path to the formatter."
      (:executable "rufo")
      (:install "gem install rufo")
      (:function format-all-the-buffer-rufo)
-     (:modes ruby-mode))
+     (:modes ruby-mode enh-ruby-mode))
     (standard
      (:executable "standard")
      (:install "npm install standard")
