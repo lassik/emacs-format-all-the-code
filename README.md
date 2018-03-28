@@ -46,3 +46,15 @@ How to report bugs
 GitHub issues are preferred. Email is also ok. Feature requests are
 welcome. PRs are very welcome, but for non-trivial changes please open
 an issue to coordinate with me first.
+
+Roadmap
+-------
+
+**[atom-beautify](https://atom.io/packages/atom-beautify#beautifiers)**
+sports a very impressive set of formatters. We should aspire to that
+level of coverage for Emacs.
+
+**[Unibeautify](https://github.com/Unibeautify/unibeautify)** is a
+project to provide one shell command to run all beautifiers.
+*atom-beautify* will be rewritten to be based on it. Perhaps we should
+be too, once it stabilizes.
