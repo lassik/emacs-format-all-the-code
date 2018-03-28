@@ -69,7 +69,7 @@ even if it produced warnings.  Not all warnings are errors."
                                  (t (buffer-substring (point-min) (point-max))))))
               (list output errput))))))))
 
-(defun format-all-subprocess
+(defun format-all-buffer-process
     (executable &optional ok-statuses error-regexp &rest args)
   "Internal helper function to implement formatters.
 
@@ -110,25 +110,25 @@ need to be shell-quoted."
   "Format the current buffer as Python using autopep8.
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess executable nil nil "-"))
+  (format-all-buffer-process executable nil nil "-"))
 
 (defun format-all-buffer-clang-format (executable)
   "Format the current buffer as C/C++ using \"clang-format\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess executable))
+  (format-all-buffer-process executable))
 
 (defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess executable nil (regexp-quote "[error]")))
+  (format-all-buffer-process executable nil (regexp-quote "[error]")))
 
 (defun format-all-buffer-elm-format (executable)
   "Format the current buffer as Elm using elm-format.
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess executable nil nil  "--yes" "--stdin"))
+  (format-all-buffer-process executable nil nil  "--yes" "--stdin"))
 
 (defun format-all-buffer-emacs-lisp (executable)
   "Format the current buffer as Emacs Lisp using Emacs itself.
@@ -146,19 +146,19 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Go using gofmt.
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess executable))
+  (format-all-buffer-process executable))
 
 (defun format-all-buffer-hindent (executable)
   "Format the current buffer as Haskell using \"hindent\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess executable))
+  (format-all-buffer-process executable))
 
 (defun format-all-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
 
 EXECUTABLE is the full path to the formatter."
-  (apply 'format-all-subprocess executable nil nil
+  (apply 'format-all-buffer-process executable nil nil
          (append (list "--simple-exit")
                  (when (buffer-file-name)
                    (list "--filename" (buffer-file-name))))))
@@ -167,7 +167,7 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Shell using \"shfmt\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess
+  (format-all-buffer-process
    executable nil nil
    "-ln" (case sh-shell (bash "bash") (mksh "mksh") (t "posix"))))
 
@@ -175,7 +175,8 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as JavaScript using standard.
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-subprocess executable '(0 1) "Parsing error:" "--fix" "--stdin"))
+  (format-all-buffer-process
+   executable '(0 1) "Parsing error:" "--fix" "--stdin"))
 
 (defconst format-all-formatters
   '((autopep8
