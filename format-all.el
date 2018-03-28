@@ -106,31 +106,31 @@ need to be shell-quoted."
                                  (string-match error-regexp errput))))))
          (list errorp errput))))))
 
-(defun format-all-the-buffer-autopep8 (executable)
+(defun format-all-buffer-autopep8 (executable)
   "Format the current buffer as Python using autopep8.
 
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable nil nil "-"))
 
-(defun format-all-the-buffer-clang-format (executable)
+(defun format-all-buffer-clang-format (executable)
   "Format the current buffer as C/C++ using \"clang-format\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable))
 
-(defun format-all-the-buffer-dfmt (executable)
+(defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable nil (regexp-quote "[error]")))
 
-(defun format-all-the-buffer-elm-format (executable)
+(defun format-all-buffer-elm-format (executable)
   "Format the current buffer as Elm using elm-format.
 
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable nil nil  "--yes" "--stdin"))
 
-(defun format-all-the-buffer-emacs-lisp (executable)
+(defun format-all-buffer-emacs-lisp (executable)
   "Format the current buffer as Emacs Lisp using Emacs itself.
 
 EXECUTABLE is the full path to the formatter."
@@ -142,19 +142,19 @@ EXECUTABLE is the full path to the formatter."
      (format-all-fix-trailing-whitespace)
      (list nil nil))))
 
-(defun format-all-the-buffer-gofmt (executable)
+(defun format-all-buffer-gofmt (executable)
   "Format the current buffer as Go using gofmt.
 
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable))
 
-(defun format-all-the-buffer-hindent (executable)
+(defun format-all-buffer-hindent (executable)
   "Format the current buffer as Haskell using \"hindent\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-subprocess executable))
 
-(defun format-all-the-buffer-rufo (executable)
+(defun format-all-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
 
 EXECUTABLE is the full path to the formatter."
@@ -163,7 +163,7 @@ EXECUTABLE is the full path to the formatter."
                  (when (buffer-file-name)
                    (list "--filename" (buffer-file-name))))))
 
-(defun format-all-the-buffer-shfmt (executable)
+(defun format-all-buffer-shfmt (executable)
   "Format the current buffer as Shell using \"shfmt\".
 
 EXECUTABLE is the full path to the formatter."
@@ -171,7 +171,7 @@ EXECUTABLE is the full path to the formatter."
    executable nil nil
    "-ln" (case sh-shell (bash "bash") (mksh "mksh") (t "posix"))))
 
-(defun format-all-the-buffer-standard (executable)
+(defun format-all-buffer-standard (executable)
   "Format the current buffer as JavaScript using standard.
 
 EXECUTABLE is the full path to the formatter."
@@ -181,52 +181,52 @@ EXECUTABLE is the full path to the formatter."
   '((autopep8
      (:executable "autopep8")
      (:install "pip install autopep8")
-     (:function format-all-the-buffer-autopep8)
+     (:function format-all-buffer-autopep8)
      (:modes python-mode))
     (clang-format
      (:executable "clang-format")
      (:install (darwin "brew install clang-format"))
-     (:function format-all-the-buffer-clang-format)
+     (:function format-all-buffer-clang-format)
      (:modes c-mode c++-mode))
     (dfmt
      (:executable "dfmt")
      (:install (darwin "brew install dfmt"))
-     (:function format-all-the-buffer-dfmt)
+     (:function format-all-buffer-dfmt)
      (:modes d-mode))
     (elm-format
      (:executable "elm-format")
      (:install (darwin "brew install elm"))
-     (:function format-all-the-buffer-elm-format)
+     (:function format-all-buffer-elm-format)
      (:modes elm-mode))
     (emacs-lisp
      (:executable nil)
      (:install nil)
-     (:function format-all-the-buffer-emacs-lisp)
+     (:function format-all-buffer-emacs-lisp)
      (:modes emacs-lisp-mode lisp-interaction-mode))
     (gofmt
      (:executable "gofmt")
      (:install (darwin "brew install go"))
-     (:function format-all-the-buffer-gofmt)
+     (:function format-all-buffer-gofmt)
      (:modes go-mode))
     (hindent
      (:executable "hindent")
      (:install "stack install hindent")
-     (:function format-all-the-buffer-hindent)
+     (:function format-all-buffer-hindent)
      (:modes haskell-mode))
     (rufo
      (:executable "rufo")
      (:install "gem install rufo")
-     (:function format-all-the-buffer-rufo)
+     (:function format-all-buffer-rufo)
      (:modes ruby-mode enh-ruby-mode))
     (shfmt
      (:executable "shfmt")
      (:install (darwin "brew install shfmt"))
-     (:function format-all-the-buffer-shfmt)
+     (:function format-all-buffer-shfmt)
      (:modes sh-mode))
     (standard
      (:executable "standard")
      (:install "npm install standard")
-     (:function format-all-the-buffer-standard)
+     (:function format-all-buffer-standard)
      (:modes js-mode js2-mode)))
   "Table of source code formatters supported by format-all.")
 
