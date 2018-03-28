@@ -4,8 +4,8 @@
 What does it do
 ---------------
 
-Lets you auto-format source code in several languages using the exact
-same command for all languages, instead of learning a different elisp
+Lets you auto-format source code in several languages using the same
+command for all languages, instead of learning a different elisp
 package and formatting command for each language.
 
 Just do **M-x** `format-all-the-buffer` and it will try its best to do

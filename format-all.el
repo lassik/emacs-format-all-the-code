@@ -11,11 +11,11 @@
 ;;
 ;;; Commentary:
 ;;
-;; Lets you auto-format source code in any one of several languages
-;; using the exact same command for all languages, instead of learning
-;; a different elisp package and formatting command for each language.
+;; Lets you auto-format source code in several languages using the
+;; same command for all languages, instead of learning a different
+;; elisp package and formatting command for each language.
 ;;
-;; Just call `format-all-the-buffer' and it will try its best to do
+;; Just do M-x `format-all-the-buffer' and it will try its best to do
 ;; the right thing.
 ;;
 ;; For most languages, you will need to install an external program to
