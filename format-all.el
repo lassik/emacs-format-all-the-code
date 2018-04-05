@@ -154,6 +154,12 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable))
 
+(defun format-all-buffer-ocp-indent (executable)
+  "Format the current buffer as OCaml using \"ocp-indent\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable))
+
 (defun format-all-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
 
@@ -214,6 +220,11 @@ EXECUTABLE is the full path to the formatter."
      (:install "stack install hindent")
      (:function format-all-buffer-hindent)
      (:modes haskell-mode))
+    (ocp-indent
+     (:executable "ocp-indent")
+     (:install "opam install ocp-indent")
+     (:function format-all-buffer-ocp-indent)
+     (:modes caml-mode tuareg-mode))
     (rufo
      (:executable "rufo")
      (:install "gem install rufo")
