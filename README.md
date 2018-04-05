@@ -34,6 +34,7 @@ Supported languages
 * **Perl** (*perltidy*)
 * **Python** (*autopep8*)
 * **Ruby** (*rufo*)
+* **Rust** (*rustfmt*)
 * **Shell script** (*shfmt*)
 * **Swift** (*swiftformat*)
 

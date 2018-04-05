@@ -175,6 +175,12 @@ EXECUTABLE is the full path to the formatter."
                  (when (buffer-file-name)
                    (list "--filename" (buffer-file-name))))))
 
+(defun format-all-buffer-rustfmt (executable)
+  "Format the current buffer as Rust using \"rustfmt\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable))
+
 (defun format-all-buffer-shfmt (executable)
   "Format the current buffer as Shell using \"shfmt\".
 
@@ -247,6 +253,11 @@ EXECUTABLE is the full path to the formatter."
      (:install "gem install rufo")
      (:function format-all-buffer-rufo)
      (:modes ruby-mode enh-ruby-mode))
+    (rustfmt
+     (:executable "rustfmt")
+     (:install "cargo install rustfmt")
+     (:function format-all-buffer-rustfmt)
+     (:modes rust-mode))
     (shfmt
      (:executable "shfmt")
      (:install (darwin "brew install shfmt"))
