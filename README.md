@@ -30,6 +30,7 @@ Supported languages
 * **Go** (*gofmt*)
 * **Haskell** (*hindent*)
 * **JavaScript** (*standard*)
+* **OCaml** (*ocp-indent*)
 * **Python** (*autopep8*)
 * **Ruby** (*rufo*)
 * **Shell script** (*shfmt*)
