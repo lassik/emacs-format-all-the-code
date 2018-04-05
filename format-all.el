@@ -107,7 +107,7 @@ need to be shell-quoted."
          (list errorp errput))))))
 
 (defun format-all-buffer-autopep8 (executable)
-  "Format the current buffer as Python using autopep8.
+  "Format the current buffer as Python using \"autopep8\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable nil nil "-"))
@@ -125,7 +125,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable nil (regexp-quote "[error]")))
 
 (defun format-all-buffer-elm-format (executable)
-  "Format the current buffer as Elm using elm-format.
+  "Format the current buffer as Elm using \"elm-format\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable nil nil  "--yes" "--stdin"))
@@ -143,7 +143,7 @@ EXECUTABLE is the full path to the formatter."
      (list nil nil))))
 
 (defun format-all-buffer-gofmt (executable)
-  "Format the current buffer as Go using gofmt.
+  "Format the current buffer as Go using \"gofmt\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable))
@@ -184,7 +184,7 @@ EXECUTABLE is the full path to the formatter."
    "-ln" (case sh-shell (bash "bash") (mksh "mksh") (t "posix"))))
 
 (defun format-all-buffer-standard (executable)
-  "Format the current buffer as JavaScript using standard.
+  "Format the current buffer as JavaScript using \"standard\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process
