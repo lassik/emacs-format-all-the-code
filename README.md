@@ -35,6 +35,7 @@ Supported languages
 * **Python** (*autopep8*)
 * **Ruby** (*rufo*)
 * **Shell script** (*shfmt*)
+* **Swift** (*swiftformat*)
 
 Adding new languages
 --------------------

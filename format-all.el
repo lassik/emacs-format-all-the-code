@@ -190,6 +190,12 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process
    executable '(0 1) "Parsing error:" "--fix" "--stdin"))
 
+(defun format-all-buffer-swiftformat (executable)
+  "Format the current buffer as Swift using \"swiftformat\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable nil "error:"))
+
 (defconst format-all-formatters
   '((autopep8
      (:executable "autopep8")
@@ -250,7 +256,12 @@ EXECUTABLE is the full path to the formatter."
      (:executable "standard")
      (:install "npm install standard")
      (:function format-all-buffer-standard)
-     (:modes js-mode js2-mode)))
+     (:modes js-mode js2-mode))
+    (swiftformat
+     (:executable "swiftformat")
+     (:install (darwin "brew install swiftformat"))
+     (:function format-all-buffer-swiftformat)
+     (:modes swift-mode swift3-mode)))
   "Table of source code formatters supported by format-all.")
 
 (defun format-all-property-list (property formatter)
