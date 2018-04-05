@@ -31,6 +31,7 @@ Supported languages
 * **Haskell** (*hindent*)
 * **JavaScript** (*standard*)
 * **OCaml** (*ocp-indent*)
+* **Perl** (*perltidy*)
 * **Python** (*autopep8*)
 * **Ruby** (*rufo*)
 * **Shell script** (*shfmt*)

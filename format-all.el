@@ -160,6 +160,12 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable))
 
+(defun format-all-buffer-perltidy (executable)
+  "Format the current buffer as Perl using \"perl-tidy\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable))
+
 (defun format-all-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
 
@@ -225,6 +231,11 @@ EXECUTABLE is the full path to the formatter."
      (:install "opam install ocp-indent")
      (:function format-all-buffer-ocp-indent)
      (:modes caml-mode tuareg-mode))
+    (perltidy
+     (:executable "perltidy")
+     (:install "cpan install Perl::Tidy")
+     (:function format-all-buffer-perltidy)
+     (:modes perl-mode))
     (rufo
      (:executable "rufo")
      (:install "gem install rufo")
