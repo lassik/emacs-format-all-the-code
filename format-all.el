@@ -61,13 +61,13 @@ even if it produced warnings.  Not all warnings are errors."
             (input (buffer-substring-no-properties (point-min) (point-max))))
         (with-temp-buffer
           (cl-destructuring-bind (errorp errput) (funcall thunk input)
-            (let* ((no-chg (or errorp
-                               (= 0 (compare-buffer-substrings inbuf nil nil
-                                                               nil nil nil))))
+            (let* ((first-diff (abs (compare-buffer-substrings inbuf nil nil
+                                                               nil nil nil)))
+                   (no-chg (or errorp (= 0 first-diff)))
                    (output (cond (errorp nil)
                                  (no-chg t)
                                  (t (buffer-substring (point-min) (point-max))))))
-              (list output errput))))))))
+              (list output errput first-diff))))))))
 
 (defun format-all-buffer-process
     (executable &optional ok-statuses error-regexp &rest args)
@@ -332,7 +332,8 @@ buffer called *format-all-errors*."
                         (error "Don't know how to format %S code" major-mode)))
          (f-function (format-all-property :function formatter))
          (executable (format-all-formatter-executable formatter)))
-    (cl-destructuring-bind (output errput) (funcall f-function executable)
+    (cl-destructuring-bind (output errput first-diff)
+        (funcall f-function executable)
       (case output
         ((nil)
          (message "Syntax error"))
@@ -341,7 +342,8 @@ buffer called *format-all-errors*."
         (t
          (message "Reformatted!")
          (erase-buffer)
-         (insert output)))
+         (insert output)
+         (goto-char first-diff)))
       (with-current-buffer (get-buffer-create "*format-all-errors*")
         (erase-buffer)
         (when errput
