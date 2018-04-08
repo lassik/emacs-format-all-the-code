@@ -187,7 +187,8 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process
    executable nil nil
-   "-ln" (case sh-shell (bash "bash") (mksh "mksh") (t "posix"))))
+   "-ln" (case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
+           (bash "bash") (mksh "mksh") (t "posix"))))
 
 (defun format-all-buffer-standard (executable)
   "Format the current buffer as JavaScript using \"standard\".
