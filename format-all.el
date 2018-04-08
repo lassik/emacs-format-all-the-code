@@ -295,7 +295,7 @@ EXECUTABLE is the full path to the formatter."
   (let ((installer (format-all-property :install formatter)))
     (concat (format "You need the %S command." executable)
             (if (not installer) ""
-              (format " Please install it with the command %S."
+              (format " You may be able to install it via %S."
                       installer)))))
 
 (defun format-all-formatter-executable (formatter)
