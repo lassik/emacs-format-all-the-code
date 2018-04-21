@@ -41,25 +41,28 @@ How to customize
 
 There is currently no before-save hook and no customize variables
 either, since it's not clear what approach should be taken. Please see
-https://github.com/lassik/emacs-format-all-the-code/issues for
-discussion.
+[GitHub issues][github-issues] for discussion.
 
-Many formatters support configuration files in the source code
-directory to control their formatting. Please see the documentation
-for each external formatter.
+Many of the external formatters support configuration files in the
+source code directory to control their formatting. Please see the
+documentation for each formatter.
 
-Adding new languages
---------------------
+How to add new languages
+------------------------
 
-New formatters can be added easily if they are external programs that
-can read code from stdin and format it to stdout.
+New external formatters can be added easily if they can read code from
+standard input and format it to standard output. Feel free to submit a
+pull request or ask for help in [GitHub issues][github-issues].
 
 How to report bugs
 ------------------
 
-GitHub issues are preferred. Email is also ok. Feature requests are
-welcome. PRs are very welcome, but for non-trivial changes please open
-an issue to coordinate with me first.
+[GitHub issues][github-issues] are preferred. Email is also ok.
+
+Feature requests are welcome. If you are interested in doing anything
+beyong just adding new formatters in the current framework, please
+discuss in issues before writing code, since there are big unresolved
+questions about where the project should go from here.
 
 Roadmap
 -------
@@ -72,3 +75,5 @@ level of coverage for Emacs.
 project to provide one shell command to run all beautifiers.
 *atom-beautify* will be rewritten to be based on it. Perhaps we should
 be too, once it stabilizes.
+
+[github-issues]: https://github.com/lassik/emacs-format-all-the-code/issues
