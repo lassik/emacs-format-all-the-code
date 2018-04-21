@@ -4,21 +4,10 @@
 What does it do
 ---------------
 
-Lets you auto-format source code in several languages using the same
+Lets you auto-format source code in many languages using the same
 command for all languages, instead of learning a different elisp
-package and formatting command for each language.
-
-Just do **M-x** `format-all-buffer` and it will try its best to do the
-right thing.
-
-For most languages, you will need to install an external program to
-help with the formatting.  If you don't have the right program,
-`format-all-buffer` will try to tell you how to install it.
-
-How to install
---------------
-
-From [MELPA](https://melpa.org/#/?q=format-all)
+package and formatting command for each language. Just do **M-x**
+`format-all-buffer` and it will try its best to do the right thing.
 
 Supported languages
 -------------------
@@ -37,6 +26,27 @@ Supported languages
 * **Rust** (*rustfmt*)
 * **Shell script** (*shfmt*)
 * **Swift** (*swiftformat*)
+
+How to install
+--------------
+
+From [MELPA](https://melpa.org/#/?q=format-all)
+
+You will need to install external programs to do the formatting. If
+`format-all-buffer` can't find the right program, it will try to tell
+you how to install it.
+
+How to customize
+----------------
+
+There is currently no before-save hook and no customize variables
+either, since it's not clear what approach should be taken. Please see
+https://github.com/lassik/emacs-format-all-the-code/issues for
+discussion.
+
+Many formatters support configuration files in the source code
+directory to control their formatting. Please see the documentation
+for each external formatter.
 
 Adding new languages
 --------------------

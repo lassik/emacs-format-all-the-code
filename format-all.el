@@ -1,4 +1,4 @@
-;;; format-all.el --- Auto-format source code in many languages
+;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby, etc. source code
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
@@ -11,16 +11,36 @@
 ;;
 ;;; Commentary:
 ;;
-;; Lets you auto-format source code in several languages using the
-;; same command for all languages, instead of learning a different
-;; elisp package and formatting command for each language.
+;; Lets you auto-format source code in many languages using the same
+;; command for all languages, instead of learning a different elisp
+;; package and formatting command for each language.  Just do M-x
+;; `format-all-buffer' and it will try its best to do the right thing.
 ;;
-;; Just do M-x `format-all-buffer' and it will try its best to do the
-;; right thing.
+;; Supported languages:
 ;;
-;; For most languages, you will need to install an external program to
-;; help with the formatting.  If you don't have the right program,
-;; `format-all-buffer' will try to tell you how to install it.
+;; - C/C++ (clang-format)
+;; - D (dfmt)
+;; - Elm (elm-format)
+;; - Emacs Lisp (native)
+;; - Go (gofmt)
+;; - Haskell (hindent)
+;; - JavaScript (standard)
+;; - OCaml (ocp-indent)
+;; - Perl (perltidy)
+;; - Python (autopep8)
+;; - Ruby (rufo)
+;; - Rust (rustfmt)
+;; - Shell script (shfmt)
+;; - Swift (swiftformat)
+;;
+;; You will need to install external programs to do the formatting.
+;; If `format-all-buffer` can't find the right program, it will try to
+;; tell you how to install it.
+;;
+;; There is currently no before-save hook and no customize variables
+;; either, since it's not clear what approach should be taken.  Please
+;; see https://github.com/lassik/emacs-format-all-the-code/issues for
+;; discussion.
 ;;
 ;;; Code:
 
@@ -319,15 +339,20 @@ No disk files are touched - the buffer doesn't even need to be
 saved.  If you don't like the results of the formatting, you can
 use ordinary undo to get your code back to its previous state.
 
-A suitable source code formatter is selected according to the
-`major-mode' of the buffer.  Only a few programming languages are
-supported currently.  Most of them use an external program to do
-the formatting.  If the right program is not found, an error
-message will in some cases try to tell you how you might be able
-to install it on your operating system.
+You will need to install external programs to do the formatting.
+If the command can't find the program that it needs, it will try
+to tell you how you might be able to install it on your operating
+system.  Only Emacs Lisp is formatted without an external program.
+
+A suitable formatter is selected according to the `major-mode' of
+the buffer.  Many popular programming languages are supported,
+but not all of them by any means, so unfortunately it's still
+likely that your favorite language is missing.  It is fairly easy
+to add new languages that have an external formatter.
 
 Any errors/warnings encountered during formatting are shown in a
-buffer called *format-all-errors*."
+buffer called *format-all-errors*.  If the formatter made any
+changes to the code, point is placed at the first change."
   (interactive)
   (let* ((formatter (or (format-all-formatter-for-mode major-mode)
                         (error "Don't know how to format %S code" major-mode)))
