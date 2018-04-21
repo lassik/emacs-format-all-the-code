@@ -42,6 +42,14 @@
 ;; see https://github.com/lassik/emacs-format-all-the-code/issues for
 ;; discussion.
 ;;
+;; Many of the external formatters support configuration files in the
+;; source code directory to control their formatting. Please see the
+;; documentation for each formatter.
+;;
+;; New external formatters can be added easily if they can read code
+;; from standard input and format it to standard output. Feel free to
+;; submit a pull request or ask for help in GitHub issues.
+;;
 ;;; Code:
 
 (defun format-all-fix-trailing-whitespace ()
