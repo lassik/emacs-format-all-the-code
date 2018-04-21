@@ -311,6 +311,7 @@ EXECUTABLE is the full path to the formatter."
     (when (member mode (format-all-property-list :modes formatter))
       (return formatter))))
 
+;;;###autoload
 (defun format-all-buffer ()
   "Auto-format the source code in the current buffer.
 
