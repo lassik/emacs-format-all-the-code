@@ -162,7 +162,7 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (cl-destructuring-bind (output errput first-diff)
       (format-all-buffer-process executable nil nil  "--yes" "--stdin")
-    (let ((errput (format-all-remove-ansi-color errput)))
+    (let ((errput (format-all-remove-ansi-color (or errput ""))))
       (list output errput first-diff))))
 
 (defun format-all-buffer-emacs-lisp (executable)
