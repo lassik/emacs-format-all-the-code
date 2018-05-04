@@ -1,4 +1,4 @@
-;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby, etc. source code
+;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby and 20 other languages
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
