@@ -13,12 +13,16 @@ Supported languages
 -------------------
 
 * **C/C++** (*clang-format*)
+* **CSS/Less/SCSS** (*prettier*)
 * **D** (*dfmt*)
 * **Elm** (*elm-format*)
 * **Emacs Lisp** (native)
 * **Go** (*gofmt*)
+* **GraphQL** (*prettier*)
 * **Haskell** (*hindent*)
 * **JavaScript** (*standard*)
+* **JavaScript/JSON/JSX/TypeScript/Vue** (*prettier*)
+* **Markdown** (*prettier*)
 * **OCaml** (*ocp-indent*)
 * **Perl** (*perltidy*)
 * **Python** (*autopep8*)
