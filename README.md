@@ -20,7 +20,6 @@ Supported languages
 * **Go** (*gofmt*)
 * **GraphQL** (*prettier*)
 * **Haskell** (*hindent*)
-* **JavaScript** (*standard*)
 * **JavaScript/JSON/JSX/TypeScript/Vue** (*prettier*)
 * **Markdown** (*prettier*)
 * **OCaml** (*ocp-indent*)
