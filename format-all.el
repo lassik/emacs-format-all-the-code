@@ -206,7 +206,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable))
 
 (defun format-all-buffer-prettier (executable)
-  "Format the current buffer as Perl using \"prettier\".
+  "Format the current buffer using \"prettier\".
 
 EXECUTABLE is the full path to the formatter."
   (let ((parser (ecase major-mode
