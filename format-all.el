@@ -201,6 +201,34 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable))
 
+(defun format-all-buffer-prettier (executable)
+  "Format the current buffer as Perl using \"prettier\".
+
+EXECUTABLE is the full path to the formatter."
+  (let ((parser (ecase major-mode
+                  ;; The prettier folks seem to be currently pondering
+                  ;; whether to use flow, babylon or some other parser
+                  ;; for all JS-like code. Hopefully they will settle
+                  ;; on one parser so this can become less convoluted.
+                  ((js-mode js2-mode)
+                   (if (and (boundp 'flow-minor-mode)
+                            (not (null (symbol-value 'flow-minor-mode))))
+                       "flow"
+                     "babylon"))
+                  ((jsx-mode rjsx-mode) "babylon")
+                  (typescript-mode "typescript")
+                  (json-mode "json")
+                  (vue-mode "vue")
+                  (css-mode "css")
+                  (scss-mode "scss")
+                  (less-css-mode "less")
+                  (graphql-mode "graphql")
+                  (markdown-mode "markdown"))))
+    (apply 'format-all-buffer-process executable nil nil
+           (append (list "--parser" parser)
+                   (when (buffer-file-name)
+                     (list "--stdin-filepath" (buffer-file-name)))))))
+
 (defun format-all-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
 
@@ -284,6 +312,13 @@ EXECUTABLE is the full path to the formatter."
      (:install "cpan install Perl::Tidy")
      (:function format-all-buffer-perltidy)
      (:modes perl-mode))
+    (prettier
+     (:executable "prettier")
+     (:install "npm install prettier")
+     (:function format-all-buffer-prettier)
+     (:modes
+      css-mode graphql-mode js-mode js2-mode json-mode jsx-mode less-css-mode
+      markdown-mode rjsx-mode scss-mode typescript-mode vue-mode))
     (rufo
      (:executable "rufo")
      (:install "gem install rufo")
