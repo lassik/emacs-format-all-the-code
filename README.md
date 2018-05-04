@@ -12,7 +12,7 @@ package and formatting command for each language. Just do **M-x**
 Supported languages
 -------------------
 
-* **C/C++** (*clang-format*)
+* **C/C++/Objective-C** (*clang-format*)
 * **CSS/Less/SCSS** (*prettier*)
 * **D** (*dfmt*)
 * **Elm** (*elm-format*)

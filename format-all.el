@@ -18,7 +18,7 @@
 ;;
 ;; Supported languages:
 ;;
-;; - C/C++ (clang-format)
+;; - C/C++/Objective-C (clang-format)
 ;; - CSS/Less/SCSS (prettier)
 ;; - D (dfmt)
 ;; - Elm (elm-format)
@@ -279,7 +279,7 @@ EXECUTABLE is the full path to the formatter."
      (:executable "clang-format")
      (:install (darwin "brew install clang-format"))
      (:function format-all-buffer-clang-format)
-     (:modes c-mode c++-mode))
+     (:modes c-mode c++-mode objc-mode))
     (dfmt
      (:executable "dfmt")
      (:install (darwin "brew install dfmt"))
