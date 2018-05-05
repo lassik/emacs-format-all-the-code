@@ -208,7 +208,7 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer using \"prettier\".
 
 EXECUTABLE is the full path to the formatter."
-  (let ((parser (ecase major-mode
+  (let ((parser (cl-ecase major-mode
                   ;; The prettier folks seem to be currently pondering
                   ;; whether to use flow, babylon or some other parser
                   ;; for all JS-like code. Hopefully they will settle
@@ -253,7 +253,7 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process
    executable nil nil
-   "-ln" (case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
+   "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
            (bash "bash") (mksh "mksh") (t "posix"))))
 
 (defun format-all-buffer-standard (executable)
@@ -357,11 +357,13 @@ EXECUTABLE is the full path to the formatter."
 
 (defun format-all-property (property formatter)
   "Internal helper function to get PROPERTY of FORMATTER."
-  (dolist (choice (format-all-property-list property formatter)
-                  (error "Property %S missing for formatter %S system %S"
-                         property formatter system-type))
-    (cond ((atom choice) (return choice))
-          ((eql system-type (car choice)) (return (cadr choice))))))
+  (cl-dolist (choice (format-all-property-list property formatter)
+                     (error "Property %S missing for formatter %S system %S"
+                            property formatter system-type))
+    (cond ((atom choice)
+           (cl-return choice))
+          ((eql system-type (car choice))
+           (cl-return (cadr choice))))))
 
 (defun format-all-please-install (executable formatter)
   "Internal helper function for error about missing EXECUTABLE for FORMATTER."
@@ -380,9 +382,9 @@ EXECUTABLE is the full path to the formatter."
 
 (defun format-all-formatter-for-mode (mode)
   "Internal helper function to get the formatter corresponding to MODE."
-  (dolist (formatter format-all-formatters nil)
+  (cl-dolist (formatter format-all-formatters nil)
     (when (member mode (format-all-property-list :modes formatter))
-      (return formatter))))
+      (cl-return formatter))))
 
 ;;;###autoload
 (defun format-all-buffer ()
@@ -413,7 +415,7 @@ changes to the code, point is placed at the first change."
          (executable (format-all-formatter-executable formatter)))
     (cl-destructuring-bind (output errput first-diff)
         (funcall f-function executable)
-      (case output
+      (cl-case output
         ((nil)
          (message "Syntax error"))
         ((t)
