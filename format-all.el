@@ -1,4 +1,4 @@
-;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby and 20 other languages
+;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby and 20 other languages -*- lexical-binding: t -*-
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
@@ -168,7 +168,7 @@ EXECUTABLE is the full path to the formatter."
     (let ((errput (format-all-remove-ansi-color (or errput ""))))
       (list output errput first-diff))))
 
-(defun format-all-buffer-emacs-lisp (executable)
+(defun format-all-buffer-emacs-lisp (_executable)
   "Format the current buffer as Emacs Lisp using Emacs itself.
 
 EXECUTABLE is the full path to the formatter."
