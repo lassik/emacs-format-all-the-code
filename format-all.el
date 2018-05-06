@@ -184,10 +184,7 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Go using \"gofmt\".
 
 EXECUTABLE is the full path to the formatter."
-  (apply 'format-all-buffer-process executable nil nil
-         (when (buffer-file-name)
-           (list "--"
-                 (file-relative-name (buffer-file-name) default-directory)))))
+  (format-all-buffer-process executable))
 
 (defun format-all-buffer-hindent (executable)
   "Format the current buffer as Haskell using \"hindent\".
