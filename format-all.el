@@ -21,6 +21,7 @@
 ;; - C/C++/Objective-C (clang-format)
 ;; - CSS/Less/SCSS (prettier)
 ;; - D (dfmt)
+;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (native)
 ;; - Go (gofmt)
