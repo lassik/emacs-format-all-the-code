@@ -321,6 +321,7 @@ EXECUTABLE is the full path to the formatter."
      (:modes haskell-mode))
     (ktlint
      (:executable "ktlint")
+     (:install nil)
      (:function format-all-buffer-ktlint)
      (:modes kotlin-mode))
     (mix-format
