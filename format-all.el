@@ -192,6 +192,12 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable))
 
+(defun format-all-buffer-mix-format (executable)
+  "Format the current buffer as Elixir using \"mix format\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable nil nil "format" "-"))
+
 (defun format-all-buffer-ocp-indent (executable)
   "Format the current buffer as OCaml using \"ocp-indent\".
 
@@ -305,6 +311,11 @@ EXECUTABLE is the full path to the formatter."
      (:install "stack install hindent")
      (:function format-all-buffer-hindent)
      (:modes haskell-mode))
+    (mix-format
+     (:executable "mix")
+     (:install (darwin "brew install elixir"))
+     (:function format-all-buffer-mix-format)
+     (:modes elixir-mode))
     (ocp-indent
      (:executable "ocp-indent")
      (:install "opam install ocp-indent")
