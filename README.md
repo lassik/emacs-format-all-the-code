@@ -22,6 +22,7 @@ Supported languages
 * **GraphQL** (*prettier*)
 * **Haskell** (*hindent*)
 * **JavaScript/JSON/JSX/TypeScript/Vue** (*prettier*)
+* **Kotlin** (*ktlint*)
 * **Markdown** (*prettier*)
 * **OCaml** (*ocp-indent*)
 * **Perl** (*perltidy*)

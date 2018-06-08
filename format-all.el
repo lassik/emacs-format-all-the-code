@@ -28,6 +28,7 @@
 ;; - GraphQL (prettier)
 ;; - Haskell (hindent)
 ;; - JavaScript/JSON/JSX/TypeScript/Vue (prettier)
+;; - Kotlin (ktlint)
 ;; - Markdown (prettier)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
@@ -193,6 +194,12 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable))
 
+(defun format-all-buffer-ktlint (executable)
+  "Format the current buffer as Kotlin using \"ktlint\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable nil nil "--format" "--stdin"))
+
 (defun format-all-buffer-mix-format (executable)
   "Format the current buffer as Elixir using \"mix format\".
 
@@ -312,6 +319,10 @@ EXECUTABLE is the full path to the formatter."
      (:install "stack install hindent")
      (:function format-all-buffer-hindent)
      (:modes haskell-mode))
+    (ktlint
+     (:executable "ktlint")
+     (:function format-all-buffer-ktlint)
+     (:modes kotlin-mode))
     (mix-format
      (:executable "mix")
      (:install (darwin "brew install elixir"))
