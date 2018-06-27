@@ -227,7 +227,7 @@ EXECUTABLE is the full path to the formatter."
                   ;; whether to use flow, babylon or some other parser
                   ;; for all JS-like code. Hopefully they will settle
                   ;; on one parser so this can become less convoluted.
-                  ((js-mode js2-mode)
+                  ((js-mode js2-mode js3-mode)
                    (if (and (boundp 'flow-minor-mode)
                             (not (null (symbol-value 'flow-minor-mode))))
                        "flow"
@@ -240,7 +240,7 @@ EXECUTABLE is the full path to the formatter."
                   (scss-mode "scss")
                   (less-css-mode "less")
                   (graphql-mode "graphql")
-                  (markdown-mode "markdown"))))
+                  ((gfm-mode markdown-mode) "markdown"))))
     (apply 'format-all-buffer-process executable nil nil
            (append (list "--parser" parser)
                    (when (buffer-file-name)
@@ -344,8 +344,9 @@ EXECUTABLE is the full path to the formatter."
      (:install "npm install prettier")
      (:function format-all-buffer-prettier)
      (:modes
-      css-mode graphql-mode js-mode js2-mode json-mode jsx-mode less-css-mode
-      markdown-mode rjsx-mode scss-mode typescript-mode vue-mode))
+      css-mode gfm-mode graphql-mode js-mode js2-mode js3-mode json-mode
+      jsx-mode less-css-mode markdown-mode rjsx-mode scss-mode typescript-mode
+      vue-mode))
     (rufo
      (:executable "rufo")
      (:install "gem install rufo")
