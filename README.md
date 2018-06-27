@@ -44,8 +44,16 @@ you how to install it.
 How to customize
 ----------------
 
-There is currently no before-save hook and no customize variables
-either, since it's not clear what approach should be taken. Please see
+A minor mode called `format-all-mode` is available.
+
+You can hook it with other modes like this:
+
+```emacs-lisp
+(add-hook 'js2-mode #'format-all-mode)
+```
+
+There is currently no customize variables either, since it's not
+clear what approach should be taken. Please see
 [GitHub issues][github-issues] for discussion.
 
 Many of the external formatters support configuration files in the

@@ -456,6 +456,15 @@ changes to the code, point is placed at the first change."
           (insert errput)
           (display-buffer (current-buffer)))))))
 
+;;;###autoload
+(define-minor-mode format-all-mode
+  "Runs prettier on file save when this mode is turned on"
+  :lighter " Format-all"
+  :global nil
+  (if format-all-mode
+      (add-hook 'before-save-hook 'format-all-buffer nil 'local)
+    (remove-hook 'before-save-hook 'format-all-buffer 'local)))
+
 (provide 'format-all)
 
 ;;; format-all.el ends here
