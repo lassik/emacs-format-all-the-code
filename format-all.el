@@ -36,6 +36,7 @@
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
 ;; - Shell script (shfmt)
+;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
 ;;
 ;; You will need to install external programs to do the formatting.
@@ -270,6 +271,12 @@ EXECUTABLE is the full path to the formatter."
    "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
            (bash "bash") (mksh "mksh") (t "posix"))))
 
+(defun format-all-buffer-sqlformat (executable)
+  "Format the current buffer as SQL using \"sqlformat\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable nil nil "-k" "upper" "-a" "-"))
+
 (defun format-all-buffer-standard (executable)
   "Format the current buffer as JavaScript using \"standard\".
 
@@ -362,6 +369,11 @@ EXECUTABLE is the full path to the formatter."
      (:install (darwin "brew install shfmt"))
      (:function format-all-buffer-shfmt)
      (:modes sh-mode))
+    (sqlformat
+     (:executable "sqlformat")
+     (:install "pip install sqlparse")
+     (:function format-all-buffer-sqlformat)
+     (:modes sql-mode))
     (standard
      (:executable "standard")
      (:install "npm install standard")
