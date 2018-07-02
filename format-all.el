@@ -458,7 +458,16 @@ changes to the code, point is placed at the first change."
 
 ;;;###autoload
 (define-minor-mode format-all-mode
-  "Runs prettier on file save when this mode is turned on"
+  "Toggle automatic source code formatting before save.
+
+When the Format-All minor mode is enabled, `format-all-buffer' is
+automatically called each time before you save the buffer.
+
+The mode is buffer-local and needs to be enabled separately each
+time a file is visited or a temporary buffer is created. You may
+want to add a function to your `after-change-major-mode-hook' in
+your `user-init-file' to enable the mode based on the buffer's
+`major-mode' and some `buffer-file-name' patterns."
   :lighter " Format-All"
   :global nil
   (if format-all-mode
