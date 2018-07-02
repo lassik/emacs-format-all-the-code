@@ -42,9 +42,12 @@
 ;; If `format-all-buffer` can't find the right program, it will try to
 ;; tell you how to install it.
 ;;
-;; There is currently no before-save hook and no customize variables
-;; either, since it's not clear what approach should be taken.  Please
-;; see https://github.com/lassik/emacs-format-all-the-code/issues for
+;; A local minor mode called `format-all-mode` is available. Please
+;; see the documentation for that function for instructions.
+;;
+;; There are currently no customize variables, since it's not clear
+;; what approach should be taken.  Please see
+;; https://github.com/lassik/emacs-format-all-the-code/issues for
 ;; discussion.
 ;;
 ;; Many of the external formatters support configuration files in the
@@ -468,10 +471,24 @@ disabled if ARG is a negative integer or zero, and enabled
 otherwise.
 
 The mode is buffer-local and needs to be enabled separately each
-time a file is visited or a temporary buffer is created. You may
-want to add a function to your `after-change-major-mode-hook' in
-your `user-init-file' to enable the mode based on the buffer's
-`major-mode' and some `buffer-file-name' patterns."
+time a file is visited or a temporary buffer is created.
+
+You may want to use `add-hook' to add a function to your personal
+`after-change-major-mode-hook' in your `user-init-file' to enable
+the mode based on the buffer's `major-mode' and some
+`buffer-file-name' patterns. For example:
+
+    (defun my-after-change-major-mode ()
+      (format-all-mode
+       (if (and (buffer-file-name)
+                (save-match-data
+                  (let ((dir (file-name-directory (buffer-file-name))))
+                    (or (string-match \"foo\" dir)
+                        (string-match \"bar\" dir))))
+                (member major-mode '(js-mode python-mode)))
+           1 0)))
+
+    (add-hook 'after-change-major-mode-hook 'my-after-change-major-mode)"
   :lighter " Format-All"
   :global nil
   (if format-all-mode

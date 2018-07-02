@@ -44,17 +44,12 @@ you how to install it.
 How to customize
 ----------------
 
-A minor mode called `format-all-mode` is available.
+A local minor mode called `format-all-mode` is available. Please see
+the documentation for that function for instructions.
 
-You can hook it with other modes like this:
-
-```emacs-lisp
-(add-hook 'js2-mode #'format-all-mode)
-```
-
-There is currently no customize variables either, since it's not
-clear what approach should be taken. Please see
-[GitHub issues][github-issues] for discussion.
+There are currently no customize variables, since it's not clear what
+approach should be taken. Please see [GitHub issues][github-issues]
+for discussion.
 
 Many of the external formatters support configuration files in the
 source code directory to control their formatting. Please see the
