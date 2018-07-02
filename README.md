@@ -30,6 +30,7 @@ Supported languages
 * **Ruby** (*rufo*)
 * **Rust** (*rustfmt*)
 * **Shell script** (*shfmt*)
+* **SQL** (*sqlformat*)
 * **Swift** (*swiftformat*)
 
 How to install
