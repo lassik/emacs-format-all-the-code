@@ -60,6 +60,20 @@
 ;;
 ;;; Code:
 
+(defconst format-all-system-type
+  (cl-case system-type
+    (windows-nt 'windows)
+    (cygwin     'windows)
+    (darwin     'macos)
+    (gnu/linux  'linux)
+    (berkeley-unix
+     (save-match-data
+       (let ((case-fold-search t))
+         (cond ((string-match "freebsd" system-configuration) 'freebsd)
+               ((string-match "openbsd" system-configuration) 'openbsd)
+               ((string-match "netbsd"  system-configuration) 'netbsd))))))
+  "Current operating system according to the format-all package.")
+
 (defun format-all-fix-trailing-whitespace ()
   "Fix trailing whitespace since some formatters don't do that."
   (save-match-data
@@ -294,17 +308,17 @@ EXECUTABLE is the full path to the formatter."
      (:modes python-mode))
     (clang-format
      (:executable "clang-format")
-     (:install (darwin "brew install clang-format"))
+     (:install (macos "brew install clang-format"))
      (:function format-all-buffer-clang-format)
      (:modes c-mode c++-mode objc-mode))
     (dfmt
      (:executable "dfmt")
-     (:install (darwin "brew install dfmt"))
+     (:install (macos "brew install dfmt"))
      (:function format-all-buffer-dfmt)
      (:modes d-mode))
     (elm-format
      (:executable "elm-format")
-     (:install (darwin "brew install elm"))
+     (:install (macos "brew install elm"))
      (:function format-all-buffer-elm-format)
      (:modes elm-mode))
     (emacs-lisp
@@ -314,7 +328,7 @@ EXECUTABLE is the full path to the formatter."
      (:modes emacs-lisp-mode lisp-interaction-mode))
     (gofmt
      (:executable "gofmt")
-     (:install (darwin "brew install go"))
+     (:install (macos "brew install go"))
      (:function format-all-buffer-gofmt)
      (:modes go-mode))
     (hindent
@@ -329,7 +343,7 @@ EXECUTABLE is the full path to the formatter."
      (:modes kotlin-mode))
     (mix-format
      (:executable "mix")
-     (:install (darwin "brew install elixir"))
+     (:install (macos "brew install elixir"))
      (:function format-all-buffer-mix-format)
      (:modes elixir-mode))
     (ocp-indent
@@ -362,7 +376,7 @@ EXECUTABLE is the full path to the formatter."
      (:modes rust-mode))
     (shfmt
      (:executable "shfmt")
-     (:install (darwin "brew install shfmt"))
+     (:install (macos "brew install shfmt"))
      (:function format-all-buffer-shfmt)
      (:modes sh-mode))
     (standard
@@ -372,7 +386,7 @@ EXECUTABLE is the full path to the formatter."
      (:modes js-mode js2-mode))
     (swiftformat
      (:executable "swiftformat")
-     (:install (darwin "brew install swiftformat"))
+     (:install (macos "brew install swiftformat"))
      (:function format-all-buffer-swiftformat)
      (:modes swift-mode swift3-mode)))
   "Table of source code formatters supported by format-all.")
@@ -387,10 +401,10 @@ EXECUTABLE is the full path to the formatter."
   "Internal helper function to get PROPERTY of FORMATTER."
   (cl-dolist (choice (format-all-property-list property formatter)
                      (error "Property %S missing for formatter %S system %S"
-                            property formatter system-type))
+                            property formatter format-all-system-type))
     (cond ((atom choice)
            (cl-return choice))
-          ((eql system-type (car choice))
+          ((eql format-all-system-type (car choice))
            (cl-return (cadr choice))))))
 
 (defun format-all-please-install (executable formatter)
