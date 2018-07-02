@@ -459,7 +459,7 @@ changes to the code, point is placed at the first change."
 ;;;###autoload
 (define-minor-mode format-all-mode
   "Runs prettier on file save when this mode is turned on"
-  :lighter " Format-all"
+  :lighter " Format-All"
   :global nil
   (if format-all-mode
       (add-hook 'before-save-hook 'format-all-buffer nil 'local)
