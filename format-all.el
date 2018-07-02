@@ -463,6 +463,10 @@ changes to the code, point is placed at the first change."
 When the Format-All minor mode is enabled, `format-all-buffer' is
 automatically called each time before you save the buffer.
 
+When called from Lisp, the mode is toggled if ARG is ‘toggle’,
+disabled if ARG is a negative integer or zero, and enabled
+otherwise.
+
 The mode is buffer-local and needs to be enabled separately each
 time a file is visited or a temporary buffer is created. You may
 want to add a function to your `after-change-major-mode-hook' in
