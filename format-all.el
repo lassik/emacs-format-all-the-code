@@ -48,11 +48,11 @@
 ;; discussion.
 ;;
 ;; Many of the external formatters support configuration files in the
-;; source code directory to control their formatting. Please see the
+;; source code directory to control their formatting.  Please see the
 ;; documentation for each formatter.
 ;;
 ;; New external formatters can be added easily if they can read code
-;; from standard input and format it to standard output. Feel free to
+;; from standard input and format it to standard output.  Feel free to
 ;; submit a pull request or ask for help in GitHub issues.
 ;;
 ;;; Code:
@@ -72,7 +72,7 @@
       (insert "\n"))))
 
 (defun format-all-remove-ansi-color (string)
-  "Internal helper function to remove terminal color codes from a string."
+  "Internal helper function to remove terminal color codes from STRING."
   (save-match-data (replace-regexp-in-string "\x1b\\[[0-9]+m" "" string t)))
 
 (defun format-all-buffer-thunk (thunk)
