@@ -42,7 +42,7 @@
 ;; If `format-all-buffer` can't find the right program, it will try to
 ;; tell you how to install it.
 ;;
-;; A local minor mode called `format-all-mode` is available. Please
+;; A local minor mode called `format-all-mode` is available.  Please
 ;; see the documentation for that function for instructions.
 ;;
 ;; There are currently no customize variables, since it's not clear
