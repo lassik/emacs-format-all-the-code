@@ -292,7 +292,19 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as SQL using \"sqlformat\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil nil "-k" "upper" "-a" "-"))
+  (let* ((ic (car default-process-coding-system))
+         (oc (cdr default-process-coding-system))
+         (ienc (symbol-name (or (coding-system-get ic :mime-charset) 'utf-8)))
+         (oenc (symbol-name (or (coding-system-get oc :mime-charset) 'utf-8)))
+         (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
+                                    process-environment)))
+    (format-all-buffer-process
+     executable
+     nil nil
+     "--keywords" "upper"
+     "--reindent_aligned"
+     "--encoding" ienc
+     "-")))
 
 (defun format-all-buffer-standard (executable)
   "Format the current buffer as JavaScript using \"standard\".
