@@ -311,7 +311,7 @@ EXECUTABLE is the full path to the formatter."
 
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process
-   executable '(0 1) "Parsing error:" "--fix" "--stdin"))
+   executable '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" "--fix" "--stdin"))
 
 (defun format-all-buffer-swiftformat (executable)
   "Format the current buffer as Swift using \"swiftformat\".
