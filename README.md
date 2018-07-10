@@ -45,8 +45,9 @@ you how to install it.
 How to customize
 ----------------
 
-A local minor mode called `format-all-mode` is available. Please see
-the documentation for that function for instructions.
+A local minor mode called `format-all-mode` is available to format
+code on save. Please see the documentation for that function for
+instructions.
 
 There are currently no customize variables, since it's not clear what
 approach should be taken. Please see [GitHub issues][github-issues]
