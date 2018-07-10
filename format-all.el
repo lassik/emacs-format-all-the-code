@@ -310,6 +310,11 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as JavaScript using \"standard\".
 
 EXECUTABLE is the full path to the formatter."
+  ;; `standard --stdin` properly uses zero vs non-zero exit codes to
+  ;; indicate success vs error.  However, it checks for quite a broad
+  ;; range of errors, all the way up to undeclared identifiers and
+  ;; such.  To catch only syntax errors, we need to look specifically
+  ;; for the text "Parsing error:".
   (format-all-buffer-process
    executable '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" "--fix" "--stdin"))
 
