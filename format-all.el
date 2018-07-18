@@ -170,7 +170,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable nil nil "-"))
 
 (defun format-all-buffer-clang-format (executable)
-  "Format the current buffer as C/C++ using \"clang-format\".
+  "Format the current buffer as C/C++/Java/Objective-C using \"clang-format\".
 
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process
