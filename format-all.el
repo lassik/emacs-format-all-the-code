@@ -172,7 +172,14 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as C/C++ using \"clang-format\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-process
+   executable nil nil
+   (concat "-assume-filename="
+           (or (buffer-file-name)
+               (cl-ecase major-mode
+                 (c-mode ".c")
+                 (c++-mode ".cpp")
+                 (objc-mode ".m"))))))
 
 (defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
