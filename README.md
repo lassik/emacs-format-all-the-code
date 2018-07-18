@@ -21,6 +21,7 @@ Supported languages
 * **Go** (*gofmt*)
 * **GraphQL** (*prettier*)
 * **Haskell** (*hindent*)
+* **Java** (*clang-format*)
 * **JavaScript/JSON/JSX/TypeScript/Vue** (*prettier*)
 * **Kotlin** (*ktlint*)
 * **Markdown** (*prettier*)

@@ -27,6 +27,7 @@
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
 ;; - Haskell (hindent)
+;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX/TypeScript/Vue (prettier)
 ;; - Kotlin (ktlint)
 ;; - Markdown (prettier)
@@ -179,6 +180,7 @@ EXECUTABLE is the full path to the formatter."
                (cl-ecase major-mode
                  (c-mode ".c")
                  (c++-mode ".cpp")
+                 (java-mode ".java")
                  (objc-mode ".m"))))))
 
 (defun format-all-buffer-dfmt (executable)
@@ -342,7 +344,7 @@ EXECUTABLE is the full path to the formatter."
      (:executable "clang-format")
      (:install (macos "brew install clang-format"))
      (:function format-all-buffer-clang-format)
-     (:modes c-mode c++-mode objc-mode))
+     (:modes c-mode c++-mode java-mode objc-mode))
     (dfmt
      (:executable "dfmt")
      (:install (macos "brew install dfmt"))
