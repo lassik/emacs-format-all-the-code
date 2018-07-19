@@ -33,6 +33,7 @@
 ;; - Markdown (prettier)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
+;; - Protocol Buffers (clang-format)
 ;; - Python (autopep8)
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
@@ -181,7 +182,8 @@ EXECUTABLE is the full path to the formatter."
                  (c-mode ".c")
                  (c++-mode ".cpp")
                  (java-mode ".java")
-                 (objc-mode ".m"))))))
+                 (objc-mode ".m")
+                 (protobuf-mode ".proto"))))))
 
 (defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
@@ -344,7 +346,7 @@ EXECUTABLE is the full path to the formatter."
      (:executable "clang-format")
      (:install (macos "brew install clang-format"))
      (:function format-all-buffer-clang-format)
-     (:modes c-mode c++-mode java-mode objc-mode))
+     (:modes c-mode c++-mode java-mode objc-mode protobuf-mode))
     (dfmt
      (:executable "dfmt")
      (:install (macos "brew install dfmt"))

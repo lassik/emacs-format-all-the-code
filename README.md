@@ -27,6 +27,7 @@ Supported languages
 * **Markdown** (*prettier*)
 * **OCaml** (*ocp-indent*)
 * **Perl** (*perltidy*)
+* **Protocol Buffers** (*clang-format*)
 * **Python** (*autopep8*)
 * **Ruby** (*rufo*)
 * **Rust** (*rustfmt*)
