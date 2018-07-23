@@ -41,6 +41,7 @@
 ;; - Shell script (shfmt)
 ;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
+;; - YAML (yq)
 ;;
 ;; You will need to install external programs to do the formatting.
 ;; If `format-all-buffer` can't find the right program, it will try to
@@ -343,6 +344,12 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (format-all-buffer-process executable nil "error:"))
 
+(defun format-all-buffer-yq (executable)
+  "Format the current buffer as YAML using \"yq\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable nil nil "read" "-"))
+
 (defconst format-all-formatters
   '((autopep8
      (:executable "autopep8")
@@ -443,7 +450,12 @@ EXECUTABLE is the full path to the formatter."
      (:executable "swiftformat")
      (:install (macos "brew install swiftformat"))
      (:function format-all-buffer-swiftformat)
-     (:modes swift-mode swift3-mode)))
+     (:modes swift-mode swift3-mode))
+    (yq
+     (:executable "yq")
+     (:install (macos "brew install yq"))
+     (:function format-all-buffer-yq)
+     (:modes yaml-mode)))
   "Table of source code formatters supported by format-all.")
 
 (defun format-all-property-list (property formatter)

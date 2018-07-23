@@ -35,6 +35,7 @@ Supported languages
 * **Shell script** ([*shfmt*](https://github.com/mvdan/sh))
 * **SQL** ([*sqlformat*](https://pypi.org/project/sqlparse/))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
+* **YAML** ([*yq*](https://github.com/mikefarah/yq))
 
 How to install
 --------------
