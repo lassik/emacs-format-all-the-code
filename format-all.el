@@ -395,7 +395,7 @@ EXECUTABLE is the full path to the formatter."
       xml-mode))
     (ktlint
      (:executable "ktlint")
-     (:install nil)
+     (:install (macos "brew install ktlint"))
      (:function format-all-buffer-ktlint)
      (:modes kotlin-mode))
     (mix-format
