@@ -40,7 +40,7 @@ Supported languages
 How to install
 --------------
 
-From [MELPA](https://melpa.org/#/?q=format-all)
+From [MELPA](https://melpa.org/#/format-all)
 
 You will need to install external programs to do the formatting. If
 `format-all-buffer` can't find the right program, it will try to tell
