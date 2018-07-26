@@ -342,7 +342,7 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Swift using \"swiftformat\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil "error:"))
+  (format-all-buffer-process executable))
 
 (defun format-all-buffer-yq (executable)
   "Format the current buffer as YAML using \"yq\".
