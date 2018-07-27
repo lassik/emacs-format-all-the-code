@@ -13,6 +13,7 @@ Supported languages
 -------------------
 
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
+* **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
 * **Elixir** ([*mix format*](https://hexdocs.pm/mix/master/Mix.Tasks.Format.html))

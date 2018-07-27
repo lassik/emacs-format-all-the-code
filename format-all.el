@@ -19,6 +19,7 @@
 ;; Supported languages:
 ;;
 ;; - C/C++/Objective-C (clang-format)
+;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier)
 ;; - D (dfmt)
 ;; - Elixir (mix format)
@@ -186,6 +187,12 @@ EXECUTABLE is the full path to the formatter."
                  (java-mode ".java")
                  (objc-mode ".m")
                  (protobuf-mode ".proto"))))))
+
+(defun format-all-buffer-crystal (executable)
+  "Format the current buffer as Crystal using \"crystal tool format\".
+
+EXECUTABLE is the full path to the formatter."
+  (format-all-buffer-process executable nil nil "tool" "format" "-"))
 
 (defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
@@ -361,6 +368,11 @@ EXECUTABLE is the full path to the formatter."
      (:install (macos "brew install clang-format"))
      (:function format-all-buffer-clang-format)
      (:modes c-mode c++-mode java-mode objc-mode protobuf-mode))
+    (crystal
+     (:executable "crystal")
+     (:install (macos "brew install crystal"))
+     (:function format-all-buffer-crystal)
+     (:modes crystal-mode))
     (dfmt
      (:executable "dfmt")
      (:install (macos "brew install dfmt"))
