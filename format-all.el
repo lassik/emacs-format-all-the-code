@@ -237,7 +237,10 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as HTML/XHTML/XML using \"tidy\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable '(0 1) nil "-q" "-indent"))
+  (apply 'format-all-buffer-process executable '(0 1) nil
+         (append '("-q" "-indent")
+                 (when (member major-mode '(nxml-mode xml-mode))
+                   '("-xml")))))
 
 (defun format-all-buffer-ktlint (executable)
   "Format the current buffer as Kotlin using \"ktlint\".
