@@ -280,7 +280,7 @@ EXECUTABLE is the full path to the formatter."
                             (not (null (symbol-value 'flow-minor-mode))))
                        "flow"
                      "babylon"))
-                  ((jsx-mode rjsx-mode) "babylon")
+                  ((js2-jsx-mode jsx-mode rjsx-mode) "babylon")
                   ((typescript-mode typescript-tsx-mode) "typescript")
                   (json-mode "json")
                   (vue-mode "vue")
@@ -433,9 +433,9 @@ EXECUTABLE is the full path to the formatter."
      (:install "npm install prettier")
      (:function format-all-buffer-prettier)
      (:modes
-      css-mode gfm-mode graphql-mode js-mode js2-mode js3-mode json-mode
-      jsx-mode less-css-mode markdown-mode rjsx-mode scss-mode typescript-mode
-      typescript-tsx-mode vue-mode))
+      css-mode gfm-mode graphql-mode js-mode js2-mode js2-jsx-mode js3-mode
+      json-mode jsx-mode less-css-mode markdown-mode rjsx-mode scss-mode
+      typescript-mode typescript-tsx-mode vue-mode))
     (rufo
      (:executable "rufo")
      (:install "gem install rufo")
