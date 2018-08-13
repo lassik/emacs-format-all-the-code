@@ -312,16 +312,19 @@ need to be shell-quoted."
   (:modes haskell-mode)
   (:format (format-all-buffer-easy executable)))
 
-(defun format-all-buffer-html-tidy (executable)
-  "Format the current buffer as HTML/XHTML/XML using \"tidy\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-hard
-   '(0 1) nil
-   executable
-   "-q" "-indent"
-   (when (member major-mode '(nxml-mode xml-mode))
-     "-xml")))
+(define-format-all-formatter html-tidy
+  (:executable "tidy")
+  (:install (macos "brew install tidy-html5"))
+  (:modes
+   html-helper-mode html-mode mhtml-mode nxhtml-mode web-mode
+   nxml-mode xml-mode)
+  (:format
+   (format-all-buffer-hard
+    '(0 1) nil
+    executable
+    "-q" "-indent"
+    (when (member major-mode '(nxml-mode xml-mode))
+      "-xml"))))
 
 (defun format-all-buffer-ktlint (executable)
   "Format the current buffer as Kotlin using \"ktlint\".
@@ -444,14 +447,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((html-tidy
-     (:executable "tidy")
-     (:install (macos "brew install tidy-html5"))
-     (:function format-all-buffer-html-tidy)
-     (:modes
-      html-helper-mode html-mode mhtml-mode nxhtml-mode nxml-mode web-mode
-      xml-mode))
-    (ktlint
+  '((ktlint
      (:executable "ktlint")
      (:install (macos "brew install ktlint"))
      (:function format-all-buffer-ktlint)
