@@ -67,19 +67,29 @@
 ;;
 ;;; Code:
 
-(defconst format-all-system-type
-  (cl-case system-type
-    (windows-nt 'windows)
-    (cygwin     'windows)
-    (darwin     'macos)
-    (gnu/linux  'linux)
-    (berkeley-unix
-     (save-match-data
-       (let ((case-fold-search t))
-         (cond ((string-match "freebsd" system-configuration) 'freebsd)
-               ((string-match "openbsd" system-configuration) 'openbsd)
-               ((string-match "netbsd"  system-configuration) 'netbsd))))))
-  "Current operating system according to the format-all package.")
+(eval-when-compile
+  (defconst format-all-system-type
+    (cl-case system-type
+      (windows-nt 'windows)
+      (cygwin     'windows)
+      (darwin     'macos)
+      (gnu/linux  'linux)
+      (berkeley-unix
+       (save-match-data
+	 (let ((case-fold-search t))
+           (cond ((string-match "freebsd" system-configuration) 'freebsd)
+		 ((string-match "openbsd" system-configuration) 'openbsd)
+		 ((string-match "netbsd"  system-configuration) 'netbsd))))))
+    "Current operating system according to the format-all package."))
+
+(eval-when-compile
+  (defun format-all-resolve-system (choices)
+    "Get first choice matching `format-all-system-type' from CHOICES."
+    (cl-dolist (choice choices)
+      (cond ((atom choice)
+             (cl-return choice))
+            ((eql format-all-system-type (car choice))
+             (cl-return (cadr choice)))))))
 
 (defun format-all-fix-trailing-whitespace ()
   "Fix trailing whitespace since some formatters don't do that."
@@ -177,6 +187,62 @@ on success/failure.
 If ARGS are given, those are arguments to EXECUTABLE.  They don't
 need to be shell-quoted."
   (apply 'format-all-buffer-hard nil nil executable args))
+
+(defvar format-all-executable-table (make-hash-table)
+  "Internal table of formatter executable names for format-all.")
+
+(defvar format-all-install-table (make-hash-table)
+  "Internal table of formatter install commands for format-all.")
+
+(defvar format-all-mode-table (make-hash-table)
+  "Internal table of major mode formatter lists for format-all.")
+
+(defvar format-all-format-table (make-hash-table)
+  "Internal table of formatter formatting functions for format-all.")
+
+(defun format-all-pushhash (key value table)
+  "Push VALUE onto the list under KEY in hash table TABLE."
+  (puthash key (cons value (remove value (gethash key table))) table))
+
+(defmacro define-format-all-formatter (formatter &rest body)
+  "Define a new source code formatter for use with format-all."
+  (let (executable install modes format)
+    (cl-assert (equal (mapcar 'car body) '(:executable :install :modes :format)))
+    (cl-dolist (part body)
+      (cl-ecase (car part)
+        (:executable
+         (setq executable
+               (unless (null (cdr part))
+                 (or (format-all-resolve-system (cdr part))
+                     (error "Executable not specified for %S system %S"
+                            formatter format-all-system-type)))))
+        (:install
+         (setq install (format-all-resolve-system (cdr part))))
+        (:modes
+         (setq modes
+               (cl-mapcan
+                (lambda (modex)
+                  (let ((modex (if (listp modex) modex (list modex))))
+                    (cl-destructuring-bind (mmodes &optional probex) modex
+                      (let* ((mmodes (if (listp mmodes) mmodes (list mmodes)))
+                             (probe (when probex `(lambda () ,probex))))
+                        (mapcar
+                         (lambda (mmode)
+                           `(format-all-pushhash ',mmode
+                                                 (cons ',formatter ,probe)
+                                                 format-all-mode-table))
+                         mmodes)))))
+                (cdr part))))
+        (:format
+         (setq format `(lambda (executable mode-result)
+                         (ignore mode-result
+                                 ,@(unless executable '(executable)))
+                         ,(cadr part))))))
+    `(progn (puthash ',formatter ,executable format-all-executable-table)
+            (puthash ',formatter ,install format-all-install-table)
+            ,@modes
+            (puthash ',formatter ,format format-all-format-table)
+            ',formatter)))
 
 (defun format-all-buffer-autopep8 (executable)
   "Format the current buffer as Python using \"autopep8\".
@@ -570,6 +636,45 @@ changes to the code, point is placed at the first change."
         (unless (= 0 (length errput))
           (insert errput)
           (display-buffer (current-buffer)))))))
+
+(defun format-all-probe ()
+  "Internal helper function to get the formatter for the current buffer."
+  (cl-dolist (pair (gethash major-mode format-all-mode-table) (list nil nil))
+    (cl-destructuring-bind (formatter . probe) pair
+      (let ((mode-result (if probe (funcall probe) t)))
+        (when mode-result (cl-return (list formatter mode-result)))))))
+
+(defun format-all-formatter-executable-new-framework (formatter)
+  "Internal helper function to get the external program for FORMATTER."
+  (let ((executable (gethash formatter format-all-executable-table)))
+    (when executable
+      (or (executable-find executable)
+          (error (format-all-please-install
+                  executable (gethash formatter format-all-install-table)))))))
+
+(defun format-all-buffer-new-framework ()
+  (interactive)
+  (cl-destructuring-bind (formatter mode-result) (format-all-probe)
+    (unless formatter (error "Don't know how to format %S code" major-mode))
+    (let ((f-function (gethash formatter format-all-format-table))
+          (executable (format-all-formatter-executable-new-framework formatter)))
+      (cl-destructuring-bind (output errput first-diff)
+          (funcall f-function executable mode-result)
+        (cl-case output
+          ((nil)
+           (message "Syntax error"))
+          ((t)
+           (message "Already formatted"))
+          (t
+           (message "Reformatted!")
+           (erase-buffer)
+           (insert output)
+           (goto-char first-diff)))
+        (with-current-buffer (get-buffer-create "*format-all-errors*")
+          (erase-buffer)
+          (unless (= 0 (length errput))
+            (insert errput)
+            (display-buffer (current-buffer))))))))
 
 ;;;###autoload
 (define-minor-mode format-all-mode
