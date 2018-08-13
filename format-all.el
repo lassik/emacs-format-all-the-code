@@ -110,8 +110,7 @@ code output to the temp buffer.  It should return (ERRORP
 ERRPUT).  ERRORP is a boolean indicating whether the formatter
 caused an error and hence the contents of the temp buffer should
 be discarded.  ERRPUT is a string containing all error/warning
-output from the formatter (ERRPUT can also be nil if there were
-no errors or warnings).
+output from the formatter.
 
 Note that in some cases we can use the output of the formatter
 even if it produced warnings.  Not all warnings are errors."
@@ -160,10 +159,9 @@ need to be shell-quoted."
               (errput (with-temp-buffer
                         (insert-file-contents errfile)
                         (delete-file errfile)
-                        (unless (= (point-min) (point-max))
-                          (buffer-string))))
+                        (buffer-string)))
               (errorp (or (not (member status ok-statuses))
-                          (and error-regexp errput
+                          (and error-regexp
                                (save-match-data
                                  (string-match error-regexp errput))))))
          (list errorp errput))))))
@@ -219,7 +217,7 @@ EXECUTABLE is the full path to the formatter."
 EXECUTABLE is the full path to the formatter."
   (cl-destructuring-bind (output errput first-diff)
       (format-all-buffer-easy executable  "--yes" "--stdin")
-    (let ((errput (format-all-remove-ansi-color (or errput ""))))
+    (let ((errput (format-all-remove-ansi-color errput)))
       (list output errput first-diff))))
 
 (defun format-all-buffer-emacs-lisp (_executable)
@@ -232,7 +230,7 @@ EXECUTABLE is the full path to the formatter."
      (insert input)
      (indent-region (point-min) (point-max))
      (format-all-fix-trailing-whitespace)
-     (list nil nil))))
+     (list nil ""))))
 
 (defun format-all-buffer-gofmt (executable)
   "Format the current buffer as Go using \"gofmt\".
@@ -569,7 +567,7 @@ changes to the code, point is placed at the first change."
          (goto-char first-diff)))
       (with-current-buffer (get-buffer-create "*format-all-errors*")
         (erase-buffer)
-        (when errput
+        (unless (= 0 (length errput))
           (insert errput)
           (display-buffer (current-buffer)))))))
 
