@@ -338,11 +338,11 @@ need to be shell-quoted."
   (:modes elixir-mode)
   (:format (format-all-buffer-easy executable "format" "-")))
 
-(defun format-all-buffer-ocp-indent (executable)
-  "Format the current buffer as OCaml using \"ocp-indent\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable))
+(define-format-all-formatter ocp-indent
+  (:executable "ocp-indent")
+  (:install "opam install ocp-indent")
+  (:modes caml-mode tuareg-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (defun format-all-buffer-perltidy (executable)
   "Format the current buffer as Perl using \"perl-tidy\".
@@ -447,12 +447,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((ocp-indent
-     (:executable "ocp-indent")
-     (:install "opam install ocp-indent")
-     (:function format-all-buffer-ocp-indent)
-     (:modes caml-mode tuareg-mode))
-    (perltidy
+  '((perltidy
      (:executable "perltidy")
      (:install "cpan install Perl::Tidy")
      (:function format-all-buffer-perltidy)
