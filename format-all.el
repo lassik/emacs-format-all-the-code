@@ -392,11 +392,11 @@ need to be shell-quoted."
     (when (buffer-file-name)
       (list "--filename" (buffer-file-name))))))
 
-(defun format-all-buffer-rustfmt (executable)
-  "Format the current buffer as Rust using \"rustfmt\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable))
+(define-format-all-formatter rustfmt
+  (:executable "rustfmt")
+  (:install "cargo install rustfmt")
+  (:modes rust-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (defun format-all-buffer-shfmt (executable)
   "Format the current buffer as Shell using \"shfmt\".
@@ -450,12 +450,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((rustfmt
-     (:executable "rustfmt")
-     (:install "cargo install rustfmt")
-     (:function format-all-buffer-rustfmt)
-     (:modes rust-mode))
-    (shfmt
+  '((shfmt
      (:executable "shfmt")
      (:install (macos "brew install shfmt"))
      (:function format-all-buffer-shfmt)
