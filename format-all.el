@@ -426,19 +426,6 @@ need to be shell-quoted."
       "--encoding" ienc
       "-"))))
 
-(defun format-all-buffer-standard (executable)
-  "Format the current buffer as JavaScript using \"standard\".
-
-EXECUTABLE is the full path to the formatter."
-  ;; `standard --stdin` properly uses zero vs non-zero exit codes to
-  ;; indicate success vs error.  However, it checks for quite a broad
-  ;; range of errors, all the way up to undeclared identifiers and
-  ;; such.  To catch only syntax errors, we need to look specifically
-  ;; for the text "Parsing error:".
-  (format-all-buffer-hard
-   '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:"
-   executable "--fix" "--stdin"))
-
 (defun format-all-buffer-swiftformat (executable)
   "Format the current buffer as Swift using \"swiftformat\".
 
@@ -452,12 +439,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((standard
-     (:executable "standard")
-     (:install "npm install standard")
-     (:function format-all-buffer-standard)
-     (:modes js-mode js2-mode))
-    (swiftformat
+  '((swiftformat
      (:executable "swiftformat")
      (:install (macos "brew install swiftformat"))
      (:function format-all-buffer-swiftformat)
