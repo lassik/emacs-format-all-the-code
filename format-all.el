@@ -148,7 +148,9 @@ exit status.
 
 If ARGS are given, those are arguments to EXECUTABLE.  They don't
 need to be shell-quoted."
-  (let ((ok-statuses (or ok-statuses '(0))))
+  (let ((ok-statuses (or ok-statuses '(0)))
+        (args (cl-mapcan (lambda (arg) (if (listp arg) arg (list arg)))
+                         args)))
     (format-all-buffer-thunk
      (lambda (input)
        (let* ((errfile (make-temp-file "format-all-"))
@@ -248,10 +250,12 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as HTML/XHTML/XML using \"tidy\".
 
 EXECUTABLE is the full path to the formatter."
-  (apply 'format-all-buffer-hard '(0 1) nil executable
-         (append '("-q" "-indent")
-                 (when (member major-mode '(nxml-mode xml-mode))
-                   '("-xml")))))
+  (format-all-buffer-hard
+   '(0 1) nil
+   executable
+   "-q" "-indent"
+   (when (member major-mode '(nxml-mode xml-mode))
+     "-xml")))
 
 (defun format-all-buffer-ktlint (executable)
   "Format the current buffer as Kotlin using \"ktlint\".
@@ -300,19 +304,21 @@ EXECUTABLE is the full path to the formatter."
                   (less-css-mode "less")
                   (graphql-mode "graphql")
                   ((gfm-mode markdown-mode) "markdown"))))
-    (apply 'format-all-buffer-easy executable
-           (append (list "--parser" parser)
-                   (when (buffer-file-name)
-                     (list "--stdin-filepath" (buffer-file-name)))))))
+    (format-all-buffer-easy
+     executable
+     "--parser" parser
+     (when (buffer-file-name)
+       (list "--stdin-filepath" (buffer-file-name))))))
 
 (defun format-all-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
 
 EXECUTABLE is the full path to the formatter."
-  (apply 'format-all-buffer-easy executable
-         (append (list "--simple-exit")
-                 (when (buffer-file-name)
-                   (list "--filename" (buffer-file-name))))))
+  (format-all-buffer-easy
+   executable
+   "--simple-exit"
+   (when (buffer-file-name)
+     (list "--filename" (buffer-file-name)))))
 
 (defun format-all-buffer-rustfmt (executable)
   "Format the current buffer as Rust using \"rustfmt\".
