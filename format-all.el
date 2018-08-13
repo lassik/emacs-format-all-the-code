@@ -344,11 +344,11 @@ need to be shell-quoted."
   (:modes caml-mode tuareg-mode)
   (:format (format-all-buffer-easy executable)))
 
-(defun format-all-buffer-perltidy (executable)
-  "Format the current buffer as Perl using \"perl-tidy\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable))
+(define-format-all-formatter perltidy
+  (:executable "perltidy")
+  (:install "cpan install Perl::Tidy")
+  (:modes perl-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (defun format-all-buffer-prettier (executable)
   "Format the current buffer using \"prettier\".
@@ -447,12 +447,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((perltidy
-     (:executable "perltidy")
-     (:install "cpan install Perl::Tidy")
-     (:function format-all-buffer-perltidy)
-     (:modes perl-mode))
-    (prettier
+  '((prettier
      (:executable "prettier")
      (:install "npm install prettier")
      (:function format-all-buffer-prettier)
