@@ -432,18 +432,14 @@ need to be shell-quoted."
   (:modes swift-mode swift3-mode)
   (:format (format-all-buffer-easy executable)))
 
-(defun format-all-buffer-yq (executable)
-  "Format the current buffer as YAML using \"yq\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable "read" "-"))
+(define-format-all-formatter yq
+  (:executable "yq")
+  (:install (macos "brew install yq"))
+  (:modes yaml-mode)
+  (:format (format-all-buffer-easy executable "read" "-")))
 
 (defconst format-all-formatters
-  '((yq
-     (:executable "yq")
-     (:install (macos "brew install yq"))
-     (:function format-all-buffer-yq)
-     (:modes yaml-mode)))
+  '()
   "Table of source code formatters supported by format-all.")
 
 (defun format-all-property-list (property formatter)
