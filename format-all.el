@@ -502,13 +502,11 @@ EXECUTABLE is the full path to the formatter."
           ((eql format-all-system-type (car choice))
            (cl-return (cadr choice))))))
 
-(defun format-all-please-install (executable formatter)
-  "Internal helper function for error about missing EXECUTABLE for FORMATTER."
-  (let ((installer (format-all-property-system :install formatter)))
-    (concat (format "You need the %S command." executable)
-            (if (not installer) ""
-              (format " You may be able to install it via %S."
-                      installer)))))
+(defun format-all-please-install (executable installer)
+  "Internal helper function for error about missing EXECUTABLE and INSTALLER."
+  (concat (format "You need the %S command." executable)
+          (if (not installer) ""
+            (format " You may be able to install it via %S." installer))))
 
 (defun format-all-formatter-executable (formatter)
   "Internal helper function to get the external program for FORMATTER."
@@ -518,7 +516,9 @@ EXECUTABLE is the full path to the formatter."
                   formatter format-all-system-type))
           ((not (eql t executable))
            (or (executable-find executable)
-               (error (format-all-please-install executable formatter)))))))
+               (error (format-all-please-install
+                       executable
+                       (format-all-property-system :install formatter))))))))
 
 (defun format-all-formatter-for-mode (mode)
   "Internal helper function to get the formatter corresponding to MODE."
