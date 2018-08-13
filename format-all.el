@@ -408,22 +408,23 @@ need to be shell-quoted."
     "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
             (bash "bash") (mksh "mksh") (t "posix")))))
 
-(defun format-all-buffer-sqlformat (executable)
-  "Format the current buffer as SQL using \"sqlformat\".
-
-EXECUTABLE is the full path to the formatter."
-  (let* ((ic (car default-process-coding-system))
-         (oc (cdr default-process-coding-system))
-         (ienc (symbol-name (or (coding-system-get ic :mime-charset) 'utf-8)))
-         (oenc (symbol-name (or (coding-system-get oc :mime-charset) 'utf-8)))
-         (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
-                                    process-environment)))
-    (format-all-buffer-easy
-     executable
-     "--keywords" "upper"
-     "--reindent_aligned"
-     "--encoding" ienc
-     "-")))
+(define-format-all-formatter sqlformat
+  (:executable "sqlformat")
+  (:install "pip install sqlparse")
+  (:modes sql-mode)
+  (:format
+   (let* ((ic (car default-process-coding-system))
+          (oc (cdr default-process-coding-system))
+          (ienc (symbol-name (or (coding-system-get ic :mime-charset) 'utf-8)))
+          (oenc (symbol-name (or (coding-system-get oc :mime-charset) 'utf-8)))
+          (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
+                                     process-environment)))
+     (format-all-buffer-easy
+      executable
+      "--keywords" "upper"
+      "--reindent_aligned"
+      "--encoding" ienc
+      "-"))))
 
 (defun format-all-buffer-standard (executable)
   "Format the current buffer as JavaScript using \"standard\".
@@ -451,12 +452,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((sqlformat
-     (:executable "sqlformat")
-     (:install "pip install sqlparse")
-     (:function format-all-buffer-sqlformat)
-     (:modes sql-mode))
-    (standard
+  '((standard
      (:executable "standard")
      (:install "npm install standard")
      (:function format-all-buffer-standard)
