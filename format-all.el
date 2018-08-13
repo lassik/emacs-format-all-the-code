@@ -306,11 +306,11 @@ need to be shell-quoted."
   (:modes go-mode)
   (:format (format-all-buffer-easy executable)))
 
-(defun format-all-buffer-hindent (executable)
-  "Format the current buffer as Haskell using \"hindent\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable))
+(define-format-all-formatter hindent
+  (:executable "hindent")
+  (:install "stack install hindent")
+  (:modes haskell-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (defun format-all-buffer-html-tidy (executable)
   "Format the current buffer as HTML/XHTML/XML using \"tidy\".
@@ -444,12 +444,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((hindent
-     (:executable "hindent")
-     (:install "stack install hindent")
-     (:function format-all-buffer-hindent)
-     (:modes haskell-mode))
-    (html-tidy
+  '((html-tidy
      (:executable "tidy")
      (:install (macos "brew install tidy-html5"))
      (:function format-all-buffer-html-tidy)
