@@ -244,11 +244,11 @@ need to be shell-quoted."
             (puthash ',formatter ,format format-all-format-table)
             ',formatter)))
 
-(defun format-all-buffer-autopep8 (executable)
-  "Format the current buffer as Python using \"autopep8\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable "-"))
+(define-format-all-formatter autopep8
+  (:executable "autopep8")
+  (:install "pip install autopep8")
+  (:modes python-mode)
+  (:format (format-all-buffer-easy executable "-")))
 
 (defun format-all-buffer-clang-format (executable)
   "Format the current buffer as C/C++/Java/Objective-C using \"clang-format\".
@@ -442,12 +442,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((autopep8
-     (:executable "autopep8")
-     (:install "pip install autopep8")
-     (:function format-all-buffer-autopep8)
-     (:modes python-mode))
-    (clang-format
+  '((clang-format
      (:executable "clang-format")
      (:install (macos "brew install clang-format"))
      (:function format-all-buffer-clang-format)
