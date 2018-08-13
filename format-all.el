@@ -381,15 +381,16 @@ need to be shell-quoted."
       (when (buffer-file-name)
         (list "--stdin-filepath" (buffer-file-name)))))))
 
-(defun format-all-buffer-rufo (executable)
-  "Format the current buffer as Ruby using \"rufo\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy
-   executable
-   "--simple-exit"
-   (when (buffer-file-name)
-     (list "--filename" (buffer-file-name)))))
+(define-format-all-formatter rufo
+  (:executable "rufo")
+  (:install "gem install rufo")
+  (:modes ruby-mode enh-ruby-mode)
+  (:format
+   (format-all-buffer-easy
+    executable
+    "--simple-exit"
+    (when (buffer-file-name)
+      (list "--filename" (buffer-file-name))))))
 
 (defun format-all-buffer-rustfmt (executable)
   "Format the current buffer as Rust using \"rustfmt\".
@@ -449,12 +450,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((rufo
-     (:executable "rufo")
-     (:install "gem install rufo")
-     (:function format-all-buffer-rufo)
-     (:modes ruby-mode enh-ruby-mode))
-    (rustfmt
+  '((rustfmt
      (:executable "rustfmt")
      (:install "cargo install rustfmt")
      (:function format-all-buffer-rustfmt)
