@@ -438,47 +438,26 @@ need to be shell-quoted."
   (:modes yaml-mode)
   (:format (format-all-buffer-easy executable "read" "-")))
 
-(defconst format-all-formatters
-  '()
-  "Table of source code formatters supported by format-all.")
-
-(defun format-all-property-list (property formatter)
-  "Internal helper function to get PROPERTY of FORMATTER."
-  (cdr (or (assoc property formatter)
-           (error "Property %S missing for formatter %S"
-                  property formatter))))
-
-(defun format-all-property-system (property formatter)
-  "Internal helper function to get PROPERTY of FORMATTER."
-  (cl-dolist (choice (format-all-property-list property formatter))
-    (cond ((atom choice)
-           (cl-return choice))
-          ((eql format-all-system-type (car choice))
-           (cl-return (cadr choice))))))
-
 (defun format-all-please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
   (concat (format "You need the %S command." executable)
           (if (not installer) ""
             (format " You may be able to install it via %S." installer))))
 
+(defun format-all-probe ()
+  "Internal helper function to get the formatter for the current buffer."
+  (cl-dolist (pair (gethash major-mode format-all-mode-table) (list nil nil))
+    (cl-destructuring-bind (formatter . probe) pair
+      (let ((mode-result (if probe (funcall probe) t)))
+        (when mode-result (cl-return (list formatter mode-result)))))))
+
 (defun format-all-formatter-executable (formatter)
   "Internal helper function to get the external program for FORMATTER."
-  (let ((executable (format-all-property-system :executable formatter)))
-    (cond ((not executable)
-           (error "Executable not specified for formatter %S system %S"
-                  formatter format-all-system-type))
-          ((not (eql t executable))
-           (or (executable-find executable)
-               (error (format-all-please-install
-                       executable
-                       (format-all-property-system :install formatter))))))))
-
-(defun format-all-formatter-for-mode (mode)
-  "Internal helper function to get the formatter corresponding to MODE."
-  (cl-dolist (formatter format-all-formatters nil)
-    (when (member mode (format-all-property-list :modes formatter))
-      (cl-return formatter))))
+  (let ((executable (gethash formatter format-all-executable-table)))
+    (when executable
+      (or (executable-find executable)
+          (error (format-all-please-install
+                  executable (gethash formatter format-all-install-table)))))))
 
 ;;;###autoload
 (defun format-all-buffer ()
@@ -503,49 +482,10 @@ Any errors/warnings encountered during formatting are shown in a
 buffer called *format-all-errors*.  If the formatter made any
 changes to the code, point is placed at the first change."
   (interactive)
-  (let* ((formatter (or (format-all-formatter-for-mode major-mode)
-                        (error "Don't know how to format %S code" major-mode)))
-         (f-function (format-all-property :function formatter))
-         (executable (format-all-formatter-executable formatter)))
-    (cl-destructuring-bind (output errput first-diff)
-        (funcall f-function executable)
-      (cl-case output
-        ((nil)
-         (message "Syntax error"))
-        ((t)
-         (message "Already formatted"))
-        (t
-         (message "Reformatted!")
-         (erase-buffer)
-         (insert output)
-         (goto-char first-diff)))
-      (with-current-buffer (get-buffer-create "*format-all-errors*")
-        (erase-buffer)
-        (unless (= 0 (length errput))
-          (insert errput)
-          (display-buffer (current-buffer)))))))
-
-(defun format-all-probe ()
-  "Internal helper function to get the formatter for the current buffer."
-  (cl-dolist (pair (gethash major-mode format-all-mode-table) (list nil nil))
-    (cl-destructuring-bind (formatter . probe) pair
-      (let ((mode-result (if probe (funcall probe) t)))
-        (when mode-result (cl-return (list formatter mode-result)))))))
-
-(defun format-all-formatter-executable-new-framework (formatter)
-  "Internal helper function to get the external program for FORMATTER."
-  (let ((executable (gethash formatter format-all-executable-table)))
-    (when executable
-      (or (executable-find executable)
-          (error (format-all-please-install
-                  executable (gethash formatter format-all-install-table)))))))
-
-(defun format-all-buffer-new-framework ()
-  (interactive)
   (cl-destructuring-bind (formatter mode-result) (format-all-probe)
     (unless formatter (error "Don't know how to format %S code" major-mode))
     (let ((f-function (gethash formatter format-all-format-table))
-          (executable (format-all-formatter-executable-new-framework formatter)))
+          (executable (format-all-formatter-executable formatter)))
       (cl-destructuring-bind (output errput first-diff)
           (funcall f-function executable mode-result)
         (cl-case output
