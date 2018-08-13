@@ -119,7 +119,7 @@ even if it produced warnings.  Not all warnings are errors."
     (save-restriction
       (widen)
       (let ((inbuf (current-buffer))
-            (input (buffer-substring-no-properties (point-min) (point-max))))
+            (input (buffer-string)))
         (with-temp-buffer
           (cl-destructuring-bind (errorp errput) (funcall thunk input)
             (let* ((first-diff (abs (compare-buffer-substrings inbuf nil nil
@@ -127,7 +127,7 @@ even if it produced warnings.  Not all warnings are errors."
                    (no-chg (or errorp (= 0 first-diff)))
                    (output (cond (errorp nil)
                                  (no-chg t)
-                                 (t (buffer-substring (point-min) (point-max))))))
+                                 (t (buffer-string)))))
               (list output errput first-diff))))))))
 
 (defun format-all-buffer-hard (ok-statuses error-regexp executable &rest args)
@@ -161,7 +161,7 @@ need to be shell-quoted."
                         (insert-file-contents errfile)
                         (delete-file errfile)
                         (unless (= (point-min) (point-max))
-                          (buffer-substring (point-min) (point-max)))))
+                          (buffer-string))))
               (errorp (or (not (member status ok-statuses))
                           (and error-regexp errput
                                (save-match-data
