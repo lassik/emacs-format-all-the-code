@@ -350,34 +350,36 @@ need to be shell-quoted."
   (:modes perl-mode)
   (:format (format-all-buffer-easy executable)))
 
-(defun format-all-buffer-prettier (executable)
-  "Format the current buffer using \"prettier\".
-
-EXECUTABLE is the full path to the formatter."
-  (let ((parser (cl-ecase major-mode
-                  ;; The prettier folks seem to be currently pondering
-                  ;; whether to use flow, babylon or some other parser
-                  ;; for all JS-like code. Hopefully they will settle
-                  ;; on one parser so this can become less convoluted.
-                  ((js-mode js2-mode js3-mode)
-                   (if (and (boundp 'flow-minor-mode)
-                            (not (null (symbol-value 'flow-minor-mode))))
-                       "flow"
-                     "babylon"))
-                  ((js2-jsx-mode jsx-mode rjsx-mode) "babylon")
-                  ((typescript-mode typescript-tsx-mode) "typescript")
-                  (json-mode "json")
-                  (vue-mode "vue")
-                  (css-mode "css")
-                  (scss-mode "scss")
-                  (less-css-mode "less")
-                  (graphql-mode "graphql")
-                  ((gfm-mode markdown-mode) "markdown"))))
-    (format-all-buffer-easy
-     executable
-     "--parser" parser
-     (when (buffer-file-name)
-       (list "--stdin-filepath" (buffer-file-name))))))
+(define-format-all-formatter prettier
+  (:executable "prettier")
+  (:install "npm install prettier")
+  (:modes
+   ((js-mode js2-mode js3-mode)
+    ;; The prettier folks seem to be currently pondering whether to
+    ;; use flow, babylon or some other parser for all JS-like
+    ;; code. Hopefully they will settle on one parser so this can
+    ;; become less convoluted.
+    (if (and (boundp 'flow-minor-mode)
+             (not (null (symbol-value 'flow-minor-mode))))
+        "flow"
+      "babylon"))
+   ((js2-jsx-mode jsx-mode rjsx-mode) "babylon")
+   ((typescript-mode typescript-tsx-mode) "typescript")
+   (json-mode "json")
+   (vue-mode "vue")
+   (css-mode "css")
+   (scss-mode "scss")
+   (less-css-mode "less")
+   (graphql-mode "graphql")
+   ((gfm-mode markdown-mode) "markdown"))
+  (:format
+   (let ((parser mode-result))
+     (format-all-buffer-easy
+      executable
+      (when parser
+        (list "--parser" parser))
+      (when (buffer-file-name)
+        (list "--stdin-filepath" (buffer-file-name)))))))
 
 (defun format-all-buffer-rufo (executable)
   "Format the current buffer as Ruby using \"rufo\".
@@ -447,15 +449,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((prettier
-     (:executable "prettier")
-     (:install "npm install prettier")
-     (:function format-all-buffer-prettier)
-     (:modes
-      css-mode gfm-mode graphql-mode js-mode js2-mode js2-jsx-mode js3-mode
-      json-mode jsx-mode less-css-mode markdown-mode rjsx-mode scss-mode
-      typescript-mode typescript-tsx-mode vue-mode))
-    (rufo
+  '((rufo
      (:executable "rufo")
      (:install "gem install rufo")
      (:function format-all-buffer-rufo)
