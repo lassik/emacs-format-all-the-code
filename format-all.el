@@ -326,11 +326,11 @@ need to be shell-quoted."
     (when (member major-mode '(nxml-mode xml-mode))
       "-xml"))))
 
-(defun format-all-buffer-ktlint (executable)
-  "Format the current buffer as Kotlin using \"ktlint\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable "--format" "--stdin"))
+(define-format-all-formatter ktlint
+  (:executable "ktlint")
+  (:install (macos "brew install ktlint"))
+  (:modes kotlin-mode)
+  (:format (format-all-buffer-easy executable "--format" "--stdin")))
 
 (defun format-all-buffer-mix-format (executable)
   "Format the current buffer as Elixir using \"mix format\".
@@ -447,12 +447,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((ktlint
-     (:executable "ktlint")
-     (:install (macos "brew install ktlint"))
-     (:function format-all-buffer-ktlint)
-     (:modes kotlin-mode))
-    (mix-format
+  '((mix-format
      (:executable "mix")
      (:install (macos "brew install elixir"))
      (:function format-all-buffer-mix-format)
