@@ -250,20 +250,20 @@ need to be shell-quoted."
   (:modes python-mode)
   (:format (format-all-buffer-easy executable "-")))
 
-(defun format-all-buffer-clang-format (executable)
-  "Format the current buffer as C/C++/Java/Objective-C using \"clang-format\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy
-   executable
-   (concat "-assume-filename="
-           (or (buffer-file-name)
-               (cl-ecase major-mode
-                 (c-mode ".c")
-                 (c++-mode ".cpp")
-                 (java-mode ".java")
-                 (objc-mode ".m")
-                 (protobuf-mode ".proto"))))))
+(define-format-all-formatter clang-format
+  (:executable "clang-format")
+  (:install (macos "brew install clang-format"))
+  (:modes
+   (c-mode ".c")
+   (c++-mode ".cpp")
+   (java-mode ".java")
+   (objc-mode ".m")
+   (protobuf-mode ".proto"))
+  (:format
+   (format-all-buffer-easy
+    executable
+    (let ((assume-filename (or (buffer-file-name) mode-result "")))
+      (when assume-filename (concat "-assume-filename=" assume-filename))))))
 
 (defun format-all-buffer-crystal (executable)
   "Format the current buffer as Crystal using \"crystal tool format\".
@@ -442,12 +442,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((clang-format
-     (:executable "clang-format")
-     (:install (macos "brew install clang-format"))
-     (:function format-all-buffer-clang-format)
-     (:modes c-mode c++-mode java-mode objc-mode protobuf-mode))
-    (crystal
+  '((crystal
      (:executable "crystal")
      (:install (macos "brew install crystal"))
      (:function format-all-buffer-crystal)
