@@ -130,8 +130,7 @@ even if it produced warnings.  Not all warnings are errors."
                                  (t (buffer-substring (point-min) (point-max))))))
               (list output errput first-diff))))))))
 
-(defun format-all-buffer-process
-    (executable &optional ok-statuses error-regexp &rest args)
+(defun format-all-buffer-hard (ok-statuses error-regexp executable &rest args)
   "Internal helper function to implement formatters.
 
 Runs the external program EXECUTABLE.  The program shall read
@@ -167,18 +166,21 @@ need to be shell-quoted."
                                  (string-match error-regexp errput))))))
          (list errorp errput))))))
 
+(defun format-all-buffer-easy (executable &rest args)
+  (apply 'format-all-buffer-hard nil nil executable args))
+
 (defun format-all-buffer-autopep8 (executable)
   "Format the current buffer as Python using \"autopep8\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil nil "-"))
+  (format-all-buffer-easy executable "-"))
 
 (defun format-all-buffer-clang-format (executable)
   "Format the current buffer as C/C++/Java/Objective-C using \"clang-format\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process
-   executable nil nil
+  (format-all-buffer-easy
+   executable
    (concat "-assume-filename="
            (or (buffer-file-name)
                (cl-ecase major-mode
@@ -192,20 +194,20 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Crystal using \"crystal tool format\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil nil "tool" "format" "-"))
+  (format-all-buffer-easy executable "tool" "format" "-"))
 
 (defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil (regexp-quote "[error]")))
+  (format-all-buffer-hard nil (regexp-quote "[error]") executable))
 
 (defun format-all-buffer-elm-format (executable)
   "Format the current buffer as Elm using \"elm-format\".
 
 EXECUTABLE is the full path to the formatter."
   (cl-destructuring-bind (output errput first-diff)
-      (format-all-buffer-process executable nil nil  "--yes" "--stdin")
+      (format-all-buffer-easy executable  "--yes" "--stdin")
     (let ((errput (format-all-remove-ansi-color (or errput ""))))
       (list output errput first-diff))))
 
@@ -225,19 +227,19 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Go using \"gofmt\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-easy executable))
 
 (defun format-all-buffer-hindent (executable)
   "Format the current buffer as Haskell using \"hindent\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-easy executable))
 
 (defun format-all-buffer-html-tidy (executable)
   "Format the current buffer as HTML/XHTML/XML using \"tidy\".
 
 EXECUTABLE is the full path to the formatter."
-  (apply 'format-all-buffer-process executable '(0 1) nil
+  (apply 'format-all-buffer-hard '(0 1) nil executable
          (append '("-q" "-indent")
                  (when (member major-mode '(nxml-mode xml-mode))
                    '("-xml")))))
@@ -246,25 +248,25 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Kotlin using \"ktlint\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil nil "--format" "--stdin"))
+  (format-all-buffer-easy executable "--format" "--stdin"))
 
 (defun format-all-buffer-mix-format (executable)
   "Format the current buffer as Elixir using \"mix format\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil nil "format" "-"))
+  (format-all-buffer-easy executable "format" "-"))
 
 (defun format-all-buffer-ocp-indent (executable)
   "Format the current buffer as OCaml using \"ocp-indent\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-easy executable))
 
 (defun format-all-buffer-perltidy (executable)
   "Format the current buffer as Perl using \"perl-tidy\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-easy executable))
 
 (defun format-all-buffer-prettier (executable)
   "Format the current buffer using \"prettier\".
@@ -289,7 +291,7 @@ EXECUTABLE is the full path to the formatter."
                   (less-css-mode "less")
                   (graphql-mode "graphql")
                   ((gfm-mode markdown-mode) "markdown"))))
-    (apply 'format-all-buffer-process executable nil nil
+    (apply 'format-all-buffer-easy executable
            (append (list "--parser" parser)
                    (when (buffer-file-name)
                      (list "--stdin-filepath" (buffer-file-name)))))))
@@ -298,7 +300,7 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Ruby using \"rufo\".
 
 EXECUTABLE is the full path to the formatter."
-  (apply 'format-all-buffer-process executable nil nil
+  (apply 'format-all-buffer-easy executable
          (append (list "--simple-exit")
                  (when (buffer-file-name)
                    (list "--filename" (buffer-file-name))))))
@@ -307,14 +309,14 @@ EXECUTABLE is the full path to the formatter."
   "Format the current buffer as Rust using \"rustfmt\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-easy executable))
 
 (defun format-all-buffer-shfmt (executable)
   "Format the current buffer as Shell using \"shfmt\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process
-   executable nil nil
+  (format-all-buffer-easy
+   executable
    "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
            (bash "bash") (mksh "mksh") (t "posix"))))
 
@@ -328,9 +330,8 @@ EXECUTABLE is the full path to the formatter."
          (oenc (symbol-name (or (coding-system-get oc :mime-charset) 'utf-8)))
          (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                     process-environment)))
-    (format-all-buffer-process
+    (format-all-buffer-easy
      executable
-     nil nil
      "--keywords" "upper"
      "--reindent_aligned"
      "--encoding" ienc
@@ -345,20 +346,21 @@ EXECUTABLE is the full path to the formatter."
   ;; range of errors, all the way up to undeclared identifiers and
   ;; such.  To catch only syntax errors, we need to look specifically
   ;; for the text "Parsing error:".
-  (format-all-buffer-process
-   executable '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" "--fix" "--stdin"))
+  (format-all-buffer-hard
+   '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:"
+   executable "--fix" "--stdin"))
 
 (defun format-all-buffer-swiftformat (executable)
   "Format the current buffer as Swift using \"swiftformat\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable))
+  (format-all-buffer-easy executable))
 
 (defun format-all-buffer-yq (executable)
   "Format the current buffer as YAML using \"yq\".
 
 EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-process executable nil nil "read" "-"))
+  (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
   '((autopep8
