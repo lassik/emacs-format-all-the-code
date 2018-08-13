@@ -265,11 +265,11 @@ need to be shell-quoted."
     (let ((assume-filename (or (buffer-file-name) mode-result "")))
       (when assume-filename (concat "-assume-filename=" assume-filename))))))
 
-(defun format-all-buffer-crystal (executable)
-  "Format the current buffer as Crystal using \"crystal tool format\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable "tool" "format" "-"))
+(define-format-all-formatter crystal
+  (:executable "crystal")
+  (:install (macos "brew install crystal"))
+  (:modes crystal-mode)
+  (:format (format-all-buffer-easy executable "tool" "format" "-")))
 
 (defun format-all-buffer-dfmt (executable)
   "Format the current buffer as D using \"dfmt\".
@@ -442,12 +442,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((crystal
-     (:executable "crystal")
-     (:install (macos "brew install crystal"))
-     (:function format-all-buffer-crystal)
-     (:modes crystal-mode))
-    (dfmt
+  '((dfmt
      (:executable "dfmt")
      (:install (macos "brew install dfmt"))
      (:function format-all-buffer-dfmt)
