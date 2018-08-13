@@ -277,14 +277,15 @@ need to be shell-quoted."
   (:modes d-mode)
   (:format (format-all-buffer-hard nil (regexp-quote "[error]") executable)))
 
-(defun format-all-buffer-elm-format (executable)
-  "Format the current buffer as Elm using \"elm-format\".
-
-EXECUTABLE is the full path to the formatter."
-  (cl-destructuring-bind (output errput first-diff)
-      (format-all-buffer-easy executable  "--yes" "--stdin")
-    (let ((errput (format-all-remove-ansi-color errput)))
-      (list output errput first-diff))))
+(define-format-all-formatter elm-format
+  (:executable "elm-format")
+  (:install (macos "brew install elm"))
+  (:modes elm-mode)
+  (:format
+   (cl-destructuring-bind (output errput first-diff)
+       (format-all-buffer-easy executable "--yes" "--stdin")
+     (let ((errput (format-all-remove-ansi-color errput)))
+       (list output errput first-diff)))))
 
 (defun format-all-buffer-emacs-lisp (_executable)
   "Format the current buffer as Emacs Lisp using Emacs itself.
@@ -442,12 +443,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((elm-format
-     (:executable "elm-format")
-     (:install (macos "brew install elm"))
-     (:function format-all-buffer-elm-format)
-     (:modes elm-mode))
-    (emacs-lisp
+  '((emacs-lisp
      (:executable t)
      (:install nil)
      (:function format-all-buffer-emacs-lisp)
