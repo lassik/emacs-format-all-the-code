@@ -398,14 +398,15 @@ need to be shell-quoted."
   (:modes rust-mode)
   (:format (format-all-buffer-easy executable)))
 
-(defun format-all-buffer-shfmt (executable)
-  "Format the current buffer as Shell using \"shfmt\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy
-   executable
-   "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
-           (bash "bash") (mksh "mksh") (t "posix"))))
+(define-format-all-formatter shfmt
+  (:executable "shfmt")
+  (:install (macos "brew install shfmt"))
+  (:modes sh-mode)
+  (:format
+   (format-all-buffer-easy
+    executable
+    "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
+            (bash "bash") (mksh "mksh") (t "posix")))))
 
 (defun format-all-buffer-sqlformat (executable)
   "Format the current buffer as SQL using \"sqlformat\".
@@ -450,12 +451,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((shfmt
-     (:executable "shfmt")
-     (:install (macos "brew install shfmt"))
-     (:function format-all-buffer-shfmt)
-     (:modes sh-mode))
-    (sqlformat
+  '((sqlformat
      (:executable "sqlformat")
      (:install "pip install sqlparse")
      (:function format-all-buffer-sqlformat)
