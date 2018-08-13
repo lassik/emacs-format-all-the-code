@@ -167,6 +167,15 @@ need to be shell-quoted."
          (list errorp errput))))))
 
 (defun format-all-buffer-easy (executable &rest args)
+  "Internal helper function to implement formatters.
+
+Runs the external program EXECUTABLE.  The program shall read
+unformatted code from stdin, write its formatted equivalent to
+stdout, write errors/warnings to stderr, and exit zero/non-zero
+on success/failure.
+
+If ARGS are given, those are arguments to EXECUTABLE.  They don't
+need to be shell-quoted."
   (apply 'format-all-buffer-hard nil nil executable args))
 
 (defun format-all-buffer-autopep8 (executable)
