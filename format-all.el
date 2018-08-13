@@ -426,11 +426,11 @@ need to be shell-quoted."
       "--encoding" ienc
       "-"))))
 
-(defun format-all-buffer-swiftformat (executable)
-  "Format the current buffer as Swift using \"swiftformat\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable))
+(define-format-all-formatter swiftformat
+  (:executable "swiftformat")
+  (:install (macos "brew install swiftformat"))
+  (:modes swift-mode swift3-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (defun format-all-buffer-yq (executable)
   "Format the current buffer as YAML using \"yq\".
@@ -439,12 +439,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((swiftformat
-     (:executable "swiftformat")
-     (:install (macos "brew install swiftformat"))
-     (:function format-all-buffer-swiftformat)
-     (:modes swift-mode swift3-mode))
-    (yq
+  '((yq
      (:executable "yq")
      (:install (macos "brew install yq"))
      (:function format-all-buffer-yq)
