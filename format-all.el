@@ -387,7 +387,7 @@ EXECUTABLE is the full path to the formatter."
      (:function format-all-buffer-elm-format)
      (:modes elm-mode))
     (emacs-lisp
-     (:executable nil)
+     (:executable t)
      (:install nil)
      (:function format-all-buffer-emacs-lisp)
      (:modes emacs-lisp-mode lisp-interaction-mode))
@@ -479,11 +479,9 @@ EXECUTABLE is the full path to the formatter."
            (error "Property %S missing for formatter %S"
                   property formatter))))
 
-(defun format-all-property (property formatter)
+(defun format-all-property-system (property formatter)
   "Internal helper function to get PROPERTY of FORMATTER."
-  (cl-dolist (choice (format-all-property-list property formatter)
-                     (error "Property %S missing for formatter %S system %S"
-                            property formatter format-all-system-type))
+  (cl-dolist (choice (format-all-property-list property formatter))
     (cond ((atom choice)
            (cl-return choice))
           ((eql format-all-system-type (car choice))
@@ -491,7 +489,7 @@ EXECUTABLE is the full path to the formatter."
 
 (defun format-all-please-install (executable formatter)
   "Internal helper function for error about missing EXECUTABLE for FORMATTER."
-  (let ((installer (format-all-property :install formatter)))
+  (let ((installer (format-all-property-system :install formatter)))
     (concat (format "You need the %S command." executable)
             (if (not installer) ""
               (format " You may be able to install it via %S."
@@ -499,10 +497,13 @@ EXECUTABLE is the full path to the formatter."
 
 (defun format-all-formatter-executable (formatter)
   "Internal helper function to get the external program for FORMATTER."
-  (let ((executable (format-all-property :executable formatter)))
-    (when executable
-      (or (executable-find executable)
-          (error (format-all-please-install executable formatter))))))
+  (let ((executable (format-all-property-system :executable formatter)))
+    (cond ((not executable)
+           (error "Executable not specified for formatter %S system %S"
+                  formatter format-all-system-type))
+          ((not (eql t executable))
+           (or (executable-find executable)
+               (error (format-all-please-install executable formatter)))))))
 
 (defun format-all-formatter-for-mode (mode)
   "Internal helper function to get the formatter corresponding to MODE."
