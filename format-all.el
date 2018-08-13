@@ -271,11 +271,11 @@ need to be shell-quoted."
   (:modes crystal-mode)
   (:format (format-all-buffer-easy executable "tool" "format" "-")))
 
-(defun format-all-buffer-dfmt (executable)
-  "Format the current buffer as D using \"dfmt\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-hard nil (regexp-quote "[error]") executable))
+(define-format-all-formatter dfmt
+  (:executable "dfmt")
+  (:install (macos "brew install dfmt"))
+  (:modes d-mode)
+  (:format (format-all-buffer-hard nil (regexp-quote "[error]") executable)))
 
 (defun format-all-buffer-elm-format (executable)
   "Format the current buffer as Elm using \"elm-format\".
@@ -442,12 +442,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((dfmt
-     (:executable "dfmt")
-     (:install (macos "brew install dfmt"))
-     (:function format-all-buffer-dfmt)
-     (:modes d-mode))
-    (elm-format
+  '((elm-format
      (:executable "elm-format")
      (:install (macos "brew install elm"))
      (:function format-all-buffer-elm-format)
