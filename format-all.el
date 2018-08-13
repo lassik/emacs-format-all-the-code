@@ -300,11 +300,11 @@ need to be shell-quoted."
       (format-all-fix-trailing-whitespace)
       (list nil "")))))
 
-(defun format-all-buffer-gofmt (executable)
-  "Format the current buffer as Go using \"gofmt\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable))
+(define-format-all-formatter gofmt
+  (:executable "gofmt")
+  (:install (macos "brew install go"))
+  (:modes go-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (defun format-all-buffer-hindent (executable)
   "Format the current buffer as Haskell using \"hindent\".
@@ -444,12 +444,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((gofmt
-     (:executable "gofmt")
-     (:install (macos "brew install go"))
-     (:function format-all-buffer-gofmt)
-     (:modes go-mode))
-    (hindent
+  '((hindent
      (:executable "hindent")
      (:install "stack install hindent")
      (:function format-all-buffer-hindent)
