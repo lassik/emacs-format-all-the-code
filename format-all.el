@@ -332,11 +332,11 @@ need to be shell-quoted."
   (:modes kotlin-mode)
   (:format (format-all-buffer-easy executable "--format" "--stdin")))
 
-(defun format-all-buffer-mix-format (executable)
-  "Format the current buffer as Elixir using \"mix format\".
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-easy executable "format" "-"))
+(define-format-all-formatter mix-format
+  (:executable "mix")
+  (:install (macos "brew install elixir"))
+  (:modes elixir-mode)
+  (:format (format-all-buffer-easy executable "format" "-")))
 
 (defun format-all-buffer-ocp-indent (executable)
   "Format the current buffer as OCaml using \"ocp-indent\".
@@ -447,12 +447,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((mix-format
-     (:executable "mix")
-     (:install (macos "brew install elixir"))
-     (:function format-all-buffer-mix-format)
-     (:modes elixir-mode))
-    (ocp-indent
+  '((ocp-indent
      (:executable "ocp-indent")
      (:install "opam install ocp-indent")
      (:function format-all-buffer-ocp-indent)
