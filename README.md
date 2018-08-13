@@ -30,7 +30,7 @@ Supported languages
 * **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
 * **Perl** ([*perltidy*](http://perltidy.sourceforge.net/))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
-* **Python** ([*autopep8*](https://pypi.org/project/autopep8/))
+* **Python** ([*black*](https://github.com/ambv/black))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
 * **Shell script** ([*shfmt*](https://github.com/mvdan/sh))

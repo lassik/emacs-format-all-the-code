@@ -36,7 +36,7 @@
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
 ;; - Protocol Buffers (clang-format)
-;; - Python (autopep8)
+;; - Python (black)
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
 ;; - Shell script (shfmt)
@@ -244,11 +244,11 @@ need to be shell-quoted."
             (puthash ',formatter ,format format-all-format-table)
             ',formatter)))
 
-(define-format-all-formatter autopep8
-  (:executable "autopep8")
-  (:install "pip install autopep8")
+(define-format-all-formatter black
+  (:executable "black")
+  (:install "pip install black")
   (:modes python-mode)
-  (:format (format-all-buffer-easy executable "-")))
+  (:format (format-all-buffer-easy executable "-q" "-")))
 
 (define-format-all-formatter clang-format
   (:executable "clang-format")
