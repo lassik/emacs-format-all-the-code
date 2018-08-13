@@ -287,17 +287,18 @@ need to be shell-quoted."
      (let ((errput (format-all-remove-ansi-color errput)))
        (list output errput first-diff)))))
 
-(defun format-all-buffer-emacs-lisp (_executable)
-  "Format the current buffer as Emacs Lisp using Emacs itself.
-
-EXECUTABLE is the full path to the formatter."
-  (format-all-buffer-thunk
-   (lambda (input)
-     (emacs-lisp-mode)
-     (insert input)
-     (indent-region (point-min) (point-max))
-     (format-all-fix-trailing-whitespace)
-     (list nil ""))))
+(define-format-all-formatter emacs-lisp
+  (:executable)
+  (:install)
+  (:modes emacs-lisp-mode lisp-interaction-mode)
+  (:format
+   (format-all-buffer-thunk
+    (lambda (input)
+      (emacs-lisp-mode)
+      (insert input)
+      (indent-region (point-min) (point-max))
+      (format-all-fix-trailing-whitespace)
+      (list nil "")))))
 
 (defun format-all-buffer-gofmt (executable)
   "Format the current buffer as Go using \"gofmt\".
@@ -443,12 +444,7 @@ EXECUTABLE is the full path to the formatter."
   (format-all-buffer-easy executable "read" "-"))
 
 (defconst format-all-formatters
-  '((emacs-lisp
-     (:executable t)
-     (:install nil)
-     (:function format-all-buffer-emacs-lisp)
-     (:modes emacs-lisp-mode lisp-interaction-mode))
-    (gofmt
+  '((gofmt
      (:executable "gofmt")
      (:install (macos "brew install go"))
      (:function format-all-buffer-gofmt)
