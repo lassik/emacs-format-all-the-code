@@ -76,10 +76,10 @@
       (gnu/linux  'linux)
       (berkeley-unix
        (save-match-data
-	 (let ((case-fold-search t))
+         (let ((case-fold-search t))
            (cond ((string-match "freebsd" system-configuration) 'freebsd)
-		 ((string-match "openbsd" system-configuration) 'openbsd)
-		 ((string-match "netbsd"  system-configuration) 'netbsd))))))
+                 ((string-match "openbsd" system-configuration) 'openbsd)
+                 ((string-match "netbsd"  system-configuration) 'netbsd))))))
     "Current operating system according to the format-all package."))
 
 (eval-when-compile
