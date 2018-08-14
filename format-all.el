@@ -321,8 +321,12 @@ Consult the existing formatters for examples of BODY."
   (:executable "tidy")
   (:install (macos "brew install tidy-html5"))
   (:modes
-   html-helper-mode html-mode mhtml-mode nxhtml-mode web-mode
-   nxml-mode xml-mode)
+   html-helper-mode html-mode mhtml-mode nxhtml-mode
+   nxml-mode xml-mode
+   (web-mode
+    (and (equal "none" (symbol-value 'web-mode-engine))
+         (car (member (symbol-value 'web-mode-content-type)
+                      '("xml" "html"))))))
   (:format
    (format-all-buffer-hard
     '(0 1) nil
@@ -376,7 +380,14 @@ Consult the existing formatters for examples of BODY."
    (scss-mode "scss")
    (less-css-mode "less")
    (graphql-mode "graphql")
-   ((gfm-mode markdown-mode) "markdown"))
+   ((gfm-mode markdown-mode) "markdown")
+   (web-mode
+    (and (equal "none" (symbol-value 'web-mode-engine))
+         (let ((ct (symbol-value 'web-mode-content-type)))
+           (cond ((equal ct "css") "css")
+                 ((equal ct "javascript") "babylon")
+                 ((equal ct "json") "json")
+                 ((equal ct "jsx") "babylon"))))))
   (:format
    (let ((parser mode-result))
      (format-all-buffer-easy
