@@ -205,7 +205,12 @@ need to be shell-quoted."
   (puthash key (cons value (remove value (gethash key table))) table))
 
 (defmacro define-format-all-formatter (formatter &rest body)
-  "Define a new source code formatter for use with format-all."
+  "Define a new source code formatter for use with format-all.
+
+FORMATTER is a symbol naming the formatter.  The name of the
+command used to run the formatter is usually a good choice.
+
+Consult the existing formatters for examples of BODY."
   (let (executable install modes format)
     (cl-assert (equal (mapcar 'car body) '(:executable :install :modes :format)))
     (cl-dolist (part body)
