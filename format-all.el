@@ -18,6 +18,7 @@
 ;;
 ;; Supported languages:
 ;;
+;; - Assembly (asmfmt)
 ;; - C/C++/Objective-C (clang-format)
 ;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier)
@@ -248,6 +249,12 @@ Consult the existing formatters for examples of BODY."
             ,@modes
             (puthash ',formatter ,format format-all-format-table)
             ',formatter)))
+
+(define-format-all-formatter asmfmt
+  (:executable "asmfmt")
+  (:install)
+  (:modes asm-mode nasm-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter black
   (:executable "black")

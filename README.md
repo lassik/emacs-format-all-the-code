@@ -12,6 +12,7 @@ package and formatting command for each language. Just do **M-x**
 Supported languages
 -------------------
 
+* **Assembly** ([*asmfmt*](https://github.com/klauspost/asmfmt))
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
