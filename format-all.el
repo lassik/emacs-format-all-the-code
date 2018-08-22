@@ -338,7 +338,9 @@ Consult the existing formatters for examples of BODY."
    (format-all-buffer-hard
     '(0 1) nil
     executable
-    "-q" "-indent"
+    "-q"
+    "--tidy-mark" "no"
+    "-indent"
     (when (member major-mode '(nxml-mode xml-mode))
       "-xml"))))
 
