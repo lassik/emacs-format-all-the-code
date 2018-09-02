@@ -87,8 +87,8 @@ keywords:
 
 The current buffer is the buffer that was just formatted.  Point
 is not guaranteed to be in any particular place, so `goto-char'
-before editing the buffer.  Narrowing may be in effect, so you
-may have to use `widen' and `save-restriction' too.")
+before editing the buffer.  Narrowing may be in effect unless
+STATUS is :reformatted.")
 
 (eval-when-compile
   (defconst format-all-system-type
