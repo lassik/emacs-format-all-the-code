@@ -513,21 +513,22 @@ changes to the code, point is placed at the first change."
           (executable (format-all-formatter-executable formatter)))
       (cl-destructuring-bind (output errput first-diff)
           (funcall f-function executable mode-result)
-        (cl-case output
-          ((nil)
-           (message "Syntax error"))
-          ((t)
-           (message "Already formatted"))
-          (t
-           (message "Reformatted!")
-           (erase-buffer)
-           (insert output)
-           (goto-char first-diff)))
-        (with-current-buffer (get-buffer-create "*format-all-errors*")
-          (erase-buffer)
-          (unless (= 0 (length errput))
-            (insert errput)
-            (display-buffer (current-buffer))))))))
+        (let ((status (cond ((null output) :error)
+                            ((equal t output) :already-formatted)
+                            (t :reformatted))))
+          (when (equal :reformatted status)
+            (erase-buffer)
+            (insert output)
+            (goto-char first-diff))
+          (with-current-buffer (get-buffer-create "*format-all-errors*")
+            (erase-buffer)
+            (unless (= 0 (length errput))
+              (insert errput)
+              (display-buffer (current-buffer))))
+          (message (cl-case status
+                     (:error "Syntax error")
+                     (:already-formatted "Already formatted")
+                     (:reformatted "Reformatted!"))))))))
 
 ;;;###autoload
 (define-minor-mode format-all-mode
