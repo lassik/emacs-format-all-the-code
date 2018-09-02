@@ -549,7 +549,7 @@ changes to the code, point is placed at the first change."
               (display-buffer (current-buffer))))
           (run-hook-with-args 'format-all-after-format-functions
                               formatter status)
-          (message (cl-case status
+          (message (cl-ecase status
                      (:error "Syntax error")
                      (:already-formatted "Already formatted")
                      (:reformatted "Reformatted!"))))))))
