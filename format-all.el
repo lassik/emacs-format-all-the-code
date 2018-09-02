@@ -68,6 +68,28 @@
 ;;
 ;;; Code:
 
+(defvar format-all-after-format-functions nil
+  "Hook run after each time ‘format-all-buffer’ has formatted a buffer.
+
+The value is a list of hook functions.  Use `add-hook' to add a
+function.  The function is called with two arguments: (FORMATTER
+STATUS).  FORMATTER is a symbol naming the formatter, as given to
+`define-format-all-formatter'.  STATUS is one of the following
+keywords:
+
+* :reformatted -- The formatter made changes to the buffer.
+
+* :already-formatted -- The buffer was already formatted
+  correctly so the formatter didn't make any changes to it.
+
+* :error -- The formatter encountered an error (usually a syntax
+  error).  The buffer contents are the same as before formatting.
+
+The current buffer is the buffer that was just formatted.  Point
+is not guaranteed to be in any particular place, so `goto-char'
+before editing the buffer.  Narrowing may be in effect, so you
+may have to use `widen' and `save-restriction' too.")
+
 (eval-when-compile
   (defconst format-all-system-type
     (cl-case system-type
@@ -525,6 +547,8 @@ changes to the code, point is placed at the first change."
             (unless (= 0 (length errput))
               (insert errput)
               (display-buffer (current-buffer))))
+          (run-hook-with-args 'format-all-after-format-functions
+                              formatter status)
           (message (cl-case status
                      (:error "Syntax error")
                      (:already-formatted "Already formatted")
