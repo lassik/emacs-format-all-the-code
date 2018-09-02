@@ -550,7 +550,7 @@ changes to the code, point is placed at the first change."
           (run-hook-with-args 'format-all-after-format-functions
                               formatter status)
           (message (cl-ecase status
-                     (:error "Syntax error")
+                     (:error "Formatting error")
                      (:already-formatted "Already formatted")
                      (:reformatted "Reformatted!"))))))))
 
