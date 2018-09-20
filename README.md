@@ -22,7 +22,7 @@ Supported languages
 * **Emacs Lisp** (native)
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/))
 * **GraphQL** ([*prettier*](https://prettier.io/))
-* **Haskell** ([*hindent*](https://github.com/commercialhaskell/hindent))
+* **Haskell** ([*brittany*](https://github.com/lspitzner/brittany))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **JavaScript/JSON/JSX/TypeScript/Vue** ([*prettier*](https://prettier.io/))

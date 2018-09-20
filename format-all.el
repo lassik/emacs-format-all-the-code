@@ -28,7 +28,7 @@
 ;; - Emacs Lisp (native)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
-;; - Haskell (hindent)
+;; - Haskell (brittany)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX/TypeScript/Vue (prettier)
@@ -284,6 +284,12 @@ Consult the existing formatters for examples of BODY."
   (:modes python-mode)
   (:format (format-all-buffer-easy executable "-q" "-")))
 
+(define-format-all-formatter brittany
+  (:executable "brittany")
+  (:install "stack install brittany")
+  (:modes haskell-mode)
+  (:format (format-all-buffer-easy executable)))
+
 (define-format-all-formatter clang-format
   (:executable "clang-format")
   (:install (macos "brew install clang-format"))
@@ -338,12 +344,6 @@ Consult the existing formatters for examples of BODY."
   (:executable "gofmt")
   (:install (macos "brew install go"))
   (:modes go-mode)
-  (:format (format-all-buffer-easy executable)))
-
-(define-format-all-formatter hindent
-  (:executable "hindent")
-  (:install "stack install hindent")
-  (:modes haskell-mode)
   (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter html-tidy
