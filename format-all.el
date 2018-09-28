@@ -154,13 +154,13 @@ even if it produced warnings.  Not all warnings are errors."
             (input (buffer-string)))
         (with-temp-buffer
           (cl-destructuring-bind (errorp errput) (funcall thunk input)
-            (let* ((first-diff (abs (compare-buffer-substrings inbuf nil nil
-                                                               nil nil nil)))
-                   (no-chg (or errorp (= 0 first-diff)))
+            (let* ((no-chg (or errorp
+                               (= 0 (compare-buffer-substrings inbuf nil nil
+                                                               nil nil nil))))
                    (output (cond (errorp nil)
                                  (no-chg t)
                                  (t (buffer-string)))))
-              (list output errput first-diff))))))))
+              (list output errput))))))))
 
 (defun format-all-buffer-hard (ok-statuses error-regexp executable &rest args)
   "Internal helper function to implement formatters.
@@ -322,10 +322,10 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install elm"))
   (:modes elm-mode)
   (:format
-   (cl-destructuring-bind (output errput first-diff)
+   (cl-destructuring-bind (output errput)
        (format-all-buffer-easy executable "--yes" "--stdin")
      (let ((errput (format-all-remove-ansi-color errput)))
-       (list output errput first-diff)))))
+       (list output errput)))))
 
 (define-format-all-formatter emacs-lisp
   (:executable)
@@ -533,15 +533,20 @@ changes to the code, point is placed at the first change."
     (unless formatter (error "Don't know how to format %S code" major-mode))
     (let ((f-function (gethash formatter format-all-format-table))
           (executable (format-all-formatter-executable formatter)))
-      (cl-destructuring-bind (output errput first-diff)
+      (cl-destructuring-bind (output errput)
           (funcall f-function executable mode-result)
         (let ((status (cond ((null output) :error)
                             ((equal t output) :already-formatted)
                             (t :reformatted))))
           (when (equal :reformatted status)
-            (erase-buffer)
-            (insert output)
-            (goto-char first-diff))
+            (let ((old-line-number (line-number-at-pos nil t))
+                  (old-column (current-column)))
+              (erase-buffer)
+              (insert output)
+              (goto-char (point-min))
+              (forward-line (1- old-line-number))
+              (let ((line-length (- (point-at-eol) (point-at-bol))))
+                (goto-char (+ (point) (min old-column line-length))))))
           (with-current-buffer (get-buffer-create "*format-all-errors*")
             (erase-buffer)
             (unless (= 0 (length errput))
