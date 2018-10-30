@@ -303,7 +303,7 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all-buffer-easy
     executable
-    (let ((assume-filename (or (buffer-file-name) mode-result "")))
+    (let ((assume-filename (or (buffer-file-name) mode-result)))
       (when assume-filename (concat "-assume-filename=" assume-filename))))))
 
 (define-format-all-formatter cljfmt
