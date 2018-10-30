@@ -532,8 +532,7 @@ It is fairly easy to add new languages that have an external
 formatter.
 
 Any errors/warnings encountered during formatting are shown in a
-buffer called *format-all-errors*.  If the formatter made any
-changes to the code, point is placed at the first change."
+buffer called *format-all-errors*."
   (interactive)
   (cl-destructuring-bind (formatter mode-result) (format-all-probe)
     (unless formatter (error "Don't know how to format %S code" major-mode))
