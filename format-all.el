@@ -20,6 +20,7 @@
 ;;
 ;; - Assembly (asmfmt)
 ;; - C/C++/Objective-C (clang-format)
+;; - Clojure/ClojureScript (cljfmt)
 ;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier)
 ;; - D (dfmt)
@@ -304,6 +305,12 @@ Consult the existing formatters for examples of BODY."
     executable
     (let ((assume-filename (or (buffer-file-name) mode-result "")))
       (when assume-filename (concat "-assume-filename=" assume-filename))))))
+
+(define-format-all-formatter cljfmt
+  (:executable "cljfmt")
+  (:install)
+  (:modes clojure-mode clojurec-mode clojurescript-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter crystal
   (:executable "crystal")
