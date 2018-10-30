@@ -308,7 +308,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter cljfmt
   (:executable "cljfmt")
-  (:install "npm install node-cljfmt")
+  (:install "npm install --global node-cljfmt")
   (:modes clojure-mode clojurec-mode clojurescript-mode)
   (:format (format-all-buffer-easy executable)))
 
@@ -399,7 +399,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter prettier
   (:executable "prettier")
-  (:install "npm install prettier")
+  (:install "npm install --global prettier")
   (:modes
    ((js-mode js2-mode js3-mode)
     ;; The prettier folks seem to be currently pondering whether to
