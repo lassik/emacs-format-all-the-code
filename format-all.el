@@ -525,10 +525,9 @@ to tell you how you might be able to install it on your operating
 system.  Only Emacs Lisp is formatted without an external program.
 
 A suitable formatter is selected according to the `major-mode' of
-the buffer.  Many popular programming languages are supported,
-but not all of them by any means, so unfortunately it's still
-likely that your favorite language is missing.  It is fairly easy
-to add new languages that have an external formatter.
+the buffer.  Many popular programming languages are supported.
+It is fairly easy to add new languages that have an external
+formatter.
 
 Any errors/warnings encountered during formatting are shown in a
 buffer called *format-all-errors*.  If the formatter made any
