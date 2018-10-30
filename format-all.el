@@ -568,7 +568,7 @@ buffer called *format-all-errors*."
 (define-minor-mode format-all-mode
   "Toggle automatic source code formatting before save.
 
-When the Format-All minor mode is enabled, `format-all-buffer' is
+When this minor mode (FmtAll) is enabled, `format-all-buffer' is
 automatically called to format your code each time before you
 save the buffer.
 
@@ -597,7 +597,7 @@ function to your personal `after-change-major-mode-hook' in your
 When `format-all-mode' is called as a Lisp function, the mode is
 toggled if ARG is ‘toggle’, disabled if ARG is a negative integer
 or zero, and enabled otherwise."
-  :lighter " Format-All"
+  :lighter " FmtAll"
   :global nil
   (if format-all-mode
       (add-hook 'before-save-hook 'format-all-buffer nil 'local)
