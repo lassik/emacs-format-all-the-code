@@ -5,9 +5,11 @@ What does it do
 ---------------
 
 Lets you auto-format source code in many languages using the same
-command for all languages, instead of learning a different elisp
+command for all languages, instead of learning a different Emacs
 package and formatting command for each language. Just do **M-x**
-`format-all-buffer` and it will try its best to do the right thing.
+`format-all-buffer` and it will try its best to do the right thing. To
+auto-format code on save, use the minor mode `format-all-mode`. Please
+see the documentation for that function for instructions.
 
 Supported languages
 -------------------
@@ -51,10 +53,6 @@ you how to install it.
 
 How to customize
 ----------------
-
-A local minor mode called `format-all-mode` is available to format
-code on save. Please see the documentation for that function for
-instructions.
 
 There are currently no customize variables, since it's not clear what
 approach should be taken. Please see [GitHub issues][github-issues]
