@@ -24,7 +24,7 @@ Supported languages
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
 * **Elixir** ([*mix format*](https://hexdocs.pm/mix/master/Mix.Tasks.Format.html))
 * **Elm** ([*elm-format*](https://github.com/avh4/elm-format))
-* **Emacs Lisp** (native)
+* **Emacs Lisp** (emacs)
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/))
 * **GraphQL** ([*prettier*](https://prettier.io/))
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany))

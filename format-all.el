@@ -30,7 +30,7 @@
 ;; - D (dfmt)
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
-;; - Emacs Lisp (native)
+;; - Emacs Lisp (emacs)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
 ;; - Haskell (brittany)
