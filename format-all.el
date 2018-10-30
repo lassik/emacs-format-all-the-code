@@ -593,9 +593,9 @@ function to your personal `after-change-major-mode-hook' in your
 
     (add-hook 'after-change-major-mode-hook 'my-after-change-major-mode)
 
-When called from Lisp, the mode is toggled if ARG is ‘toggle’,
-disabled if ARG is a negative integer or zero, and enabled
-otherwise."
+When `format-all-mode' is called as a Lisp function, the mode is
+toggled if ARG is ‘toggle’, disabled if ARG is a negative integer
+or zero, and enabled otherwise."
   :lighter " Format-All"
   :global nil
   (if format-all-mode
