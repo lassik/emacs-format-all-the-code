@@ -20,7 +20,7 @@
 ;;
 ;; - Assembly (asmfmt)
 ;; - C/C++/Objective-C (clang-format)
-;; - Clojure/ClojureScript (cljfmt)
+;; - Clojure/ClojureScript (node-cljfmt)
 ;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier)
 ;; - D (dfmt)
@@ -308,7 +308,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter cljfmt
   (:executable "cljfmt")
-  (:install)
+  (:install "npm install node-cljfmt")
   (:modes clojure-mode clojurec-mode clojurescript-mode)
   (:format (format-all-buffer-easy executable)))
 

@@ -14,7 +14,7 @@ Supported languages
 
 * **Assembly** ([*asmfmt*](https://github.com/klauspost/asmfmt))
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
-* **Clojure/ClojureScript** ([*cljfmt*](https://github.com/weavejester/cljfmt))
+* **Clojure/ClojureScript** ([*node-cljfmt*](https://github.com/snoe/node-cljfmt))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
