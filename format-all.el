@@ -288,7 +288,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter brittany
   (:executable "brittany")
   (:install "stack install brittany")
-  (:modes haskell-mode)
+  (:modes haskell-mode literate-haskell-mode)
   (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter clang-format
