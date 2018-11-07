@@ -513,6 +513,17 @@ Consult the existing formatters for examples of BODY."
           (error (format-all-please-install
                   executable (gethash formatter format-all-install-table)))))))
 
+(defun format-all-show-or-hide-errors (error-output)
+  (save-selected-window
+    (with-current-buffer (get-buffer-create "*format-all-errors*")
+      (erase-buffer)
+      (cond ((not (= 0 (length error-output)))
+             (insert error-output)
+             (display-buffer (current-buffer)))
+            (t
+             (let ((error-window (get-buffer-window (current-buffer))))
+               (when error-window (quit-window nil error-window))))))))
+
 ;;;###autoload
 (defun format-all-buffer ()
   "Auto-format the source code in the current buffer.
@@ -531,8 +542,8 @@ the buffer.  Many popular programming languages are supported.
 It is fairly easy to add new languages that have an external
 formatter.
 
-Any errors/warnings encountered during formatting are shown in a
-buffer called *format-all-errors*."
+If any errors or warnings were encountered during formatting,
+they are shown in a buffer called *format-all-errors*."
   (interactive)
   (cl-destructuring-bind (formatter mode-result) (format-all-probe)
     (unless formatter (error "Don't know how to format %S code" major-mode))
@@ -552,11 +563,7 @@ buffer called *format-all-errors*."
               (forward-line (1- old-line-number))
               (let ((line-length (- (point-at-eol) (point-at-bol))))
                 (goto-char (+ (point) (min old-column line-length))))))
-          (with-current-buffer (get-buffer-create "*format-all-errors*")
-            (erase-buffer)
-            (unless (= 0 (length errput))
-              (insert errput)
-              (display-buffer (current-buffer))))
+          (format-all-show-or-hide-errors errput)
           (run-hook-with-args 'format-all-after-format-functions
                               formatter status)
           (message (cl-ecase status
