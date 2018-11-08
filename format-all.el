@@ -69,6 +69,9 @@
 ;;
 ;;; Code:
 
+(defvar format-all-debug nil
+  "When non-nil, format-all writes debug info using `message'.")
+
 (defvar format-all-after-format-functions nil
   "Hook run after each time ‘format-all-buffer’ has formatted a buffer.
 
@@ -184,6 +187,9 @@ need to be shell-quoted."
   (let ((ok-statuses (or ok-statuses '(0)))
         (args (cl-mapcan (lambda (arg) (if (listp arg) arg (list arg)))
                          args)))
+    (when format-all-debug
+      (message "Format-All: Running: %s"
+               (mapconcat #'shell-quote-argument (cons executable args) " ")))
     (format-all-buffer-thunk
      (lambda (input)
        (let* ((errfile (make-temp-file "format-all-"))
@@ -547,6 +553,9 @@ they are shown in a buffer called *format-all-errors*."
   (interactive)
   (cl-destructuring-bind (formatter mode-result) (format-all-probe)
     (unless formatter (error "Don't know how to format %S code" major-mode))
+    (when format-all-debug
+      (message "Format-All: Formatting %s as %S"
+               (buffer-name) (list formatter mode-result)))
     (let ((f-function (gethash formatter format-all-format-table))
           (executable (format-all-formatter-executable formatter)))
       (cl-destructuring-bind (output errput)
