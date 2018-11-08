@@ -16,6 +16,7 @@ instructions.
 Supported languages
 -------------------
 
+* **Angular/Vue** ([*prettier*](https://prettier.io/))
 * **Assembly** ([*asmfmt*](https://github.com/klauspost/asmfmt))
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Clojure/ClojureScript** ([*node-cljfmt*](https://github.com/snoe/node-cljfmt))
@@ -30,7 +31,7 @@ Supported languages
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
-* **JavaScript/JSON/JSX/TypeScript/Vue** ([*prettier*](https://prettier.io/))
+* **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/))
 * **Kotlin** ([*ktlint*](https://github.com/shyiko/ktlint))
 * **Markdown** ([*prettier*](https://prettier.io/))
 * **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
@@ -42,6 +43,7 @@ Supported languages
 * **Shell script** ([*shfmt*](https://github.com/mvdan/sh))
 * **SQL** ([*sqlformat*](https://pypi.org/project/sqlparse/))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
+* **TypeScript/TSX** ([*prettier*](https://prettier.io/))
 * **YAML** ([*yq*](https://github.com/mikefarah/yq))
 
 How to install
