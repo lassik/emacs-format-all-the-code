@@ -407,6 +407,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "prettier")
   (:install "npm install --global prettier")
   (:modes
+   (angular-html-mode "angular")
    ((js-mode js2-mode js3-mode)
     (if (and (boundp 'flow-minor-mode)
              (not (null (symbol-value 'flow-minor-mode))))
