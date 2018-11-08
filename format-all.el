@@ -422,12 +422,23 @@ Consult the existing formatters for examples of BODY."
    (graphql-mode "graphql")
    ((gfm-mode markdown-mode) "markdown")
    (web-mode
-    (and (equal "none" (symbol-value 'web-mode-engine))
-         (let ((ct (symbol-value 'web-mode-content-type)))
-           (cond ((equal ct "css") "css")
-                 ((equal ct "javascript") "babylon")
-                 ((equal ct "json") "json")
-                 ((equal ct "jsx") "babylon"))))))
+    (let ((ct (symbol-value 'web-mode-content-type))
+          (en (symbol-value 'web-mode-engine)))
+      (cond ((equal ct "css") "css")
+            ((or (equal ct "javascript") (equal ct "jsx"))
+             (if (and (buffer-file-name)
+                      (save-match-data
+                        (let ((case-fold-search t))
+                          (string-match "\\.tsx?\\'" (buffer-file-name)))))
+                 "typescript"
+               "babylon"))
+            ((equal ct "json") "json")
+            ((equal ct "html")
+             (cond ((equal en "angular") "angular")
+                   ((equal en "vue") "vue")
+                   ((equal en "none") "html")
+                   (t nil)))
+            (t nil)))))
   (:format
    (let ((parser mode-result))
      (format-all-buffer-easy
