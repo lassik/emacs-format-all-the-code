@@ -408,10 +408,6 @@ Consult the existing formatters for examples of BODY."
   (:install "npm install --global prettier")
   (:modes
    ((js-mode js2-mode js3-mode)
-    ;; The prettier folks seem to be currently pondering whether to
-    ;; use flow, babylon or some other parser for all JS-like
-    ;; code. Hopefully they will settle on one parser so this can
-    ;; become less convoluted.
     (if (and (boundp 'flow-minor-mode)
              (not (null (symbol-value 'flow-minor-mode))))
         "flow"
