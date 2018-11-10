@@ -75,7 +75,7 @@
   "When non-nil, format-all writes debug info using `message'.")
 
 (defvar format-all-after-format-functions nil
-  "Hook run after each time ‘format-all-buffer’ has formatted a buffer.
+  "Hook run after each time `format-all-buffer' has formatted a buffer.
 
 The value is a list of hook functions.  Use `add-hook' to add a
 function.  The function is called with two arguments: (FORMATTER
