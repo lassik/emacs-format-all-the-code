@@ -530,6 +530,7 @@ Consult the existing formatters for examples of BODY."
                   executable (gethash formatter format-all-install-table)))))))
 
 (defun format-all-show-or-hide-errors (error-output)
+  "Internal helper function to update *format-all-errors* with ERROR-OUTPUT."
   (save-selected-window
     (with-current-buffer (get-buffer-create "*format-all-errors*")
       (erase-buffer)
