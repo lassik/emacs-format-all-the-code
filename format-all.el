@@ -138,6 +138,11 @@ STATUS is :reformatted.")
   "Internal helper function to remove terminal color codes from STRING."
   (save-match-data (replace-regexp-in-string "\x1b\\[[0-9]+m" "" string t)))
 
+(defun format-all-flatten-list (list)
+  "Internal helper function to remove nested lists in LIST."
+  (cl-mapcan (lambda (x) (if (listp x) x (list x)))
+             list))
+
 (defun format-all-buffer-thunk (thunk)
   "Internal helper function to implement formatters.
 
@@ -187,8 +192,7 @@ exit status.
 If ARGS are given, those are arguments to EXECUTABLE.  They don't
 need to be shell-quoted."
   (let ((ok-statuses (or ok-statuses '(0)))
-        (args (cl-mapcan (lambda (arg) (if (listp arg) arg (list arg)))
-                         args)))
+        (args (format-all-flatten-list args)))
     (when format-all-debug
       (message "Format-All: Running: %s"
                (mapconcat #'shell-quote-argument (cons executable args) " ")))
