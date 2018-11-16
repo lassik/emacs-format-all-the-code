@@ -541,6 +541,16 @@ Consult the existing formatters for examples of BODY."
              (let ((error-window (get-buffer-window (current-buffer))))
                (when error-window (quit-window nil error-window))))))))
 
+(defun format-all-save-line-number (thunk)
+  "Internal helper function to run THUNK and go back to the same line."
+  (let ((old-line-number (line-number-at-pos nil t))
+        (old-column (current-column)))
+    (funcall thunk)
+    (goto-char (point-min))
+    (forward-line (1- old-line-number))
+    (let ((line-length (- (point-at-eol) (point-at-bol))))
+      (goto-char (+ (point) (min old-column line-length))))))
+
 ;;;###autoload
 (defun format-all-buffer ()
   "Auto-format the source code in the current buffer.
@@ -575,14 +585,10 @@ they are shown in a buffer called *format-all-errors*."
                             ((equal t output) :already-formatted)
                             (t :reformatted))))
           (when (equal :reformatted status)
-            (let ((old-line-number (line-number-at-pos nil t))
-                  (old-column (current-column)))
-              (erase-buffer)
-              (insert output)
-              (goto-char (point-min))
-              (forward-line (1- old-line-number))
-              (let ((line-length (- (point-at-eol) (point-at-bol))))
-                (goto-char (+ (point) (min old-column line-length))))))
+            (format-all-save-line-number
+             (lambda ()
+               (erase-buffer)
+               (insert output))))
           (format-all-show-or-hide-errors errput)
           (run-hook-with-args 'format-all-after-format-functions
                               formatter status)
