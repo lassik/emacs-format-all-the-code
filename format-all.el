@@ -39,6 +39,7 @@
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX (prettier)
 ;; - Kotlin (ktlint)
+;; - Lua (lua-fmt)
 ;; - Markdown (prettier)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
@@ -386,6 +387,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install ktlint"))
   (:modes kotlin-mode)
   (:format (format-all-buffer-easy executable "--format" "--stdin")))
+
+(define-format-all-formatter lua-fmt
+  (:executable "luafmt")
+  (:install "npm install --global lua-fmt")
+  (:modes lua-mode)
+  (:format (format-all-buffer-easy executable "--stdin")))
 
 (define-format-all-formatter mix-format
   (:executable "mix")
