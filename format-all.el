@@ -554,7 +554,7 @@ Consult the existing formatters for examples of BODY."
 
 (defun format-all-save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
-  (let ((old-line-number (line-number-at-pos nil t))
+  (let ((old-line-number (line-number-at-pos))
         (old-column (current-column)))
     (funcall thunk)
     (goto-char (point-min))
@@ -596,6 +596,7 @@ they are shown in a buffer called *format-all-errors*."
                             ((equal t output) :already-formatted)
                             (t :reformatted))))
           (when (equal :reformatted status)
+            (widen)
             (format-all-save-line-number
              (lambda ()
                (erase-buffer)
