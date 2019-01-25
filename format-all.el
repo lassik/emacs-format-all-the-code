@@ -29,6 +29,7 @@
 ;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier)
 ;; - D (dfmt)
+;; - Dhall (dhall format)
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (emacs)
@@ -336,6 +337,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install dfmt"))
   (:modes d-mode)
   (:format (format-all-buffer-hard nil (regexp-quote "[error]") executable)))
+
+(define-format-all-formatter dhall
+  (:executable "dhall")
+  (:install (macos "brew install dhall"))
+  (:modes dhall-mode)
+  (:format (format-all-buffer-easy executable "format")))
 
 (define-format-all-formatter elm-format
   (:executable "elm-format")
