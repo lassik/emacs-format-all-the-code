@@ -23,6 +23,7 @@ Supported languages
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
+* **Dart** ([*dartfmt*](https://github.com/dart-lang/dart_style))
 * **Dhall** ([*dhall format*](https://github.com/dhall-lang/dhall-lang))
 * **Elixir** ([*mix format*](https://hexdocs.pm/mix/master/Mix.Tasks.Format.html))
 * **Elm** ([*elm-format*](https://github.com/avh4/elm-format))

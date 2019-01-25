@@ -29,6 +29,7 @@
 ;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier)
 ;; - D (dfmt)
+;; - Dart (dartfmt)
 ;; - Dhall (dhall format)
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
@@ -331,6 +332,16 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install crystal"))
   (:modes crystal-mode)
   (:format (format-all-buffer-easy executable "tool" "format" "-")))
+
+(define-format-all-formatter dartfmt
+  (:executable "dartfmt")
+  (:install (macos "brew tap dart-lang/dart && brew install dart"))
+  (:modes dart-mode)
+  (:format
+   (format-all-buffer-easy
+    executable
+    (when (buffer-file-name)
+      (list "--stdin-name" (buffer-file-name))))))
 
 (define-format-all-formatter dfmt
   (:executable "dfmt")
