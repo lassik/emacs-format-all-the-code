@@ -5,7 +5,7 @@
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Keywords: languages util
-;; License: MIT
+;; SPDX-License-Identifier: MIT
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
