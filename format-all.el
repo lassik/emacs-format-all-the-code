@@ -52,6 +52,7 @@
 ;; - Shell script (shfmt)
 ;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
+;; - Terraform (terraform fmt)
 ;; - TypeScript/TSX (prettier)
 ;; - YAML (yq)
 ;;
@@ -530,6 +531,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install swiftformat"))
   (:modes swift-mode swift3-mode)
   (:format (format-all-buffer-easy executable)))
+
+(define-format-all-formatter terraform-fmt
+  (:executable "terraform")
+  (:install (macos "brew install terraform"))
+  (:modes terraform-mode)
+  (:format (format-all-buffer-easy executable "fmt" "-no-color" "-")))
 
 (define-format-all-formatter yq
   (:executable "yq")

@@ -46,6 +46,7 @@ Supported languages
 * **Shell script** ([*shfmt*](https://github.com/mvdan/sh))
 * **SQL** ([*sqlformat*](https://pypi.org/project/sqlparse/))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
+* **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))
 * **TypeScript/TSX** ([*prettier*](https://prettier.io/))
 * **YAML** ([*yq*](https://github.com/mikefarah/yq))
 
