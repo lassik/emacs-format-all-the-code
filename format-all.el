@@ -431,7 +431,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter perltidy
   (:executable "perltidy")
   (:install "cpan install Perl::Tidy")
-  (:modes perl-mode)
+  (:modes perl-mode cperl-mode)
   (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter prettier
