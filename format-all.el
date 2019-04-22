@@ -411,6 +411,18 @@ Consult the existing formatters for examples of BODY."
   (:modes kotlin-mode)
   (:format (format-all-buffer-easy executable "--format" "--stdin")))
 
+(define-format-all-formatter ledger-mode
+  (:executable)
+  (:install)
+  (:modes ledger-mode)
+  (:format
+    (format-all-buffer-thunk
+     (lambda (input)
+       (ledger-mode)
+       (insert input)
+       (ledger-mode-clean-buffer)
+       (list nil "")))))
+
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
   (:install "npm install --global lua-fmt")
