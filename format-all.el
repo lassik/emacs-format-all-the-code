@@ -41,6 +41,7 @@
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX (prettier)
 ;; - Kotlin (ktlint)
+;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt)
 ;; - Markdown (prettier)
 ;; - OCaml (ocp-indent)
@@ -610,7 +611,8 @@ use ordinary undo to get your code back to its previous state.
 You will need to install external programs to do the formatting.
 If the command can't find the program that it needs, it will try
 to tell you how you might be able to install it on your operating
-system.  Only Emacs Lisp is formatted without an external program.
+system. Only Emacs Lisp and Ledger are formatted without an
+external program.
 
 A suitable formatter is selected according to the `major-mode' of
 the buffer.  Many popular programming languages are supported.

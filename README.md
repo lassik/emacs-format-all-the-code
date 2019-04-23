@@ -35,6 +35,7 @@ Supported languages
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/))
 * **Kotlin** ([*ktlint*](https://github.com/shyiko/ktlint))
+* **Ledger** ([*ledger-mode*](https://github.com/ledger/ledger-mode))
 * **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt))
 * **Markdown** ([*prettier*](https://prettier.io/))
 * **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
