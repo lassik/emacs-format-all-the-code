@@ -24,6 +24,7 @@
 ;;
 ;; - Angular/Vue (prettier)
 ;; - Assembly (asmfmt)
+;; - BibTeX (emacs)
 ;; - C/C++/Objective-C (clang-format)
 ;; - Clojure/ClojureScript (node-cljfmt)
 ;; - Crystal (crystal tool format)
@@ -296,6 +297,19 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:modes asm-mode nasm-mode)
   (:format (format-all-buffer-easy executable)))
+
+(define-format-all-formatter bibtex-mode
+  (:executable)
+  (:install)
+  (:modes bibtex-mode)
+  (:format
+    (format-all-buffer-thunk
+     (lambda (input)
+       (bibtex-mode)
+       (insert input)
+       (bibtex-reformat)
+       (bibtex-sort-buffer)
+       (list nil "")))))
 
 (define-format-all-formatter black
   (:executable "black")
@@ -618,7 +632,7 @@ use ordinary undo to get your code back to its previous state.
 You will need to install external programs to do the formatting.
 If the command can't find the program that it needs, it will try
 to tell you how you might be able to install it on your operating
-system. Only Emacs Lisp and Ledger are formatted without an
+system. Only BibTeX, Emacs Lisp and Ledger are formatted without an
 external program.
 
 A suitable formatter is selected according to the `major-mode' of

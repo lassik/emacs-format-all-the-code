@@ -18,6 +18,7 @@ Supported languages
 
 * **Angular/Vue** ([*prettier*](https://prettier.io/))
 * **Assembly** ([*asmfmt*](https://github.com/klauspost/asmfmt))
+* **BibTeX** (emacs)
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Clojure/ClojureScript** ([*node-cljfmt*](https://github.com/snoe/node-cljfmt))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
