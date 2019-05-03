@@ -304,13 +304,13 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:modes bibtex-mode)
   (:format
-    (format-all-buffer-thunk
-     (lambda (input)
-       (bibtex-mode)
-       (insert input)
-       (bibtex-reformat)
-       (bibtex-sort-buffer)
-       (list nil "")))))
+   (format-all-buffer-thunk
+    (lambda (input)
+      (bibtex-mode)
+      (insert input)
+      (bibtex-reformat)
+      (bibtex-sort-buffer)
+      (list nil "")))))
 
 (define-format-all-formatter black
   (:executable "black")
@@ -439,12 +439,12 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:modes ledger-mode)
   (:format
-    (format-all-buffer-thunk
-     (lambda (input)
-       (ledger-mode)
-       (insert input)
-       (ledger-mode-clean-buffer)
-       (list nil "")))))
+   (format-all-buffer-thunk
+    (lambda (input)
+      (ledger-mode)
+      (insert input)
+      (ledger-mode-clean-buffer)
+      (list nil "")))))
 
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
