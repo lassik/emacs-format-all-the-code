@@ -41,6 +41,7 @@
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX (prettier)
 ;; - Kotlin (ktlint)
+;; - LaTeX (latexindent)
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt)
 ;; - Markdown (prettier)
@@ -411,6 +412,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install ktlint"))
   (:modes kotlin-mode)
   (:format (format-all-buffer-easy executable "--format" "--stdin")))
+
+(define-format-all-formatter latexindent
+  (:executable "latexindent")
+  (:install)
+  (:modes latex-mode)
+  (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter ledger-mode
   (:executable)
