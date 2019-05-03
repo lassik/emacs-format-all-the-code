@@ -180,6 +180,20 @@ even if it produced warnings.  Not all warnings are errors."
                                  (t (buffer-string)))))
               (list output errput))))))))
 
+(defun format-all-buffer-native (mode &rest funcs)
+  "Internal helper function to implement formatters.
+
+In a new temp buffer, switches to MODE then calls FUNCS in order
+to format the code. MODE and FUNCS should be symbols instead of
+functions to avoid warnings from the Emacs byte compiler."
+  (format-all-buffer-thunk
+   (lambda (input)
+     (funcall mode)
+     (insert input)
+     (mapc #'funcall funcs)
+     (format-all-fix-trailing-whitespace)
+     (list nil ""))))
+
 (defun format-all-buffer-hard (ok-statuses error-regexp executable &rest args)
   "Internal helper function to implement formatters.
 
@@ -303,14 +317,8 @@ Consult the existing formatters for examples of BODY."
   (:executable)
   (:install)
   (:modes bibtex-mode)
-  (:format
-   (format-all-buffer-thunk
-    (lambda (input)
-      (bibtex-mode)
-      (insert input)
-      (bibtex-reformat)
-      (bibtex-sort-buffer)
-      (list nil "")))))
+  (:format (format-all-buffer-native
+            'bibtex-mode 'bibtex-reformat 'bibtex-sort-buffer)))
 
 (define-format-all-formatter black
   (:executable "black")
@@ -388,13 +396,9 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:modes emacs-lisp-mode lisp-interaction-mode)
   (:format
-   (format-all-buffer-thunk
-    (lambda (input)
-      (emacs-lisp-mode)
-      (insert input)
-      (indent-region (point-min) (point-max))
-      (format-all-fix-trailing-whitespace)
-      (list nil "")))))
+   (format-all-buffer-native
+    'emacs-lisp-mode
+    (lambda () (indent-region (point-min) (point-max))))))
 
 (define-format-all-formatter gofmt
   (:executable "gofmt")
@@ -439,12 +443,7 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:modes ledger-mode)
   (:format
-   (format-all-buffer-thunk
-    (lambda (input)
-      (ledger-mode)
-      (insert input)
-      (ledger-mode-clean-buffer)
-      (list nil "")))))
+   (format-all-buffer-native 'ledger-mode 'ledger-mode-clean-buffer)))
 
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
