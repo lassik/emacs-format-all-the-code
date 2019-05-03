@@ -255,7 +255,8 @@ command used to run the formatter is usually a good choice.
 
 Consult the existing formatters for examples of BODY."
   (let (executable install modes format)
-    (cl-assert (equal (mapcar 'car body) '(:executable :install :modes :format)))
+    (cl-assert
+     (equal (mapcar 'car body) '(:executable :install :modes :format)))
     (cl-dolist (part body)
       (cl-ecase (car part)
         (:executable
@@ -549,8 +550,10 @@ Consult the existing formatters for examples of BODY."
   (:format
    (let* ((ic (car default-process-coding-system))
           (oc (cdr default-process-coding-system))
-          (ienc (symbol-name (or (coding-system-get ic :mime-charset) 'utf-8)))
-          (oenc (symbol-name (or (coding-system-get oc :mime-charset) 'utf-8)))
+          (ienc (symbol-name (or (coding-system-get ic :mime-charset)
+                                 'utf-8)))
+          (oenc (symbol-name (or (coding-system-get oc :mime-charset)
+                                 'utf-8)))
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
      (format-all-buffer-easy
@@ -597,7 +600,8 @@ Consult the existing formatters for examples of BODY."
     (when executable
       (or (executable-find executable)
           (error (format-all-please-install
-                  executable (gethash formatter format-all-install-table)))))))
+                  executable
+                  (gethash formatter format-all-install-table)))))))
 
 (defun format-all-show-or-hide-errors (error-output)
   "Internal helper function to update *format-all-errors* with ERROR-OUTPUT."
