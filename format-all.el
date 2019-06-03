@@ -334,7 +334,10 @@ Consult the existing formatters for examples of BODY."
   (:executable "black")
   (:install "pip install black")
   (:modes python-mode)
-  (:format (format-all-buffer-easy executable "-q" "-")))
+  (:format (format-all-buffer-easy
+            executable "-q"
+            (when (format-all-buffer-extension-p "pyi") "--pyi")
+            "-")))
 
 (define-format-all-formatter brittany
   (:executable "brittany")
