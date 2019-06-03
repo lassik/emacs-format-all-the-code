@@ -150,6 +150,16 @@ STATUS is :reformatted.")
   (cl-mapcan (lambda (x) (if (listp x) x (list x)))
              list))
 
+(defun format-all-buffer-extension-p (&rest extensions)
+  "Internal helper function to test file name EXTENSIONS."
+  (and (buffer-file-name)
+       (save-match-data
+         (let ((case-fold-search t))
+           (cl-some (lambda (ext)
+                      (string-match (concat "\\." (regexp-quote ext) "\\'")
+                                    (buffer-file-name)))
+                    extensions)))))
+
 (defun format-all-buffer-thunk (thunk)
   "Internal helper function to implement formatters.
 
@@ -493,10 +503,7 @@ Consult the existing formatters for examples of BODY."
           (en (symbol-value 'web-mode-engine)))
       (cond ((equal ct "css") "css")
             ((or (equal ct "javascript") (equal ct "jsx"))
-             (if (and (buffer-file-name)
-                      (save-match-data
-                        (let ((case-fold-search t))
-                          (string-match "\\.tsx?\\'" (buffer-file-name)))))
+             (if (format-all-buffer-extension-p "ts" "tsx")
                  "typescript"
                "babel"))
             ((equal ct "json") "json")
