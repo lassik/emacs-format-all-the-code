@@ -42,6 +42,7 @@ Supported languages
 * **Markdown** ([*prettier*](https://prettier.io/))
 * **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
 * **Perl** ([*perltidy*](http://perltidy.sourceforge.net/))
+* **PHP** ([*prettier plugin-php*](https://github.com/prettier/plugin-php))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Python** ([*black*](https://github.com/ambv/black))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
