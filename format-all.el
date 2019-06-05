@@ -221,8 +221,8 @@ OK-STATUSES.  OK-STATUSES and ERROR-REGEXP are hacks to work
 around formatter programs that don't make sensible use of their
 exit status.
 
-If ARGS are given, those are arguments to EXECUTABLE.  They don't
-need to be shell-quoted."
+If ARGS are given, those are arguments to EXECUTABLE. They should
+not be shell-quoted."
   (let ((ok-statuses (or ok-statuses '(0)))
         (args (format-all-flatten-list args)))
     (when format-all-debug
