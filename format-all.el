@@ -105,7 +105,7 @@ before editing the buffer.  Narrowing may be in effect unless
 STATUS is :reformatted.")
 
 (eval-when-compile
-  (defconst format-all-system-type
+  (defconst format-all--system-type
     (cl-case system-type
       (windows-nt 'windows)
       (cygwin     'windows)
@@ -120,15 +120,15 @@ STATUS is :reformatted.")
     "Current operating system according to the format-all package."))
 
 (eval-when-compile
-  (defun format-all-resolve-system (choices)
-    "Get first choice matching `format-all-system-type' from CHOICES."
+  (defun format-all--resolve-system (choices)
+    "Get first choice matching `format-all--system-type' from CHOICES."
     (cl-dolist (choice choices)
       (cond ((atom choice)
              (cl-return choice))
-            ((eql format-all-system-type (car choice))
+            ((eql format-all--system-type (car choice))
              (cl-return (cadr choice)))))))
 
-(defun format-all-fix-trailing-whitespace ()
+(defun format-all--fix-trailing-whitespace ()
   "Fix trailing whitespace since some formatters don't do that."
   (save-match-data
     (goto-char (point-min))
@@ -142,16 +142,16 @@ STATUS is :reformatted.")
       (goto-char (point-max))
       (insert "\n"))))
 
-(defun format-all-remove-ansi-color (string)
+(defun format-all--remove-ansi-color (string)
   "Internal helper function to remove terminal color codes from STRING."
   (save-match-data (replace-regexp-in-string "\x1b\\[[0-9]+m" "" string t)))
 
-(defun format-all-flatten-once (list)
+(defun format-all--flatten-once (list)
   "Internal helper function to remove nested lists in LIST."
   (mapcan (lambda (x) (if (listp x) x (list x)))
           list))
 
-(defun format-all-buffer-extension-p (&rest extensions)
+(defun format-all--buffer-extension-p (&rest extensions)
   "Internal helper function to test file name EXTENSIONS."
   (and (buffer-file-name)
        (save-match-data
@@ -161,7 +161,7 @@ STATUS is :reformatted.")
                                     (buffer-file-name)))
                     extensions)))))
 
-(defun format-all-buffer-thunk (thunk)
+(defun format-all--buffer-thunk (thunk)
   "Internal helper function to implement formatters.
 
 THUNK is a function that implements a particular formatter.  It
@@ -191,26 +191,26 @@ even if it produced warnings.  Not all warnings are errors."
                                  (t (buffer-string)))))
               (list output errput))))))))
 
-(defun format-all-buffer-native (mode &rest funcs)
+(defun format-all--buffer-native (mode &rest funcs)
   "Internal helper function to implement formatters.
 
 In a new temp buffer, switches to MODE then calls FUNCS in order
 to format the code. MODE and FUNCS should be symbols instead of
 functions to avoid warnings from the Emacs byte compiler."
-  (format-all-buffer-thunk
+  (format-all--buffer-thunk
    (lambda (input)
      (funcall mode)
      (insert input)
      (mapc #'funcall funcs)
-     (format-all-fix-trailing-whitespace)
+     (format-all--fix-trailing-whitespace)
      (list nil ""))))
 
-(defun format-all-locate-default-directory (root-files)
+(defun format-all--locate-default-directory (root-files)
   "Internal helper function to find working directory for formatter.
 
 ROOT-FILES is a list of strings which are the filenames to look
 for using `locate-dominating-file'.  Details in documentation for
-`format-all-buffer-hard'."
+`format-all--buffer-hard'."
   (let ((found-dirs
          (when (and root-files (buffer-file-name))
            (mapcan (lambda (root-file)
@@ -223,7 +223,7 @@ for using `locate-dominating-file'.  Details in documentation for
         (and (buffer-file-name) (file-name-directory (buffer-file-name)))
         default-directory)))
 
-(defun format-all-buffer-hard
+(defun format-all--buffer-hard
     (ok-statuses error-regexp root-files executable &rest args)
   "Internal helper function to implement formatters.
 
@@ -250,13 +250,13 @@ or none of ROOT-FILES are found in any parent directories, the
 working directory will be the one where the formatted file is.
 ROOT-FILES is ignored for buffers that are not visiting a file."
   (let ((ok-statuses (or ok-statuses '(0)))
-        (args (format-all-flatten-once args))
-        (default-directory (format-all-locate-default-directory root-files)))
+        (args (format-all--flatten-once args))
+        (default-directory (format-all--locate-default-directory root-files)))
     (when format-all-debug
       (message "Format-All: Running: %s"
                (mapconcat #'shell-quote-argument (cons executable args) " "))
       (message "Format-All: Directory: %s" default-directory))
-    (format-all-buffer-thunk
+    (format-all--buffer-thunk
      (lambda (input)
        (let* ((errfile (make-temp-file "format-all-"))
               (status (apply #'call-process-region input nil
@@ -272,7 +272,7 @@ ROOT-FILES is ignored for buffers that are not visiting a file."
                                  (string-match error-regexp errput))))))
          (list errorp errput))))))
 
-(defun format-all-buffer-easy (executable &rest args)
+(defun format-all--buffer-easy (executable &rest args)
   "Internal helper function to implement formatters.
 
 Runs the external program EXECUTABLE.  The program shall read
@@ -282,21 +282,21 @@ on success/failure.
 
 If ARGS are given, those are arguments to EXECUTABLE.  They don't
 need to be shell-quoted."
-  (apply 'format-all-buffer-hard nil nil nil executable args))
+  (apply 'format-all--buffer-hard nil nil nil executable args))
 
-(defvar format-all-executable-table (make-hash-table)
+(defvar format-all--executable-table (make-hash-table)
   "Internal table of formatter executable names for format-all.")
 
-(defvar format-all-install-table (make-hash-table)
+(defvar format-all--install-table (make-hash-table)
   "Internal table of formatter install commands for format-all.")
 
-(defvar format-all-mode-table (make-hash-table)
+(defvar format-all--mode-table (make-hash-table)
   "Internal table of major mode formatter lists for format-all.")
 
-(defvar format-all-format-table (make-hash-table)
+(defvar format-all--format-table (make-hash-table)
   "Internal table of formatter formatting functions for format-all.")
 
-(defun format-all-pushhash (key value table)
+(defun format-all--pushhash (key value table)
   "Push VALUE onto the list under KEY in hash table TABLE."
   (puthash key (cons value (remove value (gethash key table))) table))
 
@@ -315,11 +315,11 @@ Consult the existing formatters for examples of BODY."
         (:executable
          (setq executable
                (unless (null (cdr part))
-                 (or (format-all-resolve-system (cdr part))
+                 (or (format-all--resolve-system (cdr part))
                      (error "Executable not specified for %S system %S"
-                            formatter format-all-system-type)))))
+                            formatter format-all--system-type)))))
         (:install
-         (setq install (format-all-resolve-system (cdr part))))
+         (setq install (format-all--resolve-system (cdr part))))
         (:modes
          (setq modes
                (mapcan
@@ -330,9 +330,9 @@ Consult the existing formatters for examples of BODY."
                              (probe (when probex `(lambda () ,probex))))
                         (mapcar
                          (lambda (mmode)
-                           `(format-all-pushhash ',mmode
-                                                 (cons ',formatter ,probe)
-                                                 format-all-mode-table))
+                           `(format-all--pushhash ',mmode
+                                                  (cons ',formatter ,probe)
+                                                  format-all--mode-table))
                          mmodes)))))
                 (cdr part))))
         (:format
@@ -340,39 +340,39 @@ Consult the existing formatters for examples of BODY."
                          (ignore mode-result
                                  ,@(unless executable '(executable)))
                          ,(cadr part))))))
-    `(progn (puthash ',formatter ,executable format-all-executable-table)
-            (puthash ',formatter ,install format-all-install-table)
+    `(progn (puthash ',formatter ,executable format-all--executable-table)
+            (puthash ',formatter ,install format-all--install-table)
             ,@modes
-            (puthash ',formatter ,format format-all-format-table)
+            (puthash ',formatter ,format format-all--format-table)
             ',formatter)))
 
 (define-format-all-formatter asmfmt
   (:executable "asmfmt")
   (:install)
   (:modes asm-mode nasm-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter bibtex-mode
   (:executable)
   (:install)
   (:modes bibtex-mode)
-  (:format (format-all-buffer-native
+  (:format (format-all--buffer-native
             'bibtex-mode 'bibtex-reformat 'bibtex-sort-buffer)))
 
 (define-format-all-formatter black
   (:executable "black")
   (:install "pip install black")
   (:modes python-mode)
-  (:format (format-all-buffer-easy
+  (:format (format-all--buffer-easy
             executable "-q"
-            (when (format-all-buffer-extension-p "pyi") "--pyi")
+            (when (format-all--buffer-extension-p "pyi") "--pyi")
             "-")))
 
 (define-format-all-formatter brittany
   (:executable "brittany")
   (:install "stack install brittany")
   (:modes haskell-mode literate-haskell-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter clang-format
   (:executable "clang-format")
@@ -384,7 +384,7 @@ Consult the existing formatters for examples of BODY."
    (objc-mode ".m")
    (protobuf-mode ".proto"))
   (:format
-   (format-all-buffer-easy
+   (format-all--buffer-easy
     executable
     (let ((assume-filename (or (buffer-file-name) mode-result)))
       (when assume-filename (concat "-assume-filename=" assume-filename))))))
@@ -393,20 +393,20 @@ Consult the existing formatters for examples of BODY."
   (:executable "cljfmt")
   (:install "npm install --global node-cljfmt")
   (:modes clojure-mode clojurec-mode clojurescript-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter crystal
   (:executable "crystal")
   (:install (macos "brew install crystal"))
   (:modes crystal-mode)
-  (:format (format-all-buffer-easy executable "tool" "format" "-")))
+  (:format (format-all--buffer-easy executable "tool" "format" "-")))
 
 (define-format-all-formatter dartfmt
   (:executable "dartfmt")
   (:install (macos "brew tap dart-lang/dart && brew install dart"))
   (:modes dart-mode)
   (:format
-   (format-all-buffer-easy
+   (format-all--buffer-easy
     executable
     (when (buffer-file-name)
       (list "--stdin-name" (buffer-file-name))))))
@@ -416,13 +416,13 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install dfmt"))
   (:modes d-mode)
   (:format
-   (format-all-buffer-hard nil (regexp-quote "[error]") nil executable)))
+   (format-all--buffer-hard nil (regexp-quote "[error]") nil executable)))
 
 (define-format-all-formatter dhall
   (:executable "dhall")
   (:install (macos "brew install dhall"))
   (:modes dhall-mode)
-  (:format (format-all-buffer-easy executable "format")))
+  (:format (format-all--buffer-easy executable "format")))
 
 (define-format-all-formatter elm-format
   (:executable "elm-format")
@@ -430,9 +430,9 @@ Consult the existing formatters for examples of BODY."
   (:modes elm-mode)
   (:format
    (cl-destructuring-bind (output errput)
-       (format-all-buffer-hard nil nil '("elm.json" "elm-package.json")
-                               executable "--yes" "--stdin")
-     (let ((errput (format-all-remove-ansi-color errput)))
+       (format-all--buffer-hard nil nil '("elm.json" "elm-package.json")
+                                executable "--yes" "--stdin")
+     (let ((errput (format-all--remove-ansi-color errput)))
        (list output errput)))))
 
 (define-format-all-formatter emacs-lisp
@@ -440,7 +440,7 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:modes emacs-lisp-mode lisp-interaction-mode)
   (:format
-   (format-all-buffer-native
+   (format-all--buffer-native
     'emacs-lisp-mode
     (lambda () (indent-region (point-min) (point-max))))))
 
@@ -448,7 +448,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "gofmt")
   (:install (macos "brew install go"))
   (:modes go-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter html-tidy
   (:executable "tidy")
@@ -461,7 +461,7 @@ Consult the existing formatters for examples of BODY."
          (car (member (symbol-value 'web-mode-content-type)
                       '("xml" "html"))))))
   (:format
-   (format-all-buffer-hard
+   (format-all--buffer-hard
     '(0 1) nil nil
     executable
     "-q"
@@ -474,45 +474,45 @@ Consult the existing formatters for examples of BODY."
   (:executable "ktlint")
   (:install (macos "brew install ktlint"))
   (:modes kotlin-mode)
-  (:format (format-all-buffer-easy executable "--format" "--stdin")))
+  (:format (format-all--buffer-easy executable "--format" "--stdin")))
 
 (define-format-all-formatter latexindent
   (:executable "latexindent")
   (:install)
   (:modes latex-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter ledger-mode
   (:executable)
   (:install)
   (:modes ledger-mode)
   (:format
-   (format-all-buffer-native 'ledger-mode 'ledger-mode-clean-buffer)))
+   (format-all--buffer-native 'ledger-mode 'ledger-mode-clean-buffer)))
 
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
   (:install "npm install --global lua-fmt")
   (:modes lua-mode)
-  (:format (format-all-buffer-easy executable "--stdin")))
+  (:format (format-all--buffer-easy executable "--stdin")))
 
 (define-format-all-formatter mix-format
   (:executable "mix")
   (:install (macos "brew install elixir"))
   (:modes elixir-mode)
   (:format
-   (format-all-buffer-hard nil nil '("mix.exs") executable "format" "-")))
+   (format-all--buffer-hard nil nil '("mix.exs") executable "format" "-")))
 
 (define-format-all-formatter ocp-indent
   (:executable "ocp-indent")
   (:install "opam install ocp-indent")
   (:modes caml-mode tuareg-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter perltidy
   (:executable "perltidy")
   (:install "cpan install Perl::Tidy")
   (:modes perl-mode cperl-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter prettier
   (:executable "prettier")
@@ -539,7 +539,7 @@ Consult the existing formatters for examples of BODY."
           (en (symbol-value 'web-mode-engine)))
       (cond ((equal ct "css") "css")
             ((or (equal ct "javascript") (equal ct "jsx"))
-             (if (format-all-buffer-extension-p "ts" "tsx")
+             (if (format-all--buffer-extension-p "ts" "tsx")
                  "typescript"
                "babel"))
             ((equal ct "json") "json")
@@ -551,7 +551,7 @@ Consult the existing formatters for examples of BODY."
             (t nil)))))
   (:format
    (let ((parser mode-result))
-     (format-all-buffer-easy
+     (format-all--buffer-easy
       executable
       (when parser
         (list "--parser" parser))
@@ -563,7 +563,7 @@ Consult the existing formatters for examples of BODY."
   (:install "gem install rufo")
   (:modes ruby-mode enh-ruby-mode)
   (:format
-   (format-all-buffer-easy
+   (format-all--buffer-easy
     executable
     "--simple-exit"
     (when (buffer-file-name)
@@ -573,14 +573,14 @@ Consult the existing formatters for examples of BODY."
   (:executable "rustfmt")
   (:install "cargo install rustfmt")
   (:modes rust-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter shfmt
   (:executable "shfmt")
   (:install (macos "brew install shfmt"))
   (:modes sh-mode)
   (:format
-   (format-all-buffer-easy
+   (format-all--buffer-easy
     executable
     "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
             (bash "bash") (mksh "mksh") (t "posix")))))
@@ -598,7 +598,7 @@ Consult the existing formatters for examples of BODY."
                                  'utf-8)))
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
-     (format-all-buffer-easy
+     (format-all--buffer-easy
       executable
       "--keywords" "upper"
       "--reindent_aligned"
@@ -609,43 +609,43 @@ Consult the existing formatters for examples of BODY."
   (:executable "swiftformat")
   (:install (macos "brew install swiftformat"))
   (:modes swift-mode swift3-mode)
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter terraform-fmt
   (:executable "terraform")
   (:install (macos "brew install terraform"))
   (:modes terraform-mode)
-  (:format (format-all-buffer-easy executable "fmt" "-no-color" "-")))
+  (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
 
 (define-format-all-formatter yq
   (:executable "yq")
   (:install (macos "brew install yq"))
   (:modes yaml-mode)
-  (:format (format-all-buffer-easy executable "read" "-")))
+  (:format (format-all--buffer-easy executable "read" "-")))
 
-(defun format-all-please-install (executable installer)
+(defun format-all--please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
   (concat (format "You need the %S command." executable)
           (if (not installer) ""
             (format " You may be able to install it via %S." installer))))
 
-(defun format-all-probe ()
+(defun format-all--probe ()
   "Internal helper function to get the formatter for the current buffer."
-  (cl-dolist (pair (gethash major-mode format-all-mode-table) (list nil nil))
+  (cl-dolist (pair (gethash major-mode format-all--mode-table) (list nil nil))
     (cl-destructuring-bind (formatter . probe) pair
       (let ((mode-result (if probe (funcall probe) t)))
         (when mode-result (cl-return (list formatter mode-result)))))))
 
-(defun format-all-formatter-executable (formatter)
+(defun format-all--formatter-executable (formatter)
   "Internal helper function to get the external program for FORMATTER."
-  (let ((executable (gethash formatter format-all-executable-table)))
+  (let ((executable (gethash formatter format-all--executable-table)))
     (when executable
       (or (executable-find executable)
-          (error (format-all-please-install
+          (error (format-all--please-install
                   executable
-                  (gethash formatter format-all-install-table)))))))
+                  (gethash formatter format-all--install-table)))))))
 
-(defun format-all-show-or-hide-errors (error-output)
+(defun format-all--show-or-hide-errors (error-output)
   "Internal helper function to update *format-all-errors* with ERROR-OUTPUT."
   (save-selected-window
     (with-current-buffer (get-buffer-create "*format-all-errors*")
@@ -657,7 +657,7 @@ Consult the existing formatters for examples of BODY."
              (let ((error-window (get-buffer-window (current-buffer))))
                (when error-window (quit-window nil error-window))))))))
 
-(defun format-all-save-line-number (thunk)
+(defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
   (let ((old-line-number (line-number-at-pos))
         (old-column (current-column)))
@@ -689,13 +689,13 @@ formatter.
 If any errors or warnings were encountered during formatting,
 they are shown in a buffer called *format-all-errors*."
   (interactive)
-  (cl-destructuring-bind (formatter mode-result) (format-all-probe)
+  (cl-destructuring-bind (formatter mode-result) (format-all--probe)
     (unless formatter (error "Don't know how to format %S code" major-mode))
     (when format-all-debug
       (message "Format-All: Formatting %s as %S"
                (buffer-name) (list formatter mode-result)))
-    (let ((f-function (gethash formatter format-all-format-table))
-          (executable (format-all-formatter-executable formatter)))
+    (let ((f-function (gethash formatter format-all--format-table))
+          (executable (format-all--formatter-executable formatter)))
       (cl-destructuring-bind (output errput)
           (funcall f-function executable mode-result)
         (let ((status (cond ((null output) :error)
@@ -703,11 +703,11 @@ they are shown in a buffer called *format-all-errors*."
                             (t :reformatted))))
           (when (equal :reformatted status)
             (widen)
-            (format-all-save-line-number
+            (format-all--save-line-number
              (lambda ()
                (erase-buffer)
                (insert output))))
-          (format-all-show-or-hide-errors errput)
+          (format-all--show-or-hide-errors errput)
           (run-hook-with-args 'format-all-after-format-functions
                               formatter status)
           (message (cl-ecase status
