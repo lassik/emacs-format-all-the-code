@@ -146,7 +146,7 @@ STATUS is :reformatted.")
   "Internal helper function to remove terminal color codes from STRING."
   (save-match-data (replace-regexp-in-string "\x1b\\[[0-9]+m" "" string t)))
 
-(defun format-all-flatten-list (list)
+(defun format-all-flatten-once (list)
   "Internal helper function to remove nested lists in LIST."
   (mapcan (lambda (x) (if (listp x) x (list x)))
           list))
@@ -250,7 +250,7 @@ or none of ROOT-FILES are found in any parent directories, the
 working directory will be the one where the formatted file is.
 ROOT-FILES is ignored for buffers that are not visiting a file."
   (let ((ok-statuses (or ok-statuses '(0)))
-        (args (format-all-flatten-list args))
+        (args (format-all-flatten-once args))
         (default-directory (format-all-locate-default-directory root-files)))
     (when format-all-debug
       (message "Format-All: Running: %s"
