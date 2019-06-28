@@ -63,6 +63,13 @@ You will need to install external programs to do the formatting. If
 `format-all-buffer` can't find the right program, it will try to tell
 you how to install it.
 
+If you have installed a formatter but Emacs cannot find it, Emacs may
+be using a `PATH` different from your shell. The path searched by
+Emacs is in the `exec-path` variable. You easily make it match your
+shell's `PATH` using the
+[exec-path-from-shell](http://melpa.org/#/exec-path-from-shell)
+package from MELPA.
+
 How to customize
 ----------------
 
