@@ -24,6 +24,7 @@
 ;;
 ;; - Angular/Vue (prettier)
 ;; - Assembly (asmfmt)
+;; - Bazel Starlark (buildifier)
 ;; - BibTeX (emacs)
 ;; - C/C++/Objective-C (clang-format)
 ;; - Clojure/ClojureScript (node-cljfmt)
@@ -367,6 +368,12 @@ Consult the existing formatters for examples of BODY."
             executable "-q"
             (when (format-all--buffer-extension-p "pyi") "--pyi")
             "-")))
+
+(define-format-all-formatter buildifier
+  (:executable "buildifier")
+  (:install "go get github.com/bazelbuild/buildtools/buildifier")
+  (:modes bazel-mode)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter brittany
   (:executable "brittany")
