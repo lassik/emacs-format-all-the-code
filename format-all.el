@@ -371,7 +371,9 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter buildifier
   (:executable "buildifier")
-  (:install "go get github.com/bazelbuild/buildtools/buildifier")
+  (:install
+   (macos "brew install buildifier")
+   "go get github.com/bazelbuild/buildtools/buildifier")
   (:modes bazel-mode)
   (:format (format-all--buffer-easy executable)))
 
