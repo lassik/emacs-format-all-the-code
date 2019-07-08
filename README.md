@@ -66,8 +66,8 @@ you how to install it.
 
 If you have installed a formatter but Emacs cannot find it, Emacs may
 be using a `PATH` different from your shell. The path searched by
-Emacs is in the `exec-path` variable. You easily make it match your
-shell's `PATH` using the
+Emacs is in the `exec-path` variable. You can easily make it match
+your shell's `PATH` using the
 [exec-path-from-shell](http://melpa.org/#/exec-path-from-shell)
 package from MELPA.
 
