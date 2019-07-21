@@ -60,6 +60,7 @@
 ;; - Terraform (terraform fmt)
 ;; - TypeScript/TSX (prettier)
 ;; - YAML (yq)
+;; - Nginx (crossplane)
 ;;
 ;; You will need to install external programs to do the formatting.
 ;; If `format-all-buffer` can't find the right program, it will try to
@@ -631,6 +632,15 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install yq"))
   (:modes yaml-mode)
   (:format (format-all--buffer-easy executable "read" "-")))
+
+(define-format-all-formatter crossplane
+  (:executable "crossplane")
+  (:install (macos "pip install crossplane"))
+  (:modes nginx-mode)
+  (:format (format-all--buffer-easy executable "format"
+				    (when (buffer-file-name)
+				      (buffer-file-name))
+				    )))
 
 (defun format-all--please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
