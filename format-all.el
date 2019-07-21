@@ -581,7 +581,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter rustfmt
   (:executable "rustfmt")
   (:install "cargo install rustfmt")
-  (:modes rust-mode)
+  (:modes rust-mode rustic-mode)
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter shfmt
