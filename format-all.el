@@ -83,6 +83,12 @@
 (defvar format-all-debug nil
   "When non-nil, format-all writes debug info using `message'.")
 
+(defvar format-all-ignore-unknown-formatter-error nil
+  "When non-nil, ignore error resulting from an unknown formatter.
+
+Print the error message instead to *Messages* and save
+the current buffer anyway.")
+
 (defvar format-all-after-format-functions nil
   "Hook run after each time `format-all-buffer' has formatted a buffer.
 
@@ -698,31 +704,35 @@ formatter.
 If any errors or warnings were encountered during formatting,
 they are shown in a buffer called *format-all-errors*."
   (interactive)
-  (cl-destructuring-bind (formatter mode-result) (format-all--probe)
-    (unless formatter (error "Don't know how to format %S code" major-mode))
-    (when format-all-debug
-      (message "Format-All: Formatting %s as %S"
-               (buffer-name) (list formatter mode-result)))
-    (let ((f-function (gethash formatter format-all--format-table))
-          (executable (format-all--formatter-executable formatter)))
-      (cl-destructuring-bind (output errput)
-          (funcall f-function executable mode-result)
-        (let ((status (cond ((null output) :error)
-                            ((equal t output) :already-formatted)
-                            (t :reformatted))))
-          (when (equal :reformatted status)
-            (widen)
-            (format-all--save-line-number
-             (lambda ()
-               (erase-buffer)
-               (insert output))))
-          (format-all--show-or-hide-errors errput)
-          (run-hook-with-args 'format-all-after-format-functions
-                              formatter status)
-          (message (cl-ecase status
-                     (:error "Formatting error")
-                     (:already-formatted "Already formatted")
-                     (:reformatted "Reformatted!"))))))))
+  (catch 'unknown-formatter
+	(cl-destructuring-bind (formatter mode-result) (format-all--probe)
+      (unless formatter (if format-all-ignore-unknown-formatter-error
+							(progn (message "Don't know how to format %S code" major-mode)
+								   (throw 'unknown-formatter t))
+						  (error "Don't know how to format %S code" major-mode)))
+      (when format-all-debug
+		(message "Format-All: Formatting %s as %S"
+				 (buffer-name) (list formatter mode-result)))
+      (let ((f-function (gethash formatter format-all--format-table))
+			(executable (format-all--formatter-executable formatter)))
+		(cl-destructuring-bind (output errput)
+			(funcall f-function executable mode-result)
+          (let ((status (cond ((null output) :error)
+                              ((equal t output) :already-formatted)
+                              (t :reformatted))))
+			(when (equal :reformatted status)
+              (widen)
+              (format-all--save-line-number
+               (lambda ()
+				 (erase-buffer)
+				 (insert output))))
+			(format-all--show-or-hide-errors errput)
+			(run-hook-with-args 'format-all-after-format-functions
+								formatter status)
+			(message (cl-ecase status
+                       (:error "Formatting error")
+                       (:already-formatted "Already formatted")
+                       (:reformatted "Reformatted!")))))))))
 
 ;;;###autoload
 (define-minor-mode format-all-mode
