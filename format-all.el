@@ -671,6 +671,45 @@ Consult the existing formatters for examples of BODY."
     (let ((line-length (- (point-at-eol) (point-at-bol))))
       (goto-char (+ (point) (min old-column line-length))))))
 
+(defun format-all-buffer--with (formatter mode-result)
+  "Internal helper function to format the current buffer.
+
+Relies on FORMATTER and MODE-RESULT from `format-all--probe'."
+  (when format-all-debug
+    (message "Format-All: Formatting %s as %S"
+             (buffer-name) (list formatter mode-result)))
+  (let ((f-function (gethash formatter format-all--format-table))
+        (executable (format-all--formatter-executable formatter)))
+    (cl-destructuring-bind (output errput)
+        (funcall f-function executable mode-result)
+      (let ((status (cond ((null output) :error)
+                          ((equal t output) :already-formatted)
+                          (t :reformatted))))
+        (when (equal :reformatted status)
+          (widen)
+          (format-all--save-line-number
+           (lambda ()
+             (erase-buffer)
+             (insert output))))
+        (format-all--show-or-hide-errors errput)
+        (run-hook-with-args 'format-all-after-format-functions
+                            formatter status)
+        (message (cl-ecase status
+                   (:error "Formatting error")
+                   (:already-formatted "Already formatted")
+                   (:reformatted "Reformatted!")))))))
+
+(defun format-all-buffer--from-hook ()
+  "Internal helper function to auto-format current buffer from a hook.
+
+Format-All installs this function into `before-save-hook' to
+format buffers on save. This is a lenient version of
+`format-all-buffer' that silently succeeds instead of signaling
+an error if the current buffer has no formatter."
+  (cl-destructuring-bind (formatter mode-result) (format-all--probe)
+    (when formatter
+      (format-all-buffer--with formatter mode-result))))
+
 ;;;###autoload
 (defun format-all-buffer ()
   "Auto-format the source code in the current buffer.
@@ -694,30 +733,9 @@ If any errors or warnings were encountered during formatting,
 they are shown in a buffer called *format-all-errors*."
   (interactive)
   (cl-destructuring-bind (formatter mode-result) (format-all--probe)
-    (unless formatter (error "Don't know how to format %S code" major-mode))
-    (when format-all-debug
-      (message "Format-All: Formatting %s as %S"
-               (buffer-name) (list formatter mode-result)))
-    (let ((f-function (gethash formatter format-all--format-table))
-          (executable (format-all--formatter-executable formatter)))
-      (cl-destructuring-bind (output errput)
-          (funcall f-function executable mode-result)
-        (let ((status (cond ((null output) :error)
-                            ((equal t output) :already-formatted)
-                            (t :reformatted))))
-          (when (equal :reformatted status)
-            (widen)
-            (format-all--save-line-number
-             (lambda ()
-               (erase-buffer)
-               (insert output))))
-          (format-all--show-or-hide-errors errput)
-          (run-hook-with-args 'format-all-after-format-functions
-                              formatter status)
-          (message (cl-ecase status
-                     (:error "Formatting error")
-                     (:already-formatted "Already formatted")
-                     (:reformatted "Reformatted!"))))))))
+    (if formatter
+        (format-all-buffer--with formatter mode-result)
+      (error "Don't know how to format %S code" major-mode))))
 
 ;;;###autoload
 (define-minor-mode format-all-mode
@@ -755,8 +773,12 @@ or zero, and enabled otherwise."
   :lighter " FmtAll"
   :global nil
   (if format-all-mode
-      (add-hook 'before-save-hook 'format-all-buffer nil 'local)
-    (remove-hook 'before-save-hook 'format-all-buffer 'local)))
+      (add-hook 'before-save-hook
+                'format-all-buffer--from-hook
+                nil 'local)
+    (remove-hook 'before-save-hook
+                 'format-all-buffer--from-hook
+                 'local)))
 
 (provide 'format-all)
 
