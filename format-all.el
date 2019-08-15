@@ -185,8 +185,9 @@ even if it produced warnings.  Not all warnings are errors."
         (with-temp-buffer
           (cl-destructuring-bind (errorp errput) (funcall thunk input)
             (let* ((no-chg (or errorp
-                               (= 0 (compare-buffer-substrings inbuf nil nil
-                                                               nil nil nil))))
+                               (= 0 (let ((case-fold-search nil))
+                                      (compare-buffer-substrings
+                                       inbuf nil nil nil nil nil)))))
                    (output (cond (errorp nil)
                                  (no-chg t)
                                  (t (buffer-string)))))
