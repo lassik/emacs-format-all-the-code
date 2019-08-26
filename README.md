@@ -53,6 +53,7 @@ Supported languages
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
 * **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))
 * **TypeScript/TSX** ([*prettier*](https://prettier.io/))
+* **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter))
 * **YAML** ([*prettier*](https://prettier.io/))
 
 How to install

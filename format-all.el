@@ -59,6 +59,7 @@
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TypeScript/TSX (prettier)
+;; - Verilog (iStyle)
 ;; - YAML (prettier)
 ;;
 ;; You will need to install external programs to do the formatting.
@@ -479,6 +480,12 @@ Consult the existing formatters for examples of BODY."
     "-indent"
     (when (member major-mode '(nxml-mode xml-mode))
       "-xml"))))
+
+(define-format-all-formatter istyle-verilog
+  (:executable "iStyle")
+  (:install)
+  (:modes verilog-mode)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter ktlint
   (:executable "ktlint")
