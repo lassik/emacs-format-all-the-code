@@ -387,7 +387,9 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter clang-format
   (:executable "clang-format")
-  (:install (macos "brew install clang-format"))
+  (:install
+   (macos "brew install clang-format")
+   (windows "scoop install llvm"))
   (:modes
    (c-mode ".c")
    (c++-mode ".cpp")
@@ -457,13 +459,17 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter gofmt
   (:executable "gofmt")
-  (:install (macos "brew install go"))
+  (:install
+   (macos "brew install go")
+   (windows "scoop install go"))
   (:modes go-mode)
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter html-tidy
   (:executable "tidy")
-  (:install (macos "brew install tidy-html5"))
+  (:install
+   (macos "brew install tidy-html5")
+   (windows "scoop install tidy"))
   (:modes
    html-helper-mode html-mode mhtml-mode nxhtml-mode
    nxml-mode xml-mode
@@ -595,7 +601,9 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter shfmt
   (:executable "shfmt")
-  (:install (macos "brew install shfmt"))
+  (:install
+   (macos "brew install shfmt")
+   (windows "scoop install shfmt"))
   (:modes sh-mode)
   (:format
    (format-all--buffer-easy
