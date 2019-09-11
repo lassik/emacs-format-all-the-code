@@ -41,6 +41,7 @@ Supported languages
 * **Ledger** ([*ledger-mode*](https://github.com/ledger/ledger-mode))
 * **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt))
 * **Markdown** ([*prettier*](https://prettier.io/))
+* **Nix** ([*nixfmt*](https://github.com/serokell/nixfmt))
 * **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
 * **Perl** ([*perltidy*](http://perltidy.sourceforge.net/))
 * **PHP** ([*prettier plugin-php*](https://github.com/prettier/plugin-php))
