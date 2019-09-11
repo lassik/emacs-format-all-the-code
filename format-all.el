@@ -47,6 +47,7 @@
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt)
 ;; - Markdown (prettier)
+;; - Nix (nixfmt)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
 ;; - PHP (prettier plugin-php)
@@ -524,6 +525,12 @@ Consult the existing formatters for examples of BODY."
   (:modes elixir-mode)
   (:format
    (format-all--buffer-hard nil nil '("mix.exs") executable "format" "-")))
+
+(define-format-all-formatter nixfmt
+  (:executable "nixfmt")
+  (:install "nix-env -f https://github.com/serokell/nixfmt/archive/master.tar.gz -i")
+  (:modes nix-mode)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter ocp-indent
   (:executable "ocp-indent")
