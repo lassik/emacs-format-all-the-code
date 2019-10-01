@@ -1,4 +1,4 @@
-;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby and 30 other languages -*- lexical-binding: t -*-
+;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby and 40 other languages -*- lexical-binding: t -*-
 ;;
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
