@@ -22,6 +22,7 @@ Supported languages
 * **BibTeX** (emacs)
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Clojure/ClojureScript** ([*node-cljfmt*](https://github.com/snoe/node-cljfmt))
+* **CMake** ([*cmake-format*](https://github.com/cheshirekow/cmake_format))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
