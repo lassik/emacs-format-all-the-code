@@ -48,6 +48,7 @@ Supported languages
 * **PHP** ([*prettier plugin-php*](https://github.com/prettier/plugin-php))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Python** ([*black*](https://github.com/ambv/black))
+* **R** ([*styler*](https://github.com/r-lib/styler))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
 * **Shell script** ([*shfmt*](https://github.com/mvdan/sh))
