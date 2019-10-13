@@ -54,6 +54,7 @@
 ;; - PHP (prettier plugin-php)
 ;; - Protocol Buffers (clang-format)
 ;; - Python (black)
+;; - R (styler)
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
 ;; - Shell script (shfmt)
@@ -644,6 +645,20 @@ Consult the existing formatters for examples of BODY."
       "--reindent_aligned"
       "--encoding" ienc
       "-"))))
+
+(define-format-all-formatter styler
+  (:executable "Rscript")
+  (:install "Rscript -e 'install.packages(\"styler\")'")
+  (:modes ess-r-mode)
+  (:format
+   (format-all--buffer-easy
+    executable "--vanilla"
+    "-e" (concat
+          "options(styler.colored_print.vertical=FALSE);"
+          " con <- file(\"stdin\");"
+          " out <- styler::style_text(readLines(con));"
+          " close(con);"
+          " out"))))
 
 (define-format-all-formatter swiftformat
   (:executable "swiftformat")
