@@ -28,6 +28,7 @@ Supported languages
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
 * **Dart** ([*dartfmt*](https://github.com/dart-lang/dart_style))
 * **Dhall** ([*dhall format*](https://github.com/dhall-lang/dhall-lang))
+* **Dockerfile** ([*dockfmt*](https://github.com/jessfraz/dockfmt))
 * **Elixir** ([*mix format*](https://hexdocs.pm/mix/master/Mix.Tasks.Format.html))
 * **Elm** ([*elm-format*](https://github.com/avh4/elm-format))
 * **Emacs Lisp** (emacs)
