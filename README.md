@@ -32,6 +32,7 @@ Supported languages
 * **Elixir** ([*mix format*](https://hexdocs.pm/mix/master/Mix.Tasks.Format.html))
 * **Elm** ([*elm-format*](https://github.com/avh4/elm-format))
 * **Emacs Lisp** (emacs)
+* **Fish Shell** ([*fish_indent*](https://fishshell.com/docs/current/commands.html#fish_indent))
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/))
 * **GraphQL** ([*prettier*](https://prettier.io/))
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany))
