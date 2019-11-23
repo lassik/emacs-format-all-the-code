@@ -38,6 +38,7 @@
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (emacs)
+;; - Fish Shell (fish_indent)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
 ;; - Haskell (brittany)
@@ -472,6 +473,12 @@ Consult the existing formatters for examples of BODY."
    (format-all--buffer-native
     'emacs-lisp-mode
     (lambda () (indent-region (point-min) (point-max))))))
+
+(define-format-all-formatter fish-indent
+  (:executable "fish_indent")
+  (:install (macos "brew install fish OR port install fish"))
+  (:modes fish-mode)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter gofmt
   (:executable "gofmt")
