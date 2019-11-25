@@ -546,7 +546,15 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install elixir"))
   (:modes elixir-mode)
   (:format
-   (format-all--buffer-hard nil nil '("mix.exs") executable "format" "-")))
+   (format-all--buffer-hard
+    nil nil '("mix.exs")
+    executable
+    "format"
+    (let* ((file ".formatter.exs")
+           (dir (and (buffer-file-name)
+                     (locate-dominating-file (buffer-file-name) file))))
+      (when dir (list "--dot-formatter" (concat dir file))))
+    "-")))
 
 (define-format-all-formatter nixfmt
   (:executable "nixfmt")
