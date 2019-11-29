@@ -743,7 +743,7 @@ Consult the existing formatters for examples of BODY."
 
 Relies on FORMATTER and MODE-RESULT from `format-all--probe'."
   (when format-all-debug
-    (message "Format-All: Formatting %s as %S"
+    (message "Format-All: Formatting %s using %S"
              (buffer-name) (list formatter mode-result)))
   (let ((f-function (gethash formatter format-all--format-table))
         (executable (format-all--formatter-executable formatter)))
