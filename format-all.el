@@ -48,7 +48,7 @@
 ;; - Kotlin (ktlint)
 ;; - LaTeX (latexindent)
 ;; - Ledger (ledger-mode)
-;; - Lua (lua-fmt)
+;; - Lua (prettier)
 ;; - Markdown (prettier)
 ;; - Nix (nixfmt)
 ;; - OCaml (ocp-indent)
@@ -535,12 +535,6 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-native 'ledger-mode 'ledger-mode-clean-buffer)))
 
-(define-format-all-formatter lua-fmt
-  (:executable "luafmt")
-  (:install "npm install --global lua-fmt")
-  (:modes lua-mode)
-  (:format (format-all--buffer-easy executable "--stdin")))
-
 (define-format-all-formatter mix-format
   (:executable "mix")
   (:install (macos "brew install elixir"))
@@ -576,7 +570,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter prettier
   (:executable "prettier")
-  (:install "npm install --global prettier @prettier/plugin-php")
+  (:install "npm install --global prettier @prettier/plugin-php @prettier/plugin-lua")
   (:modes
    (angular-html-mode "angular")
    ((js-mode js2-mode js3-mode)
@@ -594,6 +588,7 @@ Consult the existing formatters for examples of BODY."
    (graphql-mode "graphql")
    ((gfm-mode markdown-mode) "markdown")
    (php-mode "php")
+   (lua-mode "lua")
    (web-mode
     (let ((ct (symbol-value 'web-mode-content-type))
           (en (symbol-value 'web-mode-engine)))
