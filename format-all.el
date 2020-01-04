@@ -155,8 +155,8 @@ STATUS is :reformatted.")
 
 (defun format-all--flatten-once (list)
   "Internal helper function to remove nested lists in LIST."
-  (mapcan (lambda (x) (if (listp x) x (list x)))
-          list))
+  (cl-mapcan (lambda (x) (if (listp x) x (list x)))
+             list))
 
 (defun format-all--buffer-extension-p (&rest extensions)
   "Internal helper function to test file name EXTENSIONS."
@@ -330,7 +330,7 @@ Consult the existing formatters for examples of BODY."
          (setq install (format-all--resolve-system (cdr part))))
         (:modes
          (setq modes
-               (mapcan
+               (cl-mapcan
                 (lambda (modex)
                   (let ((modex (if (listp modex) modex (list modex))))
                     (cl-destructuring-bind (mmodes &optional probex) modex
