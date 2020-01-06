@@ -584,7 +584,7 @@ Consult the existing formatters for examples of BODY."
              (not (null (symbol-value 'flow-minor-mode))))
         "flow"
       "babel"))
-   ((js2-jsx-mode jsx-mode rjsx-mode) "babel")
+   ((js2-jsx-mode jsx-mode rjsx-mode react-mode) "babel")
    ((typescript-mode typescript-tsx-mode) "typescript")
    (json-mode "json")
    (vue-mode "vue")
