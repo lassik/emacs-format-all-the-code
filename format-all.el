@@ -59,6 +59,7 @@
 ;; - R (styler)
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
+;; - Scala (scalafmt)
 ;; - Shell script (shfmt)
 ;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
