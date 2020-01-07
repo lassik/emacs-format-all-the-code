@@ -698,6 +698,12 @@ Consult the existing formatters for examples of BODY."
   (:modes terraform-mode)
   (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
 
+(define-format-all-formatter scalafmt
+  (:executable "scalafmt")
+  (:install (macos "brew install --HEAD olafurpg/scalafmt/scalafmt"))
+  (:modes scala-mode)
+  (:format (format-all--buffer-easy executable "--stdin" "--non-interactive")))
+
 (defun format-all--please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
   (concat (format "You need the %S command." executable)
