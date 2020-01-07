@@ -53,6 +53,7 @@ Supported languages
 * **R** ([*styler*](https://github.com/r-lib/styler))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
+* **Scala** ([*scalafmt*](https://github.com/scalameta/scalafmt))
 * **Shell script** ([*shfmt*](https://github.com/mvdan/sh))
 * **SQL** ([*sqlformat*](https://pypi.org/project/sqlparse/))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
