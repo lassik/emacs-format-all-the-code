@@ -376,18 +376,18 @@ Consult the existing formatters for examples of BODY."
             (when (format-all--buffer-extension-p "pyi") "--pyi")
             "-")))
 
+(define-format-all-formatter brittany
+  (:executable "brittany")
+  (:install "stack install brittany")
+  (:modes haskell-mode literate-haskell-mode)
+  (:format (format-all--buffer-easy executable)))
+
 (define-format-all-formatter buildifier
   (:executable "buildifier")
   (:install
    (macos "brew install buildifier")
    "go get github.com/bazelbuild/buildtools/buildifier")
   (:modes bazel-mode)
-  (:format (format-all--buffer-easy executable)))
-
-(define-format-all-formatter brittany
-  (:executable "brittany")
-  (:install "stack install brittany")
-  (:modes haskell-mode literate-haskell-mode)
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter clang-format
@@ -640,6 +640,12 @@ Consult the existing formatters for examples of BODY."
   (:modes rust-mode rustic-mode)
   (:format (format-all--buffer-easy executable)))
 
+(define-format-all-formatter scalafmt
+  (:executable "scalafmt")
+  (:install (macos "brew install --HEAD olafurpg/scalafmt/scalafmt"))
+  (:modes scala-mode)
+  (:format (format-all--buffer-easy executable "--stdin" "--non-interactive")))
+
 (define-format-all-formatter shfmt
   (:executable "shfmt")
   (:install
@@ -697,12 +703,6 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install terraform"))
   (:modes terraform-mode)
   (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
-
-(define-format-all-formatter scalafmt
-  (:executable "scalafmt")
-  (:install (macos "brew install --HEAD olafurpg/scalafmt/scalafmt"))
-  (:modes scala-mode)
-  (:format (format-all--buffer-easy executable "--stdin" "--non-interactive")))
 
 (defun format-all--please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
