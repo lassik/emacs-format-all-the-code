@@ -39,6 +39,7 @@
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (emacs)
 ;; - Fish Shell (fish_indent)
+;; - Fortran 90 (fprettify)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
 ;; - Haskell (brittany)
@@ -480,6 +481,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install fish OR port install fish"))
   (:modes fish-mode)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter fprettify
+  (:executable "fprettify")
+  (:install "pip install fprettify")
+  (:modes f90-mode)
+  (:format (format-all--buffer-easy executable "--silent")))
 
 (define-format-all-formatter gofmt
   (:executable "gofmt")
