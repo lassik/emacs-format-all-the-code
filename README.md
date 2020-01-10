@@ -33,7 +33,7 @@ Supported languages
 * **Elm** ([*elm-format*](https://github.com/avh4/elm-format))
 * **Emacs Lisp** (emacs)
 * **Fish Shell** ([*fish_indent*](https://fishshell.com/docs/current/commands.html#fish_indent))
-- **Fortran 90** ([*fprettify*](https://github.com/pseewald/fprettify))
+* **Fortran 90** ([*fprettify*](https://github.com/pseewald/fprettify))
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/))
 * **GraphQL** ([*prettier*](https://prettier.io/))
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany))
