@@ -704,7 +704,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "swiftformat")
   (:install (macos "brew install swiftformat"))
   (:modes swift-mode swift3-mode)
-  (:format (format-all--buffer-easy executable)))
+  (:format (format-all--buffer-easy executable "--quiet")))
 
 (define-format-all-formatter terraform-fmt
   (:executable "terraform")
