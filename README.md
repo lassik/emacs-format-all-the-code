@@ -50,6 +50,7 @@ Supported languages
 * **Perl** ([*perltidy*](http://perltidy.sourceforge.net/))
 * **PHP** ([*prettier plugin-php*](https://github.com/prettier/plugin-php))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
+* **PureScript** ([*purty*](https://gitlab.com/joneshf/purty))
 * **Python** ([*black*](https://github.com/ambv/black))
 * **R** ([*styler*](https://github.com/r-lib/styler))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))

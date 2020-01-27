@@ -56,6 +56,7 @@
 ;; - Perl (perltidy)
 ;; - PHP (prettier plugin-php)
 ;; - Protocol Buffers (clang-format)
+;; - PureScript (purty)
 ;; - Python (black)
 ;; - R (styler)
 ;; - Ruby (rufo)
@@ -630,6 +631,12 @@ Consult the existing formatters for examples of BODY."
         (list "--parser" parser))
       (when (buffer-file-name)
         (list "--stdin-filepath" (buffer-file-name)))))))
+
+(define-format-all-formatter purty
+  (:executable "purty")
+  (:install "npm install --global purty")
+  (:modes purescript-mode)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
