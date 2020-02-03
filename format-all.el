@@ -63,6 +63,7 @@
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
 ;; - Shell script (shfmt)
+;; - Solidity (prettier prettier-plugin-solidity)
 ;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
@@ -585,7 +586,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter prettier
   (:executable "prettier")
-  (:install "npm install --global prettier @prettier/plugin-php")
+  (:install "npm install --global prettier @prettier/plugin-php prettier-plugin-solidity")
   (:modes
    (angular-html-mode "angular")
    ((js-mode js2-mode js3-mode)
@@ -603,6 +604,7 @@ Consult the existing formatters for examples of BODY."
    (graphql-mode "graphql")
    ((gfm-mode markdown-mode) "markdown")
    (php-mode "php")
+   (solidity-mode "solidity-parse")
    (web-mode
     (let ((ct (symbol-value 'web-mode-content-type))
           (en (symbol-value 'web-mode-engine)))
