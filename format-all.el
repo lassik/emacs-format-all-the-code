@@ -659,9 +659,9 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter scalafmt
   (:executable "scalafmt")
-  (:install (macos "brew install --HEAD olafurpg/scalafmt/scalafmt"))
+  (:install "coursier bootstrap org.scalameta:scalafmt-cli_2.12:2.4.0-RC1 -r sonatype:snapshots -o /usr/local/bin/scalafmt --standalone --main org.scalafmt.cli.Cli")
   (:modes scala-mode)
-  (:format (format-all--buffer-easy executable "--stdin" "--non-interactive")))
+  (:format (format-all--buffer-easy executable "--stdin" "--non-interactive" "--quiet")))
 
 (define-format-all-formatter shfmt
   (:executable "shfmt")
