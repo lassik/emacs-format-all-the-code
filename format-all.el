@@ -661,7 +661,9 @@ Consult the existing formatters for examples of BODY."
   (:executable "scalafmt")
   (:install "coursier bootstrap org.scalameta:scalafmt-cli_2.12:2.4.0-RC1 -r sonatype:snapshots -o /usr/local/bin/scalafmt --standalone --main org.scalafmt.cli.Cli")
   (:modes scala-mode)
-  (:format (format-all--buffer-easy executable "--stdin" "--non-interactive" "--quiet")))
+  (:format
+   (format-all--buffer-easy
+    executable "--stdin" "--non-interactive" "--quiet")))
 
 (define-format-all-formatter shfmt
   (:executable "shfmt")
