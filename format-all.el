@@ -700,7 +700,9 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter styler
   (:executable "Rscript")
   (:install "Rscript -e 'install.packages(\"styler\")'")
-  (:modes ess-r-mode)
+  (:modes
+   ess-r-mode
+   (ess-mode (equal "R" (symbol-value 'ess-dialect))))
   (:format
    (format-all--buffer-easy
     executable "--vanilla"
