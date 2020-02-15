@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
+;; Package-Requires: ((emacs "24") (cl-lib "0.5") (language-id "0.4"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -302,7 +302,7 @@ need to be shell-quoted."
 (defvar format-all--install-table (make-hash-table)
   "Internal table of formatter install commands for format-all.")
 
-(defvar format-all--mode-table (make-hash-table)
+(defvar format-all--language-table (make-hash-table :test 'equal)
   "Internal table of major mode formatter lists for format-all.")
 
 (defvar format-all--format-table (make-hash-table)
@@ -319,9 +319,9 @@ FORMATTER is a symbol naming the formatter.  The name of the
 command used to run the formatter is usually a good choice.
 
 Consult the existing formatters for examples of BODY."
-  (let (executable install modes format)
+  (let (executable install languages format)
     (cl-assert
-     (equal (mapcar 'car body) '(:executable :install :modes :format)))
+     (equal (mapcar 'car body) '(:executable :install :languages :format)))
     (cl-dolist (part body)
       (cl-ecase (car part)
         (:executable
@@ -332,49 +332,39 @@ Consult the existing formatters for examples of BODY."
                             formatter format-all--system-type)))))
         (:install
          (setq install (format-all--resolve-system (cdr part))))
-        (:modes
-         (setq modes
-               (cl-mapcan
-                (lambda (modex)
-                  (let ((modex (if (listp modex) modex (list modex))))
-                    (cl-destructuring-bind (mmodes &optional probex) modex
-                      (let* ((mmodes (if (listp mmodes) mmodes (list mmodes)))
-                             (probe (when probex `(lambda () ,probex))))
-                        (mapcar
-                         (lambda (mmode)
-                           `(format-all--pushhash ',mmode
-                                                  (cons ',formatter ,probe)
-                                                  format-all--mode-table))
-                         mmodes)))))
-                (cdr part))))
+        (:languages
+         (setq languages
+               (mapcar (lambda (language)
+                         `(format-all--pushhash
+                           ',language ',formatter format-all--language-table))
+                       (cdr part))))
         (:format
-         (setq format `(lambda (executable mode-result)
-                         (ignore mode-result
-                                 ,@(unless executable '(executable)))
+         (setq format `(lambda (executable language)
+                         (ignore language ,@(unless executable '(executable)))
                          ,(cadr part))))))
     `(progn (puthash ',formatter ,executable format-all--executable-table)
             (puthash ',formatter ,install format-all--install-table)
-            ,@modes
+            ,@languages
             (puthash ',formatter ,format format-all--format-table)
             ',formatter)))
 
 (define-format-all-formatter asmfmt
   (:executable "asmfmt")
   (:install)
-  (:modes asm-mode nasm-mode)
+  (:languages "Assembly")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter bibtex-mode
   (:executable)
   (:install)
-  (:modes bibtex-mode)
+  (:languages "BibTeX")
   (:format (format-all--buffer-native
             'bibtex-mode 'bibtex-reformat 'bibtex-sort-buffer)))
 
 (define-format-all-formatter black
   (:executable "black")
   (:install "pip install black")
-  (:modes python-mode)
+  (:languages "Python")
   (:format (format-all--buffer-easy
             executable "-q"
             (when (format-all--buffer-extension-p "pyi") "--pyi")
@@ -383,7 +373,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter brittany
   (:executable "brittany")
   (:install "stack install brittany")
-  (:modes haskell-mode literate-haskell-mode)
+  (:languages "Haskell" "Literate Haskell")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter buildifier
@@ -391,7 +381,7 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install buildifier")
    "go get github.com/bazelbuild/buildtools/buildifier")
-  (:modes bazel-mode)
+  (:languages "Bazel")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter clang-format
@@ -399,40 +389,41 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install clang-format")
    (windows "scoop install llvm"))
-  (:modes
-   (c-mode ".c")
-   (c++-mode ".cpp")
-   (java-mode ".java")
-   (objc-mode ".m")
-   (protobuf-mode ".proto"))
+  (:languages "C" "C++" "Java" "Objective-C" "Protocol Buffer")
   (:format
    (format-all--buffer-easy
     executable
-    (let ((assume-filename (or (buffer-file-name) mode-result)))
-      (when assume-filename (concat "-assume-filename=" assume-filename))))))
+    (concat "-assume-filename="
+            (or (buffer-file-name)
+                (cdr (assoc language
+                            '(("C"               . ".c")
+                              ("C++"             . ".cpp")
+                              ("Java"            . ".java")
+                              ("Objective-C"     . ".m")
+                              ("Protocol Buffer" . ".proto")))))))))
 
 (define-format-all-formatter cljfmt
   (:executable "cljfmt")
   (:install "npm install --global node-cljfmt")
-  (:modes clojure-mode clojurec-mode clojurescript-mode)
+  (:languages "Clojure")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter cmake-format
   (:executable "cmake-format")
   (:install "pip install cmake-format")
-  (:modes cmake-mode)
+  (:languages "CMake")
   (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter crystal
   (:executable "crystal")
   (:install (macos "brew install crystal"))
-  (:modes crystal-mode)
+  (:languages "Crystal")
   (:format (format-all--buffer-easy executable "tool" "format" "-")))
 
 (define-format-all-formatter dartfmt
   (:executable "dartfmt")
   (:install (macos "brew tap dart-lang/dart && brew install dart"))
-  (:modes dart-mode)
+  (:languages "Dart")
   (:format
    (format-all--buffer-easy
     executable
@@ -442,26 +433,26 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter dfmt
   (:executable "dfmt")
   (:install (macos "brew install dfmt"))
-  (:modes d-mode)
+  (:languages "D")
   (:format
    (format-all--buffer-hard nil (regexp-quote "[error]") nil executable)))
 
 (define-format-all-formatter dhall
   (:executable "dhall")
   (:install (macos "brew install dhall"))
-  (:modes dhall-mode)
+  (:languages "Dhall")
   (:format (format-all--buffer-easy executable "format")))
 
 (define-format-all-formatter dockfmt
   (:executable "dockfmt")
   (:install "go get github.com/jessfraz/dockfmt")
-  (:modes dockerfile-mode)
+  (:languages "Dockerfile")
   (:format (format-all--buffer-easy executable "fmt")))
 
 (define-format-all-formatter elm-format
   (:executable "elm-format")
   (:install (macos "brew install elm"))
-  (:modes elm-mode)
+  (:languages "Elm")
   (:format
    (cl-destructuring-bind (output errput)
        (format-all--buffer-hard nil nil '("elm.json" "elm-package.json")
@@ -472,7 +463,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter emacs-lisp
   (:executable)
   (:install)
-  (:modes emacs-lisp-mode lisp-interaction-mode)
+  (:languages "Emacs Lisp")
   (:format
    (format-all--buffer-native
     'emacs-lisp-mode
@@ -481,13 +472,13 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter fish-indent
   (:executable "fish_indent")
   (:install (macos "brew install fish OR port install fish"))
-  (:modes fish-mode)
+  (:languages "Fish")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter fprettify
   (:executable "fprettify")
   (:install "pip install fprettify")
-  (:modes f90-mode)
+  (:languages "_Fortran 90")
   (:format (format-all--buffer-easy executable "--silent")))
 
 (define-format-all-formatter gofmt
@@ -495,7 +486,7 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install go")
    (windows "scoop install go"))
-  (:modes go-mode)
+  (:languages "Go")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter html-tidy
@@ -503,13 +494,7 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install tidy-html5")
    (windows "scoop install tidy"))
-  (:modes
-   html-helper-mode html-mode mhtml-mode nxhtml-mode
-   nxml-mode xml-mode
-   (web-mode
-    (and (equal "none" (symbol-value 'web-mode-engine))
-         (car (member (symbol-value 'web-mode-content-type)
-                      '("xml" "html"))))))
+  (:languages "HTML" "XML")
   (:format
    (format-all--buffer-hard
     '(0 1) nil nil
@@ -517,44 +502,43 @@ Consult the existing formatters for examples of BODY."
     "-q"
     "--tidy-mark" "no"
     "-indent"
-    (when (member major-mode '(nxml-mode xml-mode))
-      "-xml"))))
+    (when (equal language "XML") "-xml"))))
 
 (define-format-all-formatter istyle-verilog
   (:executable "iStyle")
   (:install)
-  (:modes verilog-mode)
+  (:languages "Verilog")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter ktlint
   (:executable "ktlint")
   (:install (macos "brew install ktlint"))
-  (:modes kotlin-mode)
+  (:languages "Kotlin")
   (:format (format-all--buffer-easy executable "--format" "--stdin")))
 
 (define-format-all-formatter latexindent
   (:executable "latexindent")
   (:install)
-  (:modes latex-mode)
+  (:languages "LaTeX")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter ledger-mode
   (:executable)
   (:install)
-  (:modes ledger-mode)
+  (:languages "_Ledger")
   (:format
    (format-all--buffer-native 'ledger-mode 'ledger-mode-clean-buffer)))
 
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
   (:install "npm install --global lua-fmt")
-  (:modes lua-mode)
+  (:languages "Lua")
   (:format (format-all--buffer-easy executable "--stdin")))
 
 (define-format-all-formatter mix-format
   (:executable "mix")
   (:install (macos "brew install elixir"))
-  (:modes elixir-mode)
+  (:languages "Elixir")
   (:format
    (format-all--buffer-hard
     nil nil '("mix.exs")
@@ -569,81 +553,54 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter nixfmt
   (:executable "nixfmt")
   (:install "nix-env -f https://github.com/serokell/nixfmt/archive/master.tar.gz -i")
-  (:modes nix-mode)
+  (:languages "Nix")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter ocp-indent
   (:executable "ocp-indent")
   (:install "opam install ocp-indent")
-  (:modes caml-mode tuareg-mode)
+  (:languages "OCaml")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter perltidy
   (:executable "perltidy")
   (:install "cpan install Perl::Tidy")
-  (:modes perl-mode cperl-mode)
+  (:languages "Perl")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter prettier
   (:executable "prettier")
   (:install "npm install --global prettier @prettier/plugin-php prettier-plugin-solidity")
-  (:modes
-   (angular-html-mode "angular")
-   ((js-mode js2-mode js3-mode)
-    (if (and (boundp 'flow-minor-mode)
-             (not (null (symbol-value 'flow-minor-mode))))
-        "flow"
-      "babel"))
-   ((js2-jsx-mode jsx-mode rjsx-mode react-mode) "babel")
-   ((typescript-mode typescript-tsx-mode) "typescript")
-   (json-mode "json")
-   (vue-mode "vue")
-   (css-mode "css")
-   (scss-mode "scss")
-   (less-css-mode "less")
-   (graphql-mode "graphql")
-   ((gfm-mode markdown-mode) "markdown")
-   (php-mode "php")
-   (solidity-mode "solidity-parse")
-   (web-mode
-    (let ((ct (symbol-value 'web-mode-content-type))
-          (en (symbol-value 'web-mode-engine)))
-      (cond ((equal ct "css") "css")
-            ((or (equal ct "javascript") (equal ct "jsx"))
-             (if (format-all--buffer-extension-p "ts" "tsx")
-                 "typescript"
-               "babel"))
-            ((equal ct "json") "json")
-            ((equal ct "html")
-             (cond ((equal en "angular") "angular")
-                   ((equal en "vue") "vue")
-                   ;; TODO: Use html-tidy instead of prettier for
-                   ;; plain HTML. Enable prettier's HTML support once
-                   ;; we have multi-formatter support.
-                   ;;
-                   ;; ((equal en "none") "html")
-                   (t nil)))
-            (t nil))))
-   (yaml-mode "yaml"))
+  (:languages
+   "CSS" "GraphQL" "JavaScript" "JSON" "JSX" "Less" "Markdown" "PHP"
+   "SCSS" "Solidity" "TSX" "TypeScript" "Vue" "YAML"
+   ;; TODO: Use html-tidy instead of prettier for plain HTML. Enable
+   ;; prettier's HTML support once we have multi-formatter support.
+   ;; "HTML"
+   "_Angular" "_Flow")
   (:format
-   (let ((parser mode-result))
-     (format-all--buffer-easy
-      executable
-      (when parser
-        (list "--parser" parser))
-      (when (buffer-file-name)
-        (list "--stdin-filepath" (buffer-file-name)))))))
+   (format-all--buffer-easy
+    executable
+    "--parser" (let ((pair (assoc language
+                                  '(("_Angular"   . "angular")
+                                    ("_Flow"      . "flow")
+                                    ("JavaScript" . "babel")
+                                    ("JSX"        . "babel")
+                                    ("Solidity"   . "solidity-parse")
+                                    ("TSX"        . "typescript")))))
+                 (if pair (cdr pair) (downcase language)))
+    (when (buffer-file-name) (list "--stdin-filepath" (buffer-file-name))))))
 
 (define-format-all-formatter purty
   (:executable "purty")
   (:install "npm install --global purty")
-  (:modes purescript-mode)
+  (:languages "PureScript")
   (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
   (:install "gem install rufo")
-  (:modes ruby-mode enh-ruby-mode)
+  (:languages "Ruby")
   (:format
    (format-all--buffer-easy
     executable
@@ -654,13 +611,13 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter rustfmt
   (:executable "rustfmt")
   (:install "cargo install rustfmt")
-  (:modes rust-mode rustic-mode)
+  (:languages "Rust")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter scalafmt
   (:executable "scalafmt")
   (:install "coursier bootstrap org.scalameta:scalafmt-cli_2.12:2.4.0-RC1 -r sonatype:snapshots -o /usr/local/bin/scalafmt --standalone --main org.scalafmt.cli.Cli")
-  (:modes scala-mode)
+  (:languages "Scala")
   (:format
    (format-all--buffer-easy
     executable "--stdin" "--non-interactive" "--quiet")))
@@ -670,17 +627,21 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install shfmt")
    (windows "scoop install shfmt"))
-  (:modes sh-mode)
+  (:languages "Shell")
   (:format
    (format-all--buffer-easy
     executable
-    "-ln" (cl-case (and (boundp 'sh-shell) (symbol-value 'sh-shell))
-            (bash "bash") (mksh "mksh") (t "posix")))))
+    "-ln" (cl-case (and (eql major-mode 'sh-mode)
+                        (boundp 'sh-shell)
+                        (symbol-value 'sh-shell))
+            (bash "bash")
+            (mksh "mksh")
+            (t "posix")))))
 
 (define-format-all-formatter sqlformat
   (:executable "sqlformat")
   (:install "pip install sqlparse")
-  (:modes sql-mode)
+  (:languages "SQL")
   (:format
    (let* ((ic (car default-process-coding-system))
           (oc (cdr default-process-coding-system))
@@ -700,9 +661,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter styler
   (:executable "Rscript")
   (:install "Rscript -e 'install.packages(\"styler\")'")
-  (:modes
-   ess-r-mode
-   (ess-mode (equal "R" (symbol-value 'ess-dialect))))
+  (:languages "R")
   (:format
    (format-all--buffer-easy
     executable "--vanilla"
@@ -716,14 +675,35 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter swiftformat
   (:executable "swiftformat")
   (:install (macos "brew install swiftformat"))
-  (:modes swift-mode swift3-mode)
+  (:languages "Swift")
   (:format (format-all--buffer-easy executable "--quiet")))
 
 (define-format-all-formatter terraform-fmt
   (:executable "terraform")
   (:install (macos "brew install terraform"))
-  (:modes terraform-mode)
+  (:languages "Terraform")
   (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
+
+(defun format-all--language-id-buffer ()
+  "Return the language used in the current buffer, or NIL.
+
+Prefer getting the ID from the language-id library. Some
+languages do not yet have official GitHub Linguist identifiers,
+yet format-all needs to know about them anyway. That's why we
+have this custom language-id function in format-all. The
+unofficial languages IDs are prefixed with \"_\"."
+  (or (language-id-buffer)
+      (and (or (equal major-mode 'angular-html-mode)
+               (and (equal major-mode 'web-mode)
+                    (equal (symbol-value 'web-mode-content-type) "html")
+                    (equal (symbol-value 'web-mode-engine) "angular")))
+           "_Angular")
+      (and (member major-mode '(js-mode js2-mode js3-mode))
+           (boundp 'flow-minor-mode)
+           (not (null (symbol-value 'flow-minor-mode)))
+           "_Flow")
+      (and (equal major-mode 'f90-mode) "_Fortran 90")
+      (and (equal major-mode 'ledger-mode) "_Ledger")))
 
 (defun format-all--please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
@@ -733,10 +713,10 @@ Consult the existing formatters for examples of BODY."
 
 (defun format-all--probe ()
   "Internal helper function to get the formatter for the current buffer."
-  (cl-dolist (pair (gethash major-mode format-all--mode-table) (list nil nil))
-    (cl-destructuring-bind (formatter . probe) pair
-      (let ((mode-result (if probe (funcall probe) t)))
-        (when mode-result (cl-return (list formatter mode-result)))))))
+  (let ((language (format-all--language-id-buffer)))
+    (cl-dolist (formatter (gethash language format-all--language-table)
+                          (list nil nil))
+      (cl-return (list formatter language)))))
 
 (defun format-all--formatter-executable (formatter)
   "Internal helper function to get the external program for FORMATTER."
@@ -769,17 +749,17 @@ Consult the existing formatters for examples of BODY."
     (let ((line-length (- (point-at-eol) (point-at-bol))))
       (goto-char (+ (point) (min old-column line-length))))))
 
-(defun format-all-buffer--with (formatter mode-result)
+(defun format-all-buffer--with (formatter language)
   "Internal helper function to format the current buffer.
 
-Relies on FORMATTER and MODE-RESULT from `format-all--probe'."
+Relies on FORMATTER and LANGUAGE from `format-all--probe'."
   (when format-all-debug
     (message "Format-All: Formatting %s using %S"
-             (buffer-name) (list formatter mode-result)))
+             (buffer-name) (list formatter language)))
   (let ((f-function (gethash formatter format-all--format-table))
         (executable (format-all--formatter-executable formatter)))
     (cl-destructuring-bind (output errput)
-        (funcall f-function executable mode-result)
+        (funcall f-function executable language)
       (let ((status (cond ((null output) :error)
                           ((equal t output) :already-formatted)
                           (t :reformatted))))
@@ -804,9 +784,9 @@ Format-All installs this function into `before-save-hook' to
 format buffers on save. This is a lenient version of
 `format-all-buffer' that silently succeeds instead of signaling
 an error if the current buffer has no formatter."
-  (cl-destructuring-bind (formatter mode-result) (format-all--probe)
+  (cl-destructuring-bind (formatter language) (format-all--probe)
     (when formatter
-      (format-all-buffer--with formatter mode-result))))
+      (format-all-buffer--with formatter language))))
 
 ;;;###autoload
 (defun format-all-buffer ()
@@ -830,9 +810,9 @@ formatter.
 If any errors or warnings were encountered during formatting,
 they are shown in a buffer called *format-all-errors*."
   (interactive)
-  (cl-destructuring-bind (formatter mode-result) (format-all--probe)
+  (cl-destructuring-bind (formatter language) (format-all--probe)
     (if formatter
-        (format-all-buffer--with formatter mode-result)
+        (format-all-buffer--with formatter language)
       (error "Don't know how to format %S code" major-mode))))
 
 ;;;###autoload
