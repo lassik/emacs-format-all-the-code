@@ -90,6 +90,8 @@
 ;;
 ;;; Code:
 
+(require 'language-id)
+
 (defvar format-all-debug nil
   "When non-nil, format-all writes debug info using `message'.")
 
