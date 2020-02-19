@@ -936,7 +936,7 @@ an error if the current buffer has no formatter."
     (format-all--run-chain language (format-all--get-chain language))))
 
 ;;;###autoload
-(defun format-all-buffer (&optional prompt-p)
+(defun format-all-buffer (&optional prompt)
   "Auto-format the source code in the current buffer.
 
 No disk files are touched - the buffer doesn't even need to be
@@ -955,12 +955,17 @@ It is fairly easy to add new languages that have an external
 formatter.  When called interactively or PROMPT-P is non-nil, a
 missing formatter is prompted in the minibuffer.
 
+If PROMPT is non-nil (or the function is called as an interactive
+command), a missing formatter is prompted in the minibuffer.  If
+PROMPT is the symbol `always' (or a prefix argument is given),
+the formatter is prompted for even if one has already been set.
+
 If any errors or warnings were encountered during formatting,
 they are shown in a buffer called *format-all-errors*."
-  (interactive "p")
+  (interactive (list (if current-prefix-arg 'always t)))
   (let* ((language (format-all--language-id-buffer))
          (chain (format-all--get-chain language)))
-    (when (and (not chain) prompt-p)
+    (when (or (equal 'always prompt) (and prompt (not chain)))
       (let ((f-name (format-all--prompt-for-formatter language)))
         (when f-name
           (message "Setting formatter to %S" f-name)
