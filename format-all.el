@@ -648,8 +648,8 @@ Consult the existing formatters for examples of BODY."
   (:executable "prettier")
   (:install "npm install --global prettier @prettier/plugin-lua @prettier/plugin-php prettier-plugin-solidity prettier-plugin-toml")
   (:languages
-   "CSS" "GraphQL" "JavaScript" "JSON" "JSX" "Less" "Lua" "Markdown" "PHP"
-   "SCSS" "Solidity" "TOML" "TSX" "TypeScript" "Vue" "YAML"
+   "CSS" "GraphQL" "HTML" "JavaScript" "JSON" "JSX" "Less" "Lua" "Markdown"
+   "PHP" "SCSS" "Solidity" "TOML" "TSX" "TypeScript" "Vue" "YAML"
    ;; TODO: Use html-tidy instead of prettier for plain HTML. Enable
    ;; prettier's HTML support once we have multi-formatter support.
    ;; "HTML"
