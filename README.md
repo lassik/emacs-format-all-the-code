@@ -46,7 +46,7 @@ Supported languages
 * **Kotlin** ([*ktlint*](https://github.com/shyiko/ktlint))
 * **LaTeX** ([*latexindent*](https://github.com/cmhughes/latexindent.pl))
 * **Ledger** ([*ledger-mode*](https://github.com/ledger/ledger-mode))
-* **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt))
+* **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt), [*prettier plugin-lua*](https://github.com/prettier/plugin-lua))
 * **Markdown** ([*prettier*](https://prettier.io/))
 * **Nix** ([*nixfmt*](https://github.com/serokell/nixfmt))
 * **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
