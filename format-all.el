@@ -735,12 +735,7 @@ Consult the existing formatters for examples of BODY."
                                  'utf-8)))
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
-     (format-all--buffer-easy
-      executable
-      "--keywords" "upper"
-      "--reindent_aligned"
-      "--encoding" ienc
-      "-"))))
+     (format-all--buffer-easy executable "--encoding" ienc "-"))))
 
 (define-format-all-formatter standard
   (:executable "standard")
