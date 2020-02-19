@@ -41,7 +41,7 @@ Supported languages
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
-* **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/))
+* **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/))
 * **Jsonnet** ([jsonnetfmt](https://jsonnet.org/))
 * **Kotlin** ([*ktlint*](https://github.com/shyiko/ktlint))
 * **LaTeX** ([*latexindent*](https://github.com/cmhughes/latexindent.pl))

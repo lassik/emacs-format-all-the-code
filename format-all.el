@@ -47,7 +47,7 @@
 ;; - Haskell (brittany)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format)
-;; - JavaScript/JSON/JSX (prettier)
+;; - JavaScript/JSON/JSX (prettier, standard)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
 ;; - LaTeX (latexindent)
@@ -741,6 +741,20 @@ Consult the existing formatters for examples of BODY."
       "--reindent_aligned"
       "--encoding" ienc
       "-"))))
+
+(define-format-all-formatter standard
+  (:executable "standard")
+  (:install "npm install --global standard")
+  (:languages "JavaScript")
+  (:format
+   ;; `standard --stdin` properly uses zero vs non-zero exit codes to
+   ;; indicate success vs error. However, it checks for quite a broad
+   ;; range of errors, all the way up to undeclared identifiers and
+   ;; such. To catch only syntax errors, we need to look specifically
+   ;; for the text "Parsing error:".
+   (format-all--buffer-hard
+    '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" nil
+    executable "--fix" "--stdin")))
 
 (define-format-all-formatter styler
   (:executable "Rscript")
