@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.3.0
-;; Package-Requires: ((emacs "24") (cl-lib "0.5") (language-id "0.8.1"))
+;; Package-Requires: ((emacs "24.3") (language-id "0.8.1"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -134,6 +134,37 @@ The current buffer is the buffer that was just formatted.  Point
 is not guaranteed to be in any particular place, so `goto-char'
 before editing the buffer.  Narrowing may be in effect unless
 STATUS is :reformatted.")
+
+(defvar format-all--user-args nil
+  "Internal variable to temporarily store arguments for formatters.")
+
+(defvar-local format-all-formatters nil
+  "Rules to select which formatter format-all uses.
+
+The value is an association list.
+
+The first item of each association is the name of a programming
+language. (GitHub Linguist names are used.)
+
+The remaining items are one or more formatters to use for that
+language. Each formatter is either:
+
+* a symbol (e.g. black, clang-format, rufo)
+
+* a list whose first item is that symbol, and any remaining items
+  are extra command line arguments to pass to the formatter
+
+If more than one formatter is given for the same language, all of
+them are run as a chain, with the code from each formatter passed
+to the next. The final code is from the last formatter. In case
+any formatter in the chain is missing or fails to format the
+code, the entire chain fails and the old code before formatting
+is preserved.
+
+You'll probably want to set this in a \".dir-locals.el\" file or
+in a hook function. Any number of buffers can share the same
+association list. Using \".dir-locals.el\" is convenient since
+the rules for an entire source tree can be given in one file.")
 
 (eval-and-compile
   (defconst format-all--system-type
@@ -282,7 +313,7 @@ or none of ROOT-FILES are found in any parent directories, the
 working directory will be the one where the formatted file is.
 ROOT-FILES is ignored for buffers that are not visiting a file."
   (let ((ok-statuses (or ok-statuses '(0)))
-        (args (format-all--flatten-once args))
+        (args (append format-all--user-args (format-all--flatten-once args)))
         (default-directory (format-all--locate-default-directory root-files)))
     (when format-all-debug
       (message "Format-All: Running: %s"
@@ -766,13 +797,6 @@ unofficial languages IDs are prefixed with \"_\"."
           (if (not installer) ""
             (format " You may be able to install it via %S." installer))))
 
-(defun format-all--probe ()
-  "Internal helper function to get the formatter for the current buffer."
-  (let ((language (format-all--language-id-buffer)))
-    (cl-dolist (formatter (gethash language format-all--language-table)
-                          (list nil nil))
-      (cl-return (list formatter language)))))
-
 (defun format-all--formatter-executable (formatter)
   "Internal helper function to get the external program for FORMATTER."
   (let ((executable (gethash formatter format-all--executable-table)))
@@ -808,48 +832,111 @@ STATUS and ERROR-OUTPUT come from the formatter."
     (let ((line-length (- (point-at-eol) (point-at-bol))))
       (goto-char (+ (point) (min old-column line-length))))))
 
-(defun format-all-buffer--with (formatter language)
-  "Internal helper function to format the current buffer.
+(defun format-all--normalize-formatter (formatter)
+  "Internal function to convert FORMATTER spec into normal form."
+  (let ((formatter (if (listp formatter) formatter (list formatter))))
+    (when (cdr (last formatter))
+      (error "Formatter is not a proper list: %S" formatter))
+    (when (null formatter)
+      (error "Formatter name missing"))
+    (unless (symbolp (car formatter))
+      (error "Formatter name is not a symbol: %S" (car formatter)))
+    (unless (cl-every #'stringp (cdr formatter))
+      (error "Formatter command line arguments are not all strings: %S"
+             formatter))
+    formatter))
 
-Relies on FORMATTER and LANGUAGE from `format-all--probe'."
-  (when format-all-debug
-    (message "Format-All: Formatting %s using %S"
-             (buffer-name) (list formatter language)))
-  (let ((f-function (gethash formatter format-all--format-table))
-        (executable (format-all--formatter-executable formatter)))
-    (cl-destructuring-bind (output error-output)
-        (funcall f-function executable language)
-      (let ((status (cond ((null output) :error)
-                          ((equal t output) :already-formatted)
-                          (t :reformatted))))
-        (when (equal :reformatted status)
-          (widen)
-          (format-all--save-line-number
-           (lambda ()
-             (let ((inhibit-read-only t))
-               (erase-buffer)
-               (insert output)))))
-        (format-all--update-errors-buffer status error-output)
-        (run-hook-with-args 'format-all-after-format-functions
-                            formatter status)
-        (message (cl-ecase status
-                   (:error "Formatting error")
-                   (:already-formatted "Already formatted")
-                   (:reformatted "Reformatted!")))))))
+(defun format-all--normalize-chain (chain)
+  "Internal function to convert CHAIN spec into normal form."
+  (when (or (not (listp chain)) (cdr (last chain)))
+    (error "Formatter chain is not a proper list: %S" chain))
+  (mapcar #'format-all--normalize-formatter chain))
 
-(defun format-all-buffer--from-hook ()
+(defun format-all--run-chain (language chain)
+  "Internal function to run a formatter CHAIN on the current buffer.
+
+LANGUAGE is the language ID of the current buffer, from
+`format-all--language-id-buffer`."
+  (let* ((chain (format-all--normalize-chain chain))
+         (chain-tail chain)
+         (error-output "")
+         (reformatted-by '()))
+    (format-all--save-line-number
+     (lambda ()
+       (cl-loop
+        (unless (and chain-tail (= 0 (length error-output)))
+          (cl-return))
+        (let* ((formatter (car chain-tail))
+               (f-name (car formatter))
+               (f-args (cdr formatter))
+               (f-function (gethash f-name format-all--format-table))
+               (f-executable (format-all--formatter-executable f-name)))
+          (when format-all-debug
+            (message
+             "Format-All: Formatting %s as %s using %S%s"
+             (buffer-name) language f-name
+             (with-temp-buffer
+               (dolist (arg f-args) (insert " " (shell-quote-argument arg)))
+               (buffer-string))))
+          (cl-destructuring-bind (f-output f-error-output)
+              (let ((format-all--user-args f-args))
+                (funcall f-function f-executable language))
+            (let ((f-status :already-formatted))
+              (cond ((null f-output)
+                     (setq error-output f-error-output)
+                     (setq f-status :error))
+                    ((not (equal f-output t))
+                     (setq reformatted-by
+                           (append reformatted-by (list f-name)))
+                     (let ((inhibit-read-only t))
+                       (erase-buffer)
+                       (insert f-output))
+                     (setq f-status :reformatted)))
+              (run-hook-with-args 'format-all-after-format-functions
+                                  f-name f-status)
+              (format-all--update-errors-buffer f-status f-error-output))))
+        (setq chain-tail (cdr chain-tail)))
+       (message "%s"
+                (cond ((not (= 0 (length error-output))) "Formatting error")
+                      ((not reformatted-by) "Already formatted")
+                      (t "Reformatted!")))))))
+
+(defun format-all--get-chain (language)
+  "Internal function to get LANGUAGE formatter chain for current buffer."
+  (when language (cdr (assoc language format-all-formatters))))
+
+(defun format-all--set-chain (language chain)
+  "Internal function to set LANGUAGE formatter CHAIN for current buffer."
+  (cl-assert (stringp language))
+  (cl-assert (listp chain))
+  (setq format-all-formatters
+        (append (cl-remove-if (lambda (pair) (equal language (car pair)))
+                              format-all-formatters)
+                (when chain (list (cons language chain))))))
+
+(defun format-all--prompt-for-formatter (language)
+  "Internal function to choose a formatter for LANGUAGE."
+  (let ((f-names (gethash language format-all--language-table)))
+    (cond ((null f-names) (error "No supported formatters for %s" language))
+          ((null (cdr f-names)) (car f-names))
+          (t (let ((f-string (completing-read
+                              (format "Formatter for %s: " language)
+                              (mapcar #'list f-names) nil t)))
+               (and (not (= 0 (length f-string)))
+                    (intern f-string)))))))
+
+(defun format-all--buffer-from-hook ()
   "Internal helper function to auto-format current buffer from a hook.
 
 Format-All installs this function into `before-save-hook' to
 format buffers on save. This is a lenient version of
 `format-all-buffer' that silently succeeds instead of signaling
 an error if the current buffer has no formatter."
-  (cl-destructuring-bind (formatter language) (format-all--probe)
-    (when formatter
-      (format-all-buffer--with formatter language))))
+  (let ((language (format-all--language-id-buffer)))
+    (format-all--run-chain language (format-all--get-chain language))))
 
 ;;;###autoload
-(defun format-all-buffer ()
+(defun format-all-buffer (&optional prompt-p)
   "Auto-format the source code in the current buffer.
 
 No disk files are touched - the buffer doesn't even need to be
@@ -865,15 +952,22 @@ external program.
 A suitable formatter is selected according to the `major-mode' of
 the buffer.  Many popular programming languages are supported.
 It is fairly easy to add new languages that have an external
-formatter.
+formatter.  When called interactively or PROMPT-P is non-nil, a
+missing formatter is prompted in the minibuffer.
 
 If any errors or warnings were encountered during formatting,
 they are shown in a buffer called *format-all-errors*."
-  (interactive)
-  (cl-destructuring-bind (formatter language) (format-all--probe)
-    (if formatter
-        (format-all-buffer--with formatter language)
-      (error "Don't know how to format %S code" major-mode))))
+  (interactive "p")
+  (let* ((language (format-all--language-id-buffer))
+         (chain (format-all--get-chain language)))
+    (when (and (not chain) prompt-p)
+      (let ((f-name (format-all--prompt-for-formatter language)))
+        (when f-name
+          (message "Setting formatter to %S" f-name)
+          (setq chain (list f-name))
+          (format-all--set-chain language chain))))
+    (unless chain (error "No formatter"))
+    (format-all--run-chain language chain)))
 
 ;;;###autoload
 (define-minor-mode format-all-mode
@@ -912,10 +1006,10 @@ or zero, and enabled otherwise."
   :global nil
   (if format-all-mode
       (add-hook 'before-save-hook
-                'format-all-buffer--from-hook
+                'format-all--buffer-from-hook
                 nil 'local)
     (remove-hook 'before-save-hook
-                 'format-all-buffer--from-hook
+                 'format-all--buffer-from-hook
                  'local)))
 
 (provide 'format-all)
