@@ -46,6 +46,7 @@
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX (prettier)
+;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
 ;; - LaTeX (latexindent)
 ;; - Ledger (ledger-mode)
@@ -512,6 +513,12 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "Verilog")
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter jsonnetfmt
+  (:executable "jsonnetfmt")
+  (:install (macos "brew install jsonnet"))
+  (:languages "Jsonnet")
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter ktlint
   (:executable "ktlint")
