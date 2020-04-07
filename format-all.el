@@ -67,6 +67,7 @@
 ;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
+;; - TOML (prettier prettier-plugin-toml)
 ;; - TypeScript/TSX (prettier)
 ;; - Verilog (iStyle)
 ;; - YAML (prettier)
@@ -572,10 +573,10 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter prettier
   (:executable "prettier")
-  (:install "npm install --global prettier @prettier/plugin-php prettier-plugin-solidity")
+  (:install "npm install --global prettier @prettier/plugin-php prettier-plugin-solidity prettier-plugin-toml")
   (:languages
    "CSS" "GraphQL" "JavaScript" "JSON" "JSX" "Less" "Markdown" "PHP"
-   "SCSS" "Solidity" "TSX" "TypeScript" "Vue" "YAML"
+   "SCSS" "Solidity" "TOML" "TSX" "TypeScript" "Vue" "YAML"
    ;; TODO: Use html-tidy instead of prettier for plain HTML. Enable
    ;; prettier's HTML support once we have multi-formatter support.
    ;; "HTML"
