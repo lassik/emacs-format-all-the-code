@@ -691,7 +691,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter terraform-fmt
   (:executable "terraform")
   (:install (macos "brew install terraform"))
-  (:languages "Terraform")
+  (:languages "Terraform" "HCL")
   (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
 
 (defun format-all--language-id-buffer ()
