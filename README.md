@@ -62,7 +62,7 @@ Supported languages
 * **SQL** ([*sqlformat*](https://pypi.org/project/sqlparse/))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
 * **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))
-* **TOML** ([*prettier-plugin-toml*](https://github.com/fvictorio/prettier-plugin-toml))
+* **TOML** ([*prettier-plugin-toml*](https://github.com/bd82/toml-tools/tree/master/packages/prettier-plugin-toml))
 * **TypeScript/TSX** ([*prettier*](https://prettier.io/))
 * **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter))
 * **YAML** ([*prettier*](https://prettier.io/))
