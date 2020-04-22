@@ -59,6 +59,7 @@ Supported languages
 * **Scala** ([*scalafmt*](https://github.com/scalameta/scalafmt))
 * **Shell script** ([*shfmt*](https://github.com/mvdan/sh))
 * **Solidity** ([*prettier-plugin-solidity*](https://github.com/prettier-solidity/prettier-plugin-solidity))
+* **Snakemake** ([*snakefmt*](https://github.com/snakemake/snakefmt))
 * **SQL** ([*sqlformat*](https://pypi.org/project/sqlparse/))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
 * **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))

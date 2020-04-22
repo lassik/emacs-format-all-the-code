@@ -65,6 +65,7 @@
 ;; - Scala (scalafmt)
 ;; - Shell script (shfmt)
 ;; - Solidity (prettier prettier-plugin-solidity)
+;; - Snakemake (snakefmt)
 ;; - SQL (sqlformat)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
@@ -648,6 +649,12 @@ Consult the existing formatters for examples of BODY."
             (mksh "mksh")
             (t "posix")))))
 
+(define-format-all-formatter snakefmt
+  (:executable "snakefmt")
+  (:install)
+  (:languages "_Snakemake")
+  (:format (format-all--buffer-easy executable "-")))
+
 (define-format-all-formatter sqlformat
   (:executable "sqlformat")
   (:install "pip install sqlparse")
@@ -702,7 +709,8 @@ languages do not yet have official GitHub Linguist identifiers,
 yet format-all needs to know about them anyway. That's why we
 have this custom language-id function in format-all. The
 unofficial languages IDs are prefixed with \"_\"."
-  (or (language-id-buffer)
+  (or (and (equal major-mode 'snakemake-mode) "_Snakemake")
+      (language-id-buffer)
       (and (or (equal major-mode 'angular-html-mode)
                (and (equal major-mode 'web-mode)
                     (equal (symbol-value 'web-mode-content-type) "html")
