@@ -620,8 +620,8 @@ Consult the existing formatters for examples of BODY."
       (list "--filename" (buffer-file-name))))))
 
 (define-format-all-formatter rustfmt
-  (:executable "rustfmt")
-  (:install "cargo install rustfmt")
+  (:executable "cargo-fmt")
+  (:install "rustup component add rustfmt")
   (:languages "Rust")
   (:format (format-all--buffer-easy executable)))
 
