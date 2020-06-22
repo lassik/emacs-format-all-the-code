@@ -623,7 +623,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "cargo-fmt")
   (:install "rustup component add rustfmt")
   (:languages "Rust")
-  (:format (format-all--buffer-easy executable)))
+  (:format (format-all--buffer-easy executable "--" "--emit" "stdout")))
 
 (define-format-all-formatter scalafmt
   (:executable "scalafmt")
