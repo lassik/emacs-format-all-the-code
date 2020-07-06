@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.3.0
-;; Package-Requires: ((emacs "24") (cl-lib "0.5") (language-id "0.5.1"))
+;; Package-Requires: ((emacs "24") (cl-lib "0.5") (language-id "0.6"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -394,7 +394,7 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install clang-format")
    (windows "scoop install llvm"))
-  (:languages "C" "C++" "Java" "Objective-C" "Protocol Buffer")
+  (:languages "C" "C++" "GLSL" "Java" "Objective-C" "Protocol Buffer")
   (:format
    (format-all--buffer-easy
     executable
@@ -403,6 +403,7 @@ Consult the existing formatters for examples of BODY."
                 (cdr (assoc language
                             '(("C"               . ".c")
                               ("C++"             . ".cpp")
+                              ("GLSL"            . ".glsl")
                               ("Java"            . ".java")
                               ("Objective-C"     . ".m")
                               ("Protocol Buffer" . ".proto")))))))))
