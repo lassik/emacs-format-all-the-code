@@ -27,6 +27,7 @@
 ;; - Bazel Starlark (buildifier)
 ;; - BibTeX (emacs)
 ;; - C/C++/Objective-C (clang-format)
+;; - Cabal (cabal-fmt)
 ;; - Clojure/ClojureScript (node-cljfmt)
 ;; - CMake (cmake-format)
 ;; - Crystal (crystal tool format)
@@ -387,6 +388,12 @@ Consult the existing formatters for examples of BODY."
    (macos "brew install buildifier")
    "go get github.com/bazelbuild/buildtools/buildifier")
   (:languages "Bazel")
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter cabal-fmt
+  (:executable "cabal-fmt")
+  (:install "cabal install cabal-fmt")
+  (:languages "Cabal Config")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter clang-format
