@@ -21,6 +21,7 @@ Supported languages
 * **Bazel Starlark** ([*buildifier*](https://github.com/bazelbuild/buildtools/tree/master/buildifier))
 * **BibTeX** (emacs)
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
+* **Cabal** ([*cabal-fmt*](https://github.com/phadej/cabal-fmt))
 * **Clojure/ClojureScript** ([*node-cljfmt*](https://github.com/snoe/node-cljfmt))
 * **CMake** ([*cmake-format*](https://github.com/cheshirekow/cmake_format))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
