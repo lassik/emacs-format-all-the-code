@@ -35,6 +35,7 @@ Supported languages
 * **Emacs Lisp** (emacs)
 * **Fish Shell** ([*fish_indent*](https://fishshell.com/docs/current/commands.html#fish_indent))
 * **Fortran 90** ([*fprettify*](https://github.com/pseewald/fprettify))
+* **Gleam** ([*gleam format*](https://gleam.run/))
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/))
 * **GraphQL** ([*prettier*](https://prettier.io/))
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany))

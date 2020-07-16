@@ -41,6 +41,7 @@
 ;; - Emacs Lisp (emacs)
 ;; - Fish Shell (fish_indent)
 ;; - Fortran 90 (fprettify)
+;; - Gleam (gleam format)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
 ;; - Haskell (brittany)
@@ -494,6 +495,12 @@ Consult the existing formatters for examples of BODY."
   (:languages "_Fortran 90")
   (:format (format-all--buffer-easy executable "--silent")))
 
+(define-format-all-formatter gleam
+  (:executable "gleam")
+  (:install (macos "brew install gleam"))
+  (:languages "_Gleam")
+  (:format (format-all--buffer-easy executable "format" "--stdin")))
+
 (define-format-all-formatter gofmt
   (:executable "gofmt")
   (:install
@@ -727,6 +734,7 @@ unofficial languages IDs are prefixed with \"_\"."
            (not (null (symbol-value 'flow-minor-mode)))
            "_Flow")
       (and (equal major-mode 'f90-mode) "_Fortran 90")
+      (and (equal major-mode 'gleam-mode) "_Gleam")
       (and (equal major-mode 'ledger-mode) "_Ledger")
       (and (equal major-mode 'snakemake-mode) "_Snakemake")
       (language-id-buffer)))
