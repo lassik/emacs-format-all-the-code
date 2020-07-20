@@ -718,7 +718,6 @@ yet format-all needs to know about them anyway. That's why we
 have this custom language-id function in format-all. The
 unofficial languages IDs are prefixed with \"_\"."
   (or (and (equal major-mode 'snakemake-mode) "_Snakemake")
-      (language-id-buffer)
       (and (or (equal major-mode 'angular-html-mode)
                (and (equal major-mode 'web-mode)
                     (equal (symbol-value 'web-mode-content-type) "html")
@@ -729,7 +728,8 @@ unofficial languages IDs are prefixed with \"_\"."
            (not (null (symbol-value 'flow-minor-mode)))
            "_Flow")
       (and (equal major-mode 'f90-mode) "_Fortran 90")
-      (and (equal major-mode 'ledger-mode) "_Ledger")))
+      (and (equal major-mode 'ledger-mode) "_Ledger")
+      (language-id-buffer)))
 
 (defun format-all--please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
