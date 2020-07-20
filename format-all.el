@@ -717,8 +717,7 @@ languages do not yet have official GitHub Linguist identifiers,
 yet format-all needs to know about them anyway. That's why we
 have this custom language-id function in format-all. The
 unofficial languages IDs are prefixed with \"_\"."
-  (or (and (equal major-mode 'snakemake-mode) "_Snakemake")
-      (and (or (equal major-mode 'angular-html-mode)
+  (or (and (or (equal major-mode 'angular-html-mode)
                (and (equal major-mode 'web-mode)
                     (equal (symbol-value 'web-mode-content-type) "html")
                     (equal (symbol-value 'web-mode-engine) "angular")))
@@ -729,6 +728,7 @@ unofficial languages IDs are prefixed with \"_\"."
            "_Flow")
       (and (equal major-mode 'f90-mode) "_Fortran 90")
       (and (equal major-mode 'ledger-mode) "_Ledger")
+      (and (equal major-mode 'snakemake-mode) "_Snakemake")
       (language-id-buffer)))
 
 (defun format-all--please-install (executable installer)
