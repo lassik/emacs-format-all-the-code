@@ -60,7 +60,7 @@
 ;; - PHP (prettier plugin-php)
 ;; - Protocol Buffers (clang-format)
 ;; - PureScript (purty)
-;; - Python (black)
+;; - Python (black, yapf)
 ;; - R (styler)
 ;; - Reason (bsrefmt)
 ;; - Ruby (rufo)
@@ -776,6 +776,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install terraform"))
   (:languages "Terraform")
   (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
+
+(define-format-all-formatter yapf
+  (:executable "yapf")
+  (:install "pip install yapf")
+  (:languages "Python")
+  (:format (format-all--buffer-easy executable)))
 
 (defun format-all--language-id-buffer ()
   "Return the language used in the current buffer, or NIL.

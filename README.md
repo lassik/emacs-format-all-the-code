@@ -54,7 +54,7 @@ Supported languages
 * **PHP** ([*prettier plugin-php*](https://github.com/prettier/plugin-php))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **PureScript** ([*purty*](https://gitlab.com/joneshf/purty))
-* **Python** ([*black*](https://github.com/ambv/black))
+* **Python** ([*black*](https://github.com/ambv/black), [*yapf*](https://github.com/google/yapf))
 * **R** ([*styler*](https://github.com/r-lib/styler))
 * **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
