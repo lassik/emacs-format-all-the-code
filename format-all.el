@@ -635,10 +635,10 @@ Consult the existing formatters for examples of BODY."
       (list "--filename" (buffer-file-name))))))
 
 (define-format-all-formatter rustfmt
-  (:executable "cargo-fmt")
+  (:executable "rustfmt")
   (:install "rustup component add rustfmt")
   (:languages "Rust")
-  (:format (format-all--buffer-easy executable "--" "--quiet" "--emit" "stdout")))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter scalafmt
   (:executable "scalafmt")
