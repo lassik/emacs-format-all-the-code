@@ -384,6 +384,12 @@ Consult the existing formatters for examples of BODY."
   (:languages "Haskell" "Literate Haskell")
   (:format (format-all--buffer-easy executable)))
 
+(define-format-all-formatter bsrefmt
+  (:executable "bsrefmt")
+  (:install "npm install --global bs-platform")
+  (:languages "Reason")
+  (:format (format-all--buffer-easy executable)))
+
 (define-format-all-formatter buildifier
   (:executable "buildifier")
   (:install
@@ -623,12 +629,6 @@ Consult the existing formatters for examples of BODY."
   (:install "npm install --global purty")
   (:languages "PureScript")
   (:format (format-all--buffer-easy executable "-")))
-
-(define-format-all-formatter bsrefmt
-  (:executable "bsrefmt")
-  (:install "npm install --global bs-platform")
-  (:languages "Reason")
-  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
