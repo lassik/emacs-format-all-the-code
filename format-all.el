@@ -62,6 +62,7 @@
 ;; - PureScript (purty)
 ;; - Python (black)
 ;; - R (styler)
+;; - Reason (bsrefmt)
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
@@ -622,6 +623,12 @@ Consult the existing formatters for examples of BODY."
   (:install "npm install --global purty")
   (:languages "PureScript")
   (:format (format-all--buffer-easy executable "-")))
+
+(define-format-all-formatter bsrefmt
+  (:executable "bsrefmt")
+  (:install "npm install --global bs-platform")
+  (:languages "Reason")
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
