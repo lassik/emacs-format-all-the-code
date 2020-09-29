@@ -56,6 +56,7 @@ Supported languages
 * **PureScript** ([*purty*](https://gitlab.com/joneshf/purty))
 * **Python** ([*black*](https://github.com/ambv/black))
 * **R** ([*styler*](https://github.com/r-lib/styler))
+* **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
 * **Scala** ([*scalafmt*](https://github.com/scalameta/scalafmt))
