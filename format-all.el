@@ -808,8 +808,9 @@ Relies on FORMATTER and LANGUAGE from `format-all--probe'."
           (widen)
           (format-all--save-line-number
            (lambda ()
-             (erase-buffer)
-             (insert output))))
+             (let ((inhibit-read-only t))
+               (erase-buffer)
+               (insert output)))))
         (format-all--show-or-hide-errors errput)
         (run-hook-with-args 'format-all-after-format-functions
                             formatter status)
