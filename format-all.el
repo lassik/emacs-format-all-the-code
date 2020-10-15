@@ -96,6 +96,7 @@
 ;;
 ;;; Code:
 
+(require 'cl-lib)
 (require 'language-id)
 
 (defvar format-all-debug nil
