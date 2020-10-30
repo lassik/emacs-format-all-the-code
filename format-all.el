@@ -124,27 +124,29 @@ is not guaranteed to be in any particular place, so `goto-char'
 before editing the buffer.  Narrowing may be in effect unless
 STATUS is :reformatted.")
 
-(defconst format-all--system-type
-  (cl-case system-type
-    (windows-nt 'windows)
-    (cygwin     'windows)
-    (darwin     'macos)
-    (gnu/linux  'linux)
-    (berkeley-unix
-     (save-match-data
-       (let ((case-fold-search t))
-         (cond ((string-match "freebsd" system-configuration) 'freebsd)
-               ((string-match "openbsd" system-configuration) 'openbsd)
-               ((string-match "netbsd"  system-configuration) 'netbsd))))))
-  "Current operating system according to the format-all package.")
+(eval-and-compile
+  (defconst format-all--system-type
+    (cl-case system-type
+      (windows-nt 'windows)
+      (cygwin     'windows)
+      (darwin     'macos)
+      (gnu/linux  'linux)
+      (berkeley-unix
+       (save-match-data
+         (let ((case-fold-search t))
+           (cond ((string-match "freebsd" system-configuration) 'freebsd)
+                 ((string-match "openbsd" system-configuration) 'openbsd)
+                 ((string-match "netbsd"  system-configuration) 'netbsd))))))
+    "Current operating system according to the format-all package."))
 
-(defun format-all--resolve-system (choices)
-  "Get first choice matching `format-all--system-type' from CHOICES."
-  (cl-dolist (choice choices)
-    (cond ((atom choice)
-           (cl-return choice))
-          ((eql format-all--system-type (car choice))
-           (cl-return (cadr choice))))))
+(eval-and-compile
+  (defun format-all--resolve-system (choices)
+    "Get first choice matching `format-all--system-type' from CHOICES."
+    (cl-dolist (choice choices)
+      (cond ((atom choice)
+             (cl-return choice))
+            ((eql format-all--system-type (car choice))
+             (cl-return (cadr choice)))))))
 
 (defun format-all--fix-trailing-whitespace ()
   "Fix trailing whitespace since some formatters don't do that."
