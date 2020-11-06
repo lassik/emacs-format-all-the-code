@@ -778,17 +778,21 @@ unofficial languages IDs are prefixed with \"_\"."
                   executable
                   (gethash formatter format-all--install-table)))))))
 
-(defun format-all--show-or-hide-errors (error-output)
-  "Internal helper function to update *format-all-errors* with ERROR-OUTPUT."
-  (save-selected-window
-    (with-current-buffer (get-buffer-create "*format-all-errors*")
-      (erase-buffer)
-      (cond ((not (= 0 (length error-output)))
-             (insert error-output)
-             (display-buffer (current-buffer)))
-            (t
-             (let ((error-window (get-buffer-window (current-buffer))))
-               (when error-window (quit-window nil error-window))))))))
+(defun format-all--update-errors-buffer (status error-output)
+  "Internal helper function to update *format-all-errors*.
+
+STATUS and ERROR-OUTPUT come from the formatter."
+  (let ((show-errors-p (and (not (= 0 (length error-output)))
+                            (or format-all-always-show-errors
+                                (eq status :error)))))
+    (save-selected-window
+      (with-current-buffer (get-buffer-create "*format-all-errors*")
+        (erase-buffer)
+        (insert error-output)
+        (if show-errors-p
+            (display-buffer (current-buffer))
+          (let ((error-window (get-buffer-window (current-buffer))))
+            (when error-window (quit-window nil error-window))))))))
 
 (defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
@@ -821,9 +825,7 @@ Relies on FORMATTER and LANGUAGE from `format-all--probe'."
              (let ((inhibit-read-only t))
                (erase-buffer)
                (insert output)))))
-        (if (or (eq status :error)
-                format-all-always-show-errors)
-            (format-all--show-or-hide-errors errput))
+        (format-all--update-errors-buffer status errput)
         (run-hook-with-args 'format-all-after-format-functions
                             formatter status)
         (message (cl-ecase status
