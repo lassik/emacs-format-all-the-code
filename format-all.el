@@ -200,9 +200,9 @@ takes INPUT (the unformatted source code as a string).  THUNK is
 invoked such that the current buffer is an empty temp buffer.  It
 should call the formatter on INPUT and write the formatted source
 code output to the temp buffer.  It should return (ERRORP
-ERRPUT).  ERRORP is a boolean indicating whether the formatter
+ERROR-OUTPUT).  ERRORP is a boolean indicating whether the formatter
 caused an error and hence the contents of the temp buffer should
-be discarded.  ERRPUT is a string containing all error/warning
+be discarded.  ERROR-OUTPUT is a string containing all error/warning
 output from the formatter.
 
 Note that in some cases we can use the output of the formatter
@@ -213,7 +213,7 @@ even if it produced warnings.  Not all warnings are errors."
       (let ((inbuf (current-buffer))
             (input (buffer-string)))
         (with-temp-buffer
-          (cl-destructuring-bind (errorp errput) (funcall thunk input)
+          (cl-destructuring-bind (errorp error-output) (funcall thunk input)
             (let* ((no-chg (or errorp
                                (= 0 (let ((case-fold-search nil))
                                       (compare-buffer-substrings
@@ -221,7 +221,7 @@ even if it produced warnings.  Not all warnings are errors."
                    (output (cond (errorp nil)
                                  (no-chg t)
                                  (t (buffer-string)))))
-              (list output errput))))))))
+              (list output error-output))))))))
 
 (defun format-all--buffer-native (mode &rest funcs)
   "Internal helper function to implement formatters.
@@ -294,15 +294,15 @@ ROOT-FILES is ignored for buffers that are not visiting a file."
               (status (apply #'call-process-region input nil
                              executable nil (list t errfile)
                              nil args))
-              (errput (with-temp-buffer
-                        (insert-file-contents errfile)
-                        (delete-file errfile)
-                        (buffer-string)))
+              (error-output (with-temp-buffer
+                              (insert-file-contents errfile)
+                              (delete-file errfile)
+                              (buffer-string)))
               (errorp (or (not (member status ok-statuses))
                           (and error-regexp
                                (save-match-data
-                                 (string-match error-regexp errput))))))
-         (list errorp errput))))))
+                                 (string-match error-regexp error-output))))))
+         (list errorp error-output))))))
 
 (defun format-all--buffer-easy (executable &rest args)
   "Internal helper function to implement formatters.
@@ -487,11 +487,11 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install elm"))
   (:languages "Elm")
   (:format
-   (cl-destructuring-bind (output errput)
+   (cl-destructuring-bind (output error-output)
        (format-all--buffer-hard nil nil '("elm.json" "elm-package.json")
                                 executable "--yes" "--stdin")
-     (let ((errput (format-all--remove-ansi-color errput)))
-       (list output errput)))))
+     (let ((error-output (format-all--remove-ansi-color error-output)))
+       (list output error-output)))))
 
 (define-format-all-formatter emacs-lisp
   (:executable)
@@ -815,7 +815,7 @@ Relies on FORMATTER and LANGUAGE from `format-all--probe'."
              (buffer-name) (list formatter language)))
   (let ((f-function (gethash formatter format-all--format-table))
         (executable (format-all--formatter-executable formatter)))
-    (cl-destructuring-bind (output errput)
+    (cl-destructuring-bind (output error-output)
         (funcall f-function executable language)
       (let ((status (cond ((null output) :error)
                           ((equal t output) :already-formatted)
@@ -827,7 +827,7 @@ Relies on FORMATTER and LANGUAGE from `format-all--probe'."
              (let ((inhibit-read-only t))
                (erase-buffer)
                (insert output)))))
-        (format-all--update-errors-buffer status errput)
+        (format-all--update-errors-buffer status error-output)
         (run-hook-with-args 'format-all-after-format-functions
                             formatter status)
         (message (cl-ecase status
