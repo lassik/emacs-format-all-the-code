@@ -103,8 +103,10 @@
   "Lets you auto-format source code."
   :group 'format-all)
 
-(defvar format-all-debug nil
-  "When non-nil, format-all writes debug info using `message'.")
+(defcustom format-all-debug nil
+  "When non-nil, troubleshooting info is written into the *Messages* buffer."
+  :type 'boolean
+  :group 'format-all)
 
 (defcustom format-all-always-show-errors nil
   "When non-nil, error/warning output is shown even if formatting is successful."
