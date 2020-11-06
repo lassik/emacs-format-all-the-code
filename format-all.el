@@ -99,8 +99,17 @@
 (require 'cl-lib)
 (require 'language-id)
 
+(defgroup format-all nil
+  "Lets you auto-format source code."
+  :group 'format-all)
+
 (defvar format-all-debug nil
   "When non-nil, format-all writes debug info using `message'.")
+
+(defcustom format-all-always-show-errors nil
+  "When non-nil, error/warning output is shown even if formatting is successful."
+  :type 'boolean
+  :group 'format-all)
 
 (defvar format-all-after-format-functions nil
   "Hook run after each time `format-all-buffer' has formatted a buffer.
@@ -812,7 +821,9 @@ Relies on FORMATTER and LANGUAGE from `format-all--probe'."
              (let ((inhibit-read-only t))
                (erase-buffer)
                (insert output)))))
-        (format-all--show-or-hide-errors errput)
+        (if (or (eq status :error)
+                format-all-always-show-errors)
+            (format-all--show-or-hide-errors errput))
         (run-hook-with-args 'format-all-after-format-functions
                             formatter status)
         (message (cl-ecase status
