@@ -676,12 +676,14 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-easy
     executable
-    "-ln" (cl-case (and (eql major-mode 'sh-mode)
-                        (boundp 'sh-shell)
-                        (symbol-value 'sh-shell))
-            (bash "bash")
-            (mksh "mksh")
-            (t "posix")))))
+    (if (buffer-file-name)
+        (list "-filename" (buffer-file-name))
+      (list "-ln" (cl-case (and (eql major-mode 'sh-mode)
+                                (boundp 'sh-shell)
+                                (symbol-value 'sh-shell))
+                    (bash "bash")
+                    (mksh "mksh")
+                    (t "posix")))))))
 
 (define-format-all-formatter snakefmt
   (:executable "snakefmt")
