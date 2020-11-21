@@ -752,7 +752,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter standard
   (:executable "standard")
   (:install "npm install --global standard")
-  (:languages "JavaScript")
+  (:languages "JavaScript" "JSX")
   (:format
    ;; `standard --stdin` properly uses zero vs non-zero exit codes to
    ;; indicate success vs error. However, it checks for quite a broad
