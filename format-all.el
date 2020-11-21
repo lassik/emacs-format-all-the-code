@@ -69,7 +69,7 @@
 ;; - Shell script (shfmt)
 ;; - Snakemake (snakefmt)
 ;; - Solidity (prettier prettier-plugin-solidity)
-;; - SQL (sqlformat)
+;; - SQL (pg-format, sqlformat)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier prettier-plugin-toml)
@@ -648,6 +648,12 @@ Consult the existing formatters for examples of BODY."
   (:executable "perltidy")
   (:install "cpan install Perl::Tidy")
   (:languages "Perl")
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter pg-format
+  (:executable "pg_format")
+  (:install)
+  (:languages "SQL")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter prettier
