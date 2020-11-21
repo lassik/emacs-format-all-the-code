@@ -66,7 +66,7 @@
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
-;; - Shell script (shfmt)
+;; - Shell script (beautysh, shfmt)
 ;; - Snakemake (snakefmt)
 ;; - Solidity (prettier prettier-plugin-solidity)
 ;; - SQL (pg-format, sqlformat)
@@ -404,6 +404,12 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "Assembly")
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter beautysh
+  (:executable "beautysh")
+  (:install "pip3 install beautysh")
+  (:languages "Shell")
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter bibtex-mode
   (:executable)

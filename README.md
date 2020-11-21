@@ -60,7 +60,7 @@ Supported languages
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
 * **Scala** ([*scalafmt*](https://github.com/scalameta/scalafmt))
-* **Shell script** ([*shfmt*](https://github.com/mvdan/sh))
+* **Shell script** ([*beautysh*](https://github.com/lovesegfault/beautysh), [*shfmt*](https://github.com/mvdan/sh))
 * **Snakemake** ([*snakefmt*](https://github.com/snakemake/snakefmt))
 * **Solidity** ([*prettier-plugin-solidity*](https://github.com/prettier-solidity/prettier-plugin-solidity))
 * **SQL** ([pg-format](https://github.com/darold/pgFormatter), [*sqlformat*](https://pypi.org/project/sqlparse/))
