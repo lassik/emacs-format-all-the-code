@@ -407,7 +407,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter beautysh
   (:executable "beautysh")
-  (:install "pip3 install beautysh")
+  (:install "pip install beautysh")
   (:languages "Shell")
   (:format (format-all--buffer-easy executable "-")))
 
