@@ -563,7 +563,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "hindent")
   (:install "stack install hindent")
   (:languages "Haskell" "Literate Haskell")
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter html-tidy
   (:executable "tidy")
@@ -775,7 +775,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "stylish-haskell")
   (:install "stack install stylish-haskell")
   (:languages "Haskell")
-  (:format (format-all-buffer-easy executable)))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter swiftformat
   (:executable "swiftformat")
