@@ -44,7 +44,7 @@
 ;; - Gleam (gleam format)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
-;; - Haskell (brittany)
+;; - Haskell (brittany, hindent)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX (prettier, standard)
@@ -558,6 +558,12 @@ Consult the existing formatters for examples of BODY."
    (windows "scoop install go"))
   (:languages "Go")
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter hindent
+  (:executable "hindent")
+  (:install "stack install hindent")
+  (:languages "Haskell" "Literate Haskell")
+  (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter html-tidy
   (:executable "tidy")
