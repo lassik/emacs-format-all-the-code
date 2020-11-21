@@ -38,7 +38,7 @@ Supported languages
 * **Gleam** ([*gleam format*](https://gleam.run/))
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/))
 * **GraphQL** ([*prettier*](https://prettier.io/))
-* **Haskell** ([*brittany*](https://github.com/lspitzner/brittany), [*hindent*](https://github.com/commercialhaskell/hindent))
+* **Haskell** ([*brittany*](https://github.com/lspitzner/brittany), [*hindent*](https://github.com/commercialhaskell/hindent), [stylish-haskell](https://github.com/jaspervdj/stylish-haskell))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/))

@@ -44,7 +44,7 @@
 ;; - Gleam (gleam format)
 ;; - Go (gofmt)
 ;; - GraphQL (prettier)
-;; - Haskell (brittany, hindent)
+;; - Haskell (brittany, hindent, stylish-haskell)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format)
 ;; - JavaScript/JSON/JSX (prettier, standard)
@@ -770,6 +770,12 @@ Consult the existing formatters for examples of BODY."
           " out <- styler::style_text(readLines(con));"
           " close(con);"
           " out"))))
+
+(define-format-all-formatter stylish-haskell
+  (:executable "stylish-haskell")
+  (:install "stack install stylish-haskell")
+  (:languages "Haskell")
+  (:format (format-all-buffer-easy executable)))
 
 (define-format-all-formatter swiftformat
   (:executable "swiftformat")
