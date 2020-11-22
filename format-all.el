@@ -668,9 +668,6 @@ Consult the existing formatters for examples of BODY."
   (:languages
    "CSS" "GraphQL" "HTML" "JavaScript" "JSON" "JSX" "Less" "Lua" "Markdown"
    "PHP" "SCSS" "Solidity" "TOML" "TSX" "TypeScript" "Vue" "YAML"
-   ;; TODO: Use html-tidy instead of prettier for plain HTML. Enable
-   ;; prettier's HTML support once we have multi-formatter support.
-   ;; "HTML"
    "_Angular" "_Flow")
   (:format
    (format-all--buffer-easy
