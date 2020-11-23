@@ -69,7 +69,7 @@
 ;; - Shell script (beautysh, shfmt)
 ;; - Snakemake (snakefmt)
 ;; - Solidity (prettier prettier-plugin-solidity)
-;; - SQL (pg-format, sqlformat)
+;; - SQL (pgformatter, sqlformat)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier prettier-plugin-toml)
@@ -656,7 +656,7 @@ Consult the existing formatters for examples of BODY."
   (:languages "Perl")
   (:format (format-all--buffer-easy executable)))
 
-(define-format-all-formatter pg-format
+(define-format-all-formatter pgformatter
   (:executable "pg_format")
   (:install)
   (:languages "SQL")
