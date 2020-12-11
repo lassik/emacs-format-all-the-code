@@ -109,7 +109,7 @@
   :group 'format-all)
 
 (defcustom format-all-always-show-errors nil
-  "When non-nil, error/warning output is shown even if formatting is successful."
+  "When non-nil, warnings are shown even when formatting is successful."
   :type 'boolean
   :group 'format-all)
 
