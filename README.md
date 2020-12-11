@@ -114,9 +114,8 @@ How to report bugs
 [GitHub issues][github-issues] are preferred. Email is also ok.
 
 Feature requests are welcome. If you are interested in doing anything
-beyong just adding new formatters in the current framework, please
-discuss in issues before writing code, since there are big unresolved
-questions about where the project should go from here.
+beyond adding new formatters in the current framework, please discuss
+in issues before writing code.
 
 Roadmap
 -------
