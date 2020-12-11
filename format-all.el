@@ -108,6 +108,77 @@
   :type 'boolean
   :group 'format-all)
 
+(defcustom format-all-default-formatters
+  '(("Assembly" asmfmt)
+    ("Bazel" buildifier)
+    ("BibTeX" bibtex-mode)
+    ("C" clang-format)
+    ("C++" clang-format)
+    ("CMake" cmake-format)
+    ("CSS" prettier)
+    ("Cabal Config" cabal-fmt)
+    ("Clojure" cljfmt)
+    ("Crystal" crystal)
+    ("D" dfmt)
+    ("Dart" dartfmt)
+    ("Dhall" dhall)
+    ("Dockerfile" dockfmt)
+    ("Elixir" mix-format)
+    ("Elm" elm-format)
+    ("Emacs Lisp" emacs-lisp)
+    ("Fish" fish-indent)
+    ("GLSL" clang-format)
+    ("Go" gofmt)
+    ("GraphQL" prettier)
+    ("HTML" html-tidy)
+    ("Haskell" brittany)
+    ("JSON" prettier)
+    ("JSX" prettier)
+    ("Java" clang-format)
+    ("JavaScript" prettier)
+    ("Jsonnet" jsonnetfmt)
+    ("Kotlin" ktlint)
+    ("LaTeX" latexindent)
+    ("Less" prettier)
+    ("Literate Haskell" brittany)
+    ("Lua" lua-fmt)
+    ("Markdown" prettier)
+    ("Nix" nixfmt)
+    ("OCaml" ocp-indent)
+    ("Objective-C" clang-format)
+    ("PHP" prettier)
+    ("Perl" perltidy)
+    ("Protocol Buffer" clang-format)
+    ("PureScript" purty)
+    ("Python" black)
+    ("R" styler)
+    ("Reason" bsrefmt)
+    ("Ruby" rufo)
+    ("Rust" rustfmt)
+    ("SCSS" prettier)
+    ("SQL" sqlformat)
+    ("Scala" scalafmt)
+    ("Shell" shfmt)
+    ("Solidity" prettier)
+    ("Swift" swiftformat)
+    ("TOML" prettier)
+    ("TSX" prettier)
+    ("Terraform" terraform-fmt)
+    ("TypeScript" prettier)
+    ("Verilog" istyle-verilog)
+    ("Vue" prettier)
+    ("XML" html-tidy)
+    ("YAML" prettier)
+    ("_Angular" prettier)
+    ("_Flow" prettier)
+    ("_Fortran 90" fprettify)
+    ("_Gleam" gleam)
+    ("_Ledger" ledger-mode)
+    ("_Snakemake" snakefmt))
+  "Default formatter to use for each language."
+  :type '(repeat (list string symbol))
+  :group 'format-all)
+
 (defcustom format-all-always-show-errors nil
   "When non-nil, warnings are shown even when formatting is successful."
   :type 'boolean
@@ -937,6 +1008,10 @@ LANGUAGE is the language ID of the current buffer, from
                       ((not reformatted-by) "Already formatted")
                       (t "Reformatted!")))))))
 
+(defun format-all--get-default-chain (language)
+  "Internal function to get the default formatter chain for LANGUAGE."
+  (when language (cdr (assoc language format-all-default-formatters))))
+
 (defun format-all--get-chain (language)
   "Internal function to get LANGUAGE formatter chain for current buffer."
   (when language (cdr (assoc language format-all-formatters))))
@@ -1009,6 +1084,18 @@ they are shown in a buffer called *format-all-errors*."
           (format-all--set-chain language chain))))
     (unless chain (error "No formatter"))
     (format-all--run-chain language chain)))
+
+(defun format-all-ensure-formatter ()
+  (interactive)
+  "Ensure current buffer has a formatter, using default if not."
+  (let ((language (format-all--language-id-buffer)))
+    (unless (format-all--get-chain language)
+      (let ((chain (format-all--get-default-chain language)))
+        (message "Using default formatter%s"
+                 (with-temp-buffer
+                   (dolist (formatter chain (buffer-string))
+                     (insert (format " %S" formatter)))))
+        (format-all--set-chain language chain)))))
 
 ;;;###autoload
 (define-minor-mode format-all-mode
