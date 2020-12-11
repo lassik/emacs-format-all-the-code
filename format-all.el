@@ -81,11 +81,6 @@
 ;; If `format-all-buffer` can't find the right program, it will try to
 ;; tell you how to install it.
 ;;
-;; There are currently no customize variables, since it's not clear
-;; what approach should be taken.  Please see
-;; https://github.com/lassik/emacs-format-all-the-code/issues for
-;; discussion.
-;;
 ;; Many of the external formatters support configuration files in the
 ;; source code directory to control their formatting.  Please see the
 ;; documentation for each formatter.
@@ -1106,26 +1101,15 @@ automatically called to format your code each time before you
 save the buffer.
 
 The mode is buffer-local and needs to be enabled separately each
-time a file is visited.  You may want to use `add-hook' to add a
-function to your personal `after-change-major-mode-hook' in your
-`user-init-file' to enable the mode based on the buffer's
-`major-mode' and some `buffer-file-name' patterns. For example:
+time a file is visited. You may want to use `add-hook' in your
+`user-init-file' to enable the mode based on buffer modes. E.g.:
 
-    (defvar my-auto-format-modes '(js-mode python-mode))
-    (defvar my-auto-format-dirs '(\"foo\" \"bar\"))
+    (add-hook 'prog-mode-hook 'format-all-mode)
 
-    (defun my-auto-format-buffer-p ()
-      (and (member major-mode my-auto-format-modes)
-           (buffer-file-name)
-           (save-match-data
-             (let ((dir (file-name-directory (buffer-file-name))))
-               (cl-some (lambda (regexp) (string-match regexp dir))
-                        my-auto-format-dirs)))))
+To use a default formatter for projects that don't have one, add
+this too:
 
-    (defun my-after-change-major-mode ()
-      (format-all-mode (if (my-auto-format-buffer-p) 1 0)))
-
-    (add-hook 'after-change-major-mode-hook 'my-after-change-major-mode)
+    (add-hook 'prog-mode-hook 'format-all-ensure-formatter)
 
 When `format-all-mode' is called as a Lisp function, the mode is
 toggled if ARG is ‘toggle’, disabled if ARG is a negative integer

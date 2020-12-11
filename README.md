@@ -90,13 +90,16 @@ package from MELPA.
 How to customize
 ----------------
 
-There are currently no customize variables, since it's not clear what
-approach should be taken. Please see [GitHub issues][github-issues]
-for discussion.
+`M-x customize-group format-all` has a few basic settings.
 
-Many of the external formatters support configuration files in the
-source code directory to control their formatting. Please see the
-documentation for each formatter.
+However, the main thing you probably want to set is
+`format-all-formatters`. That variable is buffer-local, and can be
+made project-local by setting it in a `.dir-locals.el` file for the
+project.
+
+Additionally, many of the external formatters support configuration
+files in the source code directory to control their formatting. Please
+see the documentation for each formatter.
 
 How to add new languages
 ------------------------
