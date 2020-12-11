@@ -1083,21 +1083,22 @@ they are shown in a buffer called *format-all-errors*."
 (defun format-all-ensure-formatter ()
   "Ensure current buffer has a formatter, using default if not."
   (interactive)
-  (let* ((language (format-all--language-id-buffer))
-         (default  (format-all--get-default-chain language)))
+  (let ((language (format-all--language-id-buffer)))
     (unless (format-all--get-chain language)
       (cond ((not language)
-             (message "No formatter for this language")
-             nil)
-            ((not default)
-             (message "No default formatter for %s" language)
-             nil)
+             (message "No formatter for this language"))
+            ((not (gethash language format-all--language-table))
+             (message "No formatter for %s" language))
             (t
-             (message "Using default formatter%s"
-                      (with-temp-buffer
-                        (dolist (formatter default (buffer-string))
-                          (insert (format " %S" formatter)))))
-             (format-all--set-chain language default))))))
+             (let ((default (format-all--get-default-chain language)))
+               (cond ((not default)
+                      (message "No default formatter for %s" language))
+                     (t
+                      (message "Using default formatter%s"
+                               (with-temp-buffer
+                                 (dolist (formatter default (buffer-string))
+                                   (insert (format " %S" formatter)))))
+                      (format-all--set-chain language default)))))))))
 
 ;;;###autoload
 (define-minor-mode format-all-mode
