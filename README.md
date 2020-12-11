@@ -1,6 +1,11 @@
 *format-all* for Emacs
 ======================
 
+*NOTE:* The package is actively maintained but due to lack of time,
+complex tasks are done at a slow pace. Simple tasks like adding or
+fixing formatter definitions are often done immediately. For faster
+progress, additional maintainers are welcome.
+
 What does it do
 ---------------
 
