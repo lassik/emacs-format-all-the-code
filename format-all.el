@@ -1086,8 +1086,8 @@ they are shown in a buffer called *format-all-errors*."
     (format-all--run-chain language chain)))
 
 (defun format-all-ensure-formatter ()
-  (interactive)
   "Ensure current buffer has a formatter, using default if not."
+  (interactive)
   (let ((language (format-all--language-id-buffer)))
     (unless (format-all--get-chain language)
       (let ((chain (format-all--get-default-chain language)))
