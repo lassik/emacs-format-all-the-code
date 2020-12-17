@@ -24,6 +24,7 @@
 ;;
 ;; - Angular/Vue (prettier)
 ;; - Assembly (asmfmt)
+;; - ATS (atsfmt)
 ;; - Bazel Starlark (buildifier)
 ;; - BibTeX (emacs)
 ;; - C/C++/Objective-C (clang-format)
@@ -105,6 +106,7 @@
 
 (defcustom format-all-default-formatters
   '(("Assembly" asmfmt)
+    ("ATS" atsfmt)
     ("Bazel" buildifier)
     ("BibTeX" bibtex-mode)
     ("C" clang-format)
@@ -469,6 +471,12 @@ Consult the existing formatters for examples of BODY."
   (:executable "asmfmt")
   (:install)
   (:languages "Assembly")
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter atsfmt
+  (:executable "atsfmt")
+  (:install "cabal new-install ats-format --happy-options='-gcsa' -O2")
+  (:languages "ATS")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter beautysh
