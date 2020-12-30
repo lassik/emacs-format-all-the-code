@@ -43,7 +43,7 @@
 ;; - Fish Shell (fish_indent)
 ;; - Fortran 90 (fprettify)
 ;; - Gleam (gleam format)
-;; - Go (gofmt)
+;; - Go (gofmt, goimports)
 ;; - GraphQL (prettier)
 ;; - Haskell (brittany, hindent, stylish-haskell)
 ;; - HTML/XHTML/XML (tidy)
@@ -636,6 +636,12 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install go")
    (windows "scoop install go"))
+  (:languages "Go")
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter goimports
+  (:executable "goimports")
+  (:install "go get golang.org/x/tools/cmd/goimports")
   (:languages "Go")
   (:format (format-all--buffer-easy executable)))
 
