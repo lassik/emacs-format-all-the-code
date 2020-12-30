@@ -42,7 +42,7 @@ Supported languages
 * **Fish Shell** ([*fish_indent*](https://fishshell.com/docs/current/commands.html#fish_indent))
 * **Fortran 90** ([*fprettify*](https://github.com/pseewald/fprettify))
 * **Gleam** ([*gleam format*](https://gleam.run/))
-* **Go** ([*gofmt*](https://golang.org/cmd/gofmt/)), ([*goimports*](https://godoc.org/golang.org/x/tools/cmd/goimports))
+* **Go** ([*gofmt*](https://golang.org/cmd/gofmt/), [*goimports*](https://godoc.org/golang.org/x/tools/cmd/goimports))
 * **GraphQL** ([*prettier*](https://prettier.io/))
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany), [*hindent*](https://github.com/commercialhaskell/hindent), [*stylish-haskell*](https://github.com/jaspervdj/stylish-haskell))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
