@@ -712,10 +712,8 @@ Consult the existing formatters for examples of BODY."
     nil nil '("mix.exs")
     executable
     "format"
-    (let* ((file ".formatter.exs")
-           (dir (and (buffer-file-name)
-                     (locate-dominating-file (buffer-file-name) file))))
-      (when dir (list "--dot-formatter" (concat dir file))))
+    (let ((config-file (format-all--find-file ".formatter.exs")))
+      (when config-file (list "--dot-formatter" config-file)))
     "-")))
 
 (define-format-all-formatter nixfmt
@@ -760,7 +758,9 @@ Consult the existing formatters for examples of BODY."
                                     ("Solidity"   . "solidity-parse")
                                     ("TSX"        . "typescript")))))
                  (if pair (cdr pair) (downcase language)))
-    (when (buffer-file-name) (list "--stdin-filepath" (buffer-file-name))))))
+    (when (buffer-file-name) (list "--stdin-filepath" (buffer-file-name)))
+    (let ((ignore-file (format-all--find-file ".prettierignore")))
+      (when ignore-file (list "--ignore-path" ignore-file))))))
 
 (define-format-all-formatter purty
   (:executable "purty")
@@ -1054,6 +1054,12 @@ format buffers on save. This is a lenient version of
 an error if the current buffer has no formatter."
   (let ((language (format-all--language-id-buffer)))
     (format-all--run-chain language (format-all--get-chain language))))
+
+(defun format-all--find-file (filename)
+  "Internal helper function to locate a dominating file for the current buffer."
+    (let* ((dir (and (buffer-file-name)
+                     (locate-dominating-file (buffer-file-name) filename))))
+      (when dir (expand-file-name (concat dir filename)))))
 
 ;;;###autoload
 (defun format-all-buffer (&optional prompt)
