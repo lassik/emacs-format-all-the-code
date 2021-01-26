@@ -100,8 +100,18 @@ How to customize
 
 However, the main thing you probably want to set is
 `format-all-formatters`. That variable is buffer-local, and can be
-made project-local by setting it in a `.dir-locals.el` file for the
-project.
+made project-local by setting it in a `.dir-locals.el` file in a
+project's directory. That file can be committed to version control to
+share it with the whole project.
+
+To enable format on save for most programming language buffers:
+`(add-hook 'prog-mode-hook 'format-all-mode)`.
+
+The command `format-all-ensure-formatter` will ensure that a default
+formatter is selected in case you don't have one set; you can
+customize the default formatter for each language. To ensure a
+formatter is set whenever you enable `format-all-mode`, you can use:
+`(add-hook 'format-all-mode-hook 'format-all-ensure-formatter)`.
 
 Additionally, many of the external formatters support configuration
 files in the source code directory to control their formatting. Please
