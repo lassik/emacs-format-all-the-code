@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.3.0
-;; Package-Requires: ((emacs "24.3") (language-id "0.10"))
+;; Package-Requires: ((emacs "24.3") (language-id "0.10") (inheritenv "0.1"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -311,16 +311,17 @@ even if it produced warnings.  Not all warnings are errors."
       (widen)
       (let ((inbuf (current-buffer))
             (input (buffer-string)))
-        (with-temp-buffer
-          (cl-destructuring-bind (errorp error-output) (funcall thunk input)
-            (let* ((no-chg (or errorp
-                               (= 0 (let ((case-fold-search nil))
-                                      (compare-buffer-substrings
-                                       inbuf nil nil nil nil nil)))))
-                   (output (cond (errorp nil)
-                                 (no-chg t)
-                                 (t (buffer-string)))))
-              (list output error-output))))))))
+        (inheritenv
+         (with-temp-buffer
+           (cl-destructuring-bind (errorp error-output) (funcall thunk input)
+             (let* ((no-chg (or errorp
+                                (= 0 (let ((case-fold-search nil))
+                                       (compare-buffer-substrings
+                                        inbuf nil nil nil nil nil)))))
+                    (output (cond (errorp nil)
+                                  (no-chg t)
+                                  (t (buffer-string)))))
+               (list output error-output)))))))))
 
 (defun format-all--buffer-native (mode &rest funcs)
   "Internal helper function to implement formatters.
