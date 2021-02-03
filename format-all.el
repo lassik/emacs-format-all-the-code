@@ -55,7 +55,7 @@
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, prettier plugin-lua)
 ;; - Markdown (prettier)
-;; - Nix (nixfmt)
+;; - Nix (nixpkgs-fmt, nixfmt)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
 ;; - PHP (prettier plugin-php)
@@ -141,7 +141,7 @@
     ("Literate Haskell" brittany)
     ("Lua" lua-fmt)
     ("Markdown" prettier)
-    ("Nix" nixfmt)
+    ("Nix" nixpkgs-fmt)
     ("OCaml" ocp-indent)
     ("Objective-C" clang-format)
     ("PHP" prettier)
@@ -721,6 +721,12 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter nixfmt
   (:executable "nixfmt")
   (:install "nix-env -f https://github.com/serokell/nixfmt/archive/master.tar.gz -i")
+  (:languages "Nix")
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter nixpkgs-fmt
+  (:executable "nixpkgs-fmt")
+  (:install "nix-env -f https://github.com/nix-community/nixpkgs-fmt/archive/master.tar.gz -i")
   (:languages "Nix")
   (:format (format-all--buffer-easy executable)))
 
