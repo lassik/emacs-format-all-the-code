@@ -113,6 +113,7 @@
     ("Bazel" buildifier)
     ("BibTeX" bibtex-mode)
     ("C" clang-format)
+    ("C#" clang-format)
     ("C++" clang-format)
     ("Cabal Config" cabal-fmt)
     ("Clojure" cljfmt)
@@ -554,7 +555,7 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install clang-format")
    (windows "scoop install llvm"))
-  (:languages "C" "C++" "GLSL" "Java" "Objective-C" "Protocol Buffer")
+  (:languages "C" "C#" "C++" "GLSL" "Java" "Objective-C" "Protocol Buffer")
   (:format
    (format-all--buffer-easy
     executable
@@ -562,6 +563,7 @@ Consult the existing formatters for examples of BODY."
             (or (buffer-file-name)
                 (cdr (assoc language
                             '(("C"               . ".c")
+                              ("C#"              . ".cs")
                               ("C++"             . ".cpp")
                               ("GLSL"            . ".glsl")
                               ("Java"            . ".java")
