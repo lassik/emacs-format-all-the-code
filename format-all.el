@@ -27,7 +27,7 @@
 ;; - ATS (atsfmt)
 ;; - Bazel Starlark (buildifier)
 ;; - BibTeX (emacs)
-;; - C/C++/Objective-C (clang-format)
+;; - C/C++/Objective-C (clang-format, astyle)
 ;; - Cabal (cabal-fmt)
 ;; - Clojure/ClojureScript (node-cljfmt)
 ;; - CMake (cmake-format)
@@ -47,7 +47,7 @@
 ;; - GraphQL (prettier)
 ;; - Haskell (brittany, hindent, stylish-haskell)
 ;; - HTML/XHTML/XML (tidy)
-;; - Java (clang-format)
+;; - Java (clang-format, astyle)
 ;; - JavaScript/JSON/JSX (prettier, standard)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
@@ -474,6 +474,15 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "Assembly")
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter astyle
+  (:executable "astyle")
+  (:install "")
+  (:languages "C" "C++" "C#" "Java")
+  (:format (format-all--buffer-easy
+            executable
+            (let ((astylerc (format-all--find-file ".astylerc")))
+              (when astylerc (concat "--options=" astylerc))))))
 
 (define-format-all-formatter atsfmt
   (:executable "atsfmt")
