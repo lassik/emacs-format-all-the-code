@@ -477,7 +477,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter astyle
   (:executable "astyle")
-  (:install "")
+  (:install (macos "brew install astyle"))
   (:languages "C" "C++" "C#" "Java")
   (:format (format-all--buffer-easy
             executable
