@@ -108,9 +108,7 @@
   :group 'format-all)
 
 (defcustom format-all-default-formatters
-  '(
-
-    ("Assembly" asmfmt)
+  '(("Assembly" asmfmt)
     ("ATS" atsfmt)
     ("Bazel" buildifier)
     ("BibTeX" bibtex-mode)
@@ -178,9 +176,7 @@
     ("_Fortran 90" fprettify)
     ("_Gleam" gleam)
     ("_Ledger" ledger-mode)
-    ("_Snakemake" snakefmt)
-
-    )
+    ("_Snakemake" snakefmt))
   "Default formatter to use for each language."
   :type '(repeat (list string symbol))
   :group 'format-all)
