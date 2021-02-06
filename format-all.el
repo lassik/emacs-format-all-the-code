@@ -338,6 +338,12 @@ functions to avoid warnings from the Emacs byte compiler."
      (format-all--fix-trailing-whitespace)
      (list nil ""))))
 
+(defun format-all--find-file (filename)
+  "Internal helper function to locate a dominating file for the current buffer."
+    (let* ((dir (and (buffer-file-name)
+                     (locate-dominating-file (buffer-file-name) filename))))
+      (when dir (expand-file-name (concat dir filename)))))
+
 (defun format-all--locate-default-directory (root-files)
   "Internal helper function to find working directory for formatter.
 
@@ -1071,12 +1077,6 @@ format buffers on save. This is a lenient version of
 an error if the current buffer has no formatter."
   (let ((language (format-all--language-id-buffer)))
     (format-all--run-chain language (format-all--get-chain language))))
-
-(defun format-all--find-file (filename)
-  "Internal helper function to locate a dominating file for the current buffer."
-    (let* ((dir (and (buffer-file-name)
-                     (locate-dominating-file (buffer-file-name) filename))))
-      (when dir (expand-file-name (concat dir filename)))))
 
 ;;;###autoload
 (defun format-all-buffer (&optional prompt)
