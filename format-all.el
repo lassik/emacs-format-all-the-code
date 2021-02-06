@@ -154,6 +154,7 @@
     ("Python" black)
     ("R" styler)
     ("Reason" bsrefmt)
+    ("ReScript" resfmt)
     ("Ruby" rufo)
     ("Rust" rustfmt)
     ("Scala" scalafmt)
@@ -795,6 +796,12 @@ Consult the existing formatters for examples of BODY."
   (:install "npm install --global purty")
   (:languages "PureScript")
   (:format (format-all--buffer-easy executable "-")))
+
+(define-format-all-formatter resfmt
+  (:executable "resfmt")
+  (:install "pip install resfmt")
+  (:languages "ReScript")
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
