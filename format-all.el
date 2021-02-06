@@ -343,7 +343,7 @@ functions to avoid warnings from the Emacs byte compiler."
      (list nil ""))))
 
 (defun format-all--locate-file (filename)
-  "Internal helper function to locate a dominating file for the current buffer."
+  "Internal helper to locate dominating copy of FILENAME for current buffer."
     (let* ((dir (and (buffer-file-name)
                      (locate-dominating-file (buffer-file-name) filename))))
       (when dir (expand-file-name (concat dir filename)))))
