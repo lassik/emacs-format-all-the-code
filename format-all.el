@@ -47,7 +47,7 @@
 ;; - GLSL (clang-format)
 ;; - Go (gofmt, goimports)
 ;; - GraphQL (prettier)
-;; - Haskell (brittany, hindent, stylish-haskell)
+;; - Haskell (brittany, hindent, stylish-haskell, ormolu)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format, astyle)
 ;; - JavaScript/JSON/JSX (prettier, standard)
@@ -756,6 +756,12 @@ Consult the existing formatters for examples of BODY."
   (:executable "ocp-indent")
   (:install "opam install ocp-indent")
   (:languages "OCaml")
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter ormolu
+  (:executable "ormolu")
+  (:install "stack install ormolu")
+  (:languages "Haskell" "Literate Haskell")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter perltidy
