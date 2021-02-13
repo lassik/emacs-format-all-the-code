@@ -912,7 +912,11 @@ Consult the existing formatters for examples of BODY."
   (:executable "swiftformat")
   (:install (macos "brew install swiftformat"))
   (:languages "Swift")
-  (:format (format-all--buffer-easy executable "--quiet")))
+  (:format
+   (format-all--buffer-easy
+    executable "--quiet"
+    (let ((config (format-all--locate-file ".swiftformat")))
+      (when config (list "--config" config))))))
 
 (define-format-all-formatter terraform-fmt
   (:executable "terraform")
