@@ -241,6 +241,19 @@ in a hook function. Any number of buffers can share the same
 association list. Using \".dir-locals.el\" is convenient since
 the rules for an entire source tree can be given in one file.")
 
+(put 'format-all-formatters
+     'safe-local-variable
+     (lambda (xs)
+       (and (listp xs)
+            (cl-every
+             (lambda (x)
+               (and (stringp (car x))
+                    (or (symbolp (cadr x))
+                        (and (listp (cadr x))
+                             (symbolp (caadr x))
+                             (cl-every #'stringp (cdadr x))))))
+             xs))))
+
 (eval-and-compile
   (defconst format-all--system-type
     (cl-case system-type
