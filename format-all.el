@@ -241,6 +241,33 @@ in a hook function. Any number of buffers can share the same
 association list. Using \".dir-locals.el\" is convenient since
 the rules for an entire source tree can be given in one file.")
 
+(defun format-all--proper-list-p (object)
+  "Return t if OBJECT is a proper list, nil otherwise."
+  ;; If we could depend on Emacs 27.1 this function would be built in.
+  (and (listp object) (not (null (cl-list-length object)))))
+
+(defun format-all-valid-formatters-p (formatters)
+  "Return t if FORMATTERS is a valid value for `format-all-formatters'."
+  (and (format-all--proper-list-p formatters)
+       (cl-every
+        (lambda (chain)
+          (and (not (null chain))
+               (format-all--proper-list-p chain)
+               (stringp (car chain))
+               (cl-every
+                (lambda (formatter)
+                  (and (not (null formatter))
+                       (or (symbolp formatter)
+                           (and (format-all--proper-list-p formatter)
+                                (and (symbolp (car formatter))
+                                     (not (null (car formatter))))
+                                (cl-every #'stringp (cdr formatter))))))
+                (cdr chain))))
+        formatters)))
+
+(put 'format-all-formatters 'safe-local-variable
+     'format-all-valid-formatters-p)
+
 (eval-and-compile
   (defconst format-all--system-type
     (cl-case system-type
