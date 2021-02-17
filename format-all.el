@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.3.0
-;; Package-Requires: ((emacs "24.3") (language-id "0.12") (inheritenv "0.1"))
+;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.12"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -96,8 +96,8 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'language-id)
 (require 'inheritenv)
+(require 'language-id)
 
 (defgroup format-all nil
   "Lets you auto-format source code."
