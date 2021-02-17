@@ -246,6 +246,26 @@ the rules for an entire source tree can be given in one file.")
   ;; If we could depend on Emacs 27.1 this function would be built in.
   (and (listp object) (not (null (cl-list-length object)))))
 
+(defun format-all--normalize-formatter (formatter)
+  "Internal function to convert FORMATTER spec into normal form."
+  (let ((formatter (if (listp formatter) formatter (list formatter))))
+    (when (cdr (last formatter))
+      (error "Formatter is not a proper list: %S" formatter))
+    (when (null formatter)
+      (error "Formatter name missing"))
+    (unless (symbolp (car formatter))
+      (error "Formatter name is not a symbol: %S" (car formatter)))
+    (unless (cl-every #'stringp (cdr formatter))
+      (error "Formatter command line arguments are not all strings: %S"
+             formatter))
+    formatter))
+
+(defun format-all--normalize-chain (chain)
+  "Internal function to convert CHAIN spec into normal form."
+  (when (or (not (listp chain)) (cdr (last chain)))
+    (error "Formatter chain is not a proper list: %S" chain))
+  (mapcar #'format-all--normalize-formatter chain))
+
 (defun format-all-valid-formatters-p (formatters)
   "Return t if FORMATTERS is a valid value for `format-all-formatters'."
   (and (format-all--proper-list-p formatters)
@@ -1020,26 +1040,6 @@ STATUS and ERROR-OUTPUT come from the formatter."
     (forward-line (1- old-line-number))
     (let ((line-length (- (point-at-eol) (point-at-bol))))
       (goto-char (+ (point) (min old-column line-length))))))
-
-(defun format-all--normalize-formatter (formatter)
-  "Internal function to convert FORMATTER spec into normal form."
-  (let ((formatter (if (listp formatter) formatter (list formatter))))
-    (when (cdr (last formatter))
-      (error "Formatter is not a proper list: %S" formatter))
-    (when (null formatter)
-      (error "Formatter name missing"))
-    (unless (symbolp (car formatter))
-      (error "Formatter name is not a symbol: %S" (car formatter)))
-    (unless (cl-every #'stringp (cdr formatter))
-      (error "Formatter command line arguments are not all strings: %S"
-             formatter))
-    formatter))
-
-(defun format-all--normalize-chain (chain)
-  "Internal function to convert CHAIN spec into normal form."
-  (when (or (not (listp chain)) (cdr (last chain)))
-    (error "Formatter chain is not a proper list: %S" chain))
-  (mapcar #'format-all--normalize-formatter chain))
 
 (defun format-all--run-chain (language chain)
   "Internal function to run a formatter CHAIN on the current buffer.
