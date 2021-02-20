@@ -188,6 +188,19 @@
   :type 'boolean
   :group 'format-all)
 
+(defcustom format-all-reformat-buffer-function
+  'format-all-fast-reformat-buffer
+  "Function to call when reformatting the buffer.
+
+The function shall take one argument which is string with reformatted
+content and it will rewrite current buffer accordingly. If nil
+`format-all-fast-reformat-buffer' is used as default."
+  :type '(radio (function-item format-all-fast-reformat-buffer)
+                (function-item format-all-point-and-markers-preserving-reformat-buffer)
+                (function-item format-all-non-destructive-reformat-buffer)
+                (function :tag "Another function" format-all-fast-reformat-buffer))
+  :group 'format-all)
+
 (defvar format-all-after-format-functions nil
   "Hook run after each time `format-all-buffer' has formatted a buffer.
 
@@ -977,6 +990,40 @@ Consult the existing formatters for examples of BODY."
   (:languages "Python")
   (:format (format-all--buffer-easy executable)))
 
+(defun format-all-fast-reformat-buffer (content)
+  "Reformat buffer but don't preserve any additional properties of the buffer."
+  (erase-buffer)
+  (insert content))
+
+(defun format-all-point-and-markers-preserving-reformat-buffer (content)
+  "Reformat buffer and try to preserve point and markers."
+  (let ((helper-file (make-temp-file "*format-all-output*")))
+    (unwind-protect
+        (progn
+          (with-temp-file helper-file
+            (insert content))
+          (insert-file-contents helper-file nil nil nil t))
+      (delete-file helper-file))))
+
+(defun format-all-non-destructive-reformat-buffer (content)
+  "Reformat buffer so that it's as non-destructive as possible.
+
+The function might be slow in pathological cases."
+  (let ((helper-buffer (generate-new-buffer "*format-all-output*")))
+    (unwind-protect
+        (progn
+          (with-current-buffer helper-buffer
+            (insert content))
+          (replace-buffer-contents helper-buffer))
+      (kill-buffer helper-buffer))))
+
+(defun format-all--invoke-reformat-buffer-function (content)
+  "Internal helper function to reformat buffer with customized function."
+  (let ((func (or format-all-reformat-buffer-function
+                  #'format-all-fast-reformat-buffer)))
+    (let ((inhibit-read-only t))
+      (funcall func content))))
+
 (defun format-all--language-id-buffer ()
   "Return the language used in the current buffer, or NIL.
 
@@ -1077,9 +1124,7 @@ LANGUAGE is the language ID of the current buffer, from
                     ((not (equal f-output t))
                      (setq reformatted-by
                            (append reformatted-by (list f-name)))
-                     (let ((inhibit-read-only t))
-                       (erase-buffer)
-                       (insert f-output))
+                     (format-all--invoke-reformat-buffer-function f-output)
                      (setq f-status :reformatted)))
               (run-hook-with-args 'format-all-after-format-functions
                                   f-name f-status)
