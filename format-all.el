@@ -183,9 +183,12 @@
   :type '(repeat (list string symbol))
   :group 'format-all)
 
-(defcustom format-all-always-show-errors nil
-  "When non-nil, warnings are shown even when formatting is successful."
-  :type 'boolean
+(defcustom format-all-show-errors 'errors
+  "When to show formatting errors or warnings."
+  :type '(choice (const :tag "Always" always)
+                 (const :tag "Errors" errors)
+                 (const :tag "Warnings" warnings)
+                 (const :tag "Never" never))
   :group 'format-all)
 
 (defvar format-all-after-format-functions nil
@@ -393,9 +396,9 @@ functions to avoid warnings from the Emacs byte compiler."
 
 (defun format-all--locate-file (filename)
   "Internal helper to locate dominating copy of FILENAME for current buffer."
-    (let* ((dir (and (buffer-file-name)
-                     (locate-dominating-file (buffer-file-name) filename))))
-      (when dir (expand-file-name (concat dir filename)))))
+  (let* ((dir (and (buffer-file-name)
+                   (locate-dominating-file (buffer-file-name) filename))))
+    (when dir (expand-file-name (concat dir filename)))))
 
 (defun format-all--locate-default-directory (root-files)
   "Internal helper function to find working directory for formatter.
@@ -1015,21 +1018,36 @@ unofficial languages IDs are prefixed with \"_\"."
                   executable
                   (gethash formatter format-all--install-table)))))))
 
+(defun format-all--show-errors-buffer (error-output show-errors-p)
+  "Internal shorthand function to update and show error output.
+
+ERROR-OUTPUT come from the formatter.  SHOW-ERRORS-P determines
+whether or not to display the errors buffer."
+  (save-selected-window
+    (with-current-buffer (get-buffer-create "*format-all-errors*")
+      (erase-buffer)
+      (insert error-output)
+      (if show-errors-p
+          (display-buffer (current-buffer))
+        (let ((error-window (get-buffer-window (current-buffer))))
+          (when error-window (quit-window nil error-window)))))))
+
 (defun format-all--update-errors-buffer (status error-output)
   "Internal helper function to update *format-all-errors*.
 
 STATUS and ERROR-OUTPUT come from the formatter."
-  (let ((show-errors-p (and (not (= 0 (length error-output)))
-                            (or format-all-always-show-errors
-                                (eq status :error)))))
-    (save-selected-window
-      (with-current-buffer (get-buffer-create "*format-all-errors*")
-        (erase-buffer)
-        (insert error-output)
-        (if show-errors-p
-            (display-buffer (current-buffer))
-          (let ((error-window (get-buffer-window (current-buffer))))
-            (when error-window (quit-window nil error-window))))))))
+  (let* ((show-errors-choice (symbol-name format-all-show-errors))
+         (has-warnings-p (not (= 0 (length error-output))))
+         (has-errors-p (eq status :error))
+         (show-errors-p (and (not (string-equal show-errors-choice 'never))
+                             (or
+                              (and (string-equal show-errors-choice 'always)
+                                   (or has-errors-p has-warnings-p))
+                              (and (string-equal show-errors-choice 'warnings)
+                                   (or has-errors-p has-warnings-p))
+                              (and (string-equal show-errors-choice 'errors)
+                                   has-errors-p)))))
+    (format-all--show-errors-buffer error-output show-errors-p)))
 
 (defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
