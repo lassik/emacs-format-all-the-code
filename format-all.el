@@ -393,9 +393,9 @@ functions to avoid warnings from the Emacs byte compiler."
 
 (defun format-all--locate-file (filename)
   "Internal helper to locate dominating copy of FILENAME for current buffer."
-    (let* ((dir (and (buffer-file-name)
-                     (locate-dominating-file (buffer-file-name) filename))))
-      (when dir (expand-file-name (concat dir filename)))))
+  (let* ((dir (and (buffer-file-name)
+                   (locate-dominating-file (buffer-file-name) filename))))
+    (when dir (expand-file-name (concat dir filename)))))
 
 (defun format-all--locate-default-directory (root-files)
   "Internal helper function to find working directory for formatter.
