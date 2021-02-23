@@ -1036,17 +1036,13 @@ whether or not to display the errors buffer."
   "Internal helper function to update *format-all-errors*.
 
 STATUS and ERROR-OUTPUT come from the formatter."
-  (let* ((show-errors-choice (symbol-name format-all-show-errors))
-         (has-warnings-p (not (= 0 (length error-output))))
+  (let* ((has-warnings-p (not (= 0 (length error-output))))
          (has-errors-p (eq status :error))
-         (show-errors-p (and (not (string-equal show-errors-choice 'never))
-                             (or
-                              (and (string-equal show-errors-choice 'always)
-                                   (or has-errors-p has-warnings-p))
-                              (and (string-equal show-errors-choice 'warnings)
-                                   (or has-errors-p has-warnings-p))
-                              (and (string-equal show-errors-choice 'errors)
-                                   has-errors-p)))))
+         (show-errors-p (cl-case format-all-show-errors
+                          (never nil)
+                          (always t)
+                          (warnings (or has-errors-p has-warnings-p))
+                          (errors has-errors-p))))
     (format-all--show-errors-buffer error-output show-errors-p)))
 
 (defun format-all--save-line-number (thunk)
