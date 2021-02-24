@@ -113,8 +113,8 @@ To enable format on save for most programming language buffers:
 To control displaying the formatting errors buffer when
 formatting fails or has warnings, customize the variable
 `format-all-show-errors`. Set it to one of these - `'always` (shows
-errors buffer regardless),`'warnings` (shows errors buffer for 
-both errors and warnings), `'errors` (only show errors buffer 
+errors buffer regardless),`'warnings` (shows errors buffer for
+both errors and warnings), `'errors` (only show errors buffer
 when there are errors) or `'never` (never show errors buffer).
 
 The command `format-all-ensure-formatter` will ensure that a default
