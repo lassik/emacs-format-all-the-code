@@ -52,7 +52,7 @@ Supported languages
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/))
 * **Jsonnet** ([*jsonnetfmt*](https://jsonnet.org/))
 * **Kotlin** ([*ktlint*](https://github.com/shyiko/ktlint))
-* **LaTeX** ([*latexindent*](https://github.com/cmhughes/latexindent.pl))
+* **LaTeX** ([*latexindent*](https://github.com/cmhughes/latexindent.pl), [*auctex*](https://www.gnu.org/software/auctex/))
 * **Ledger** ([*ledger-mode*](https://github.com/ledger/ledger-mode))
 * **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt), [*prettier plugin-lua*](https://github.com/prettier/plugin-lua))
 * **Markdown** ([*prettier*](https://prettier.io/))

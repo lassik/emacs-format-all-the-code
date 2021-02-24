@@ -53,7 +53,7 @@
 ;; - JavaScript/JSON/JSX (prettier, standard)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
-;; - LaTeX (latexindent)
+;; - LaTeX (latexindent, auctex)
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, prettier plugin-lua)
 ;; - Markdown (prettier)
@@ -551,6 +551,13 @@ Consult the existing formatters for examples of BODY."
   (:install "cabal new-install ats-format --happy-options='-gcsa' -O2")
   (:languages "ATS")
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter auctex
+  (:executable)
+  (:install)
+  (:languages "LaTeX")
+  (:format (format-all--buffer-native
+            'latex-mode (lambda () (LaTeX-fill-buffer nil)))))
 
 (define-format-all-formatter beautysh
   (:executable "beautysh")
