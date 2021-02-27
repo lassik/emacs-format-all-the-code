@@ -637,7 +637,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "cmake-format")
   (:install "pip install cmake-format")
   (:languages "CMake")
-  (:format (format-all--buffer-easy executable "-")))
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter crystal
   (:executable "crystal")
