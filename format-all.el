@@ -947,14 +947,14 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter styler
   (:executable "Rscript")
-  (:install "Rscript -e 'install.packages(\"styler\")'")
+  (:install "Rscript -e \"install.packages('styler')\"")
   (:languages "R")
   (:format
    (format-all--buffer-easy
     executable "--vanilla"
     "-e" (concat
           "options(styler.colored_print.vertical=FALSE);"
-          " con <- file(\"stdin\");"
+          " con <- file('stdin');"
           " out <- styler::style_text(readLines(con));"
           " close(con);"
           " out"))))
