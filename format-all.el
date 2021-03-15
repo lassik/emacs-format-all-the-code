@@ -1131,13 +1131,16 @@ LANGUAGE is the language ID of the current buffer, from
 (defun format-all--prompt-for-formatter (language)
   "Internal function to choose a formatter for LANGUAGE."
   (let ((f-names (gethash language format-all--language-table)))
-    (cond ((null f-names) (error "No supported formatters for %s" language))
-          ((null (cdr f-names)) (car f-names))
-          (t (let ((f-string (completing-read
-                              (format "Formatter for %s: " language)
-                              (mapcar #'list f-names) nil t)))
-               (and (not (= 0 (length f-string)))
-                    (intern f-string)))))))
+    (cond ((null f-names)
+           (error "No supported formatters for %s" language))
+          ((null (cdr f-names))
+           (car f-names))
+          (t
+           (let ((f-string (completing-read
+                            (format "Formatter for %s: " language)
+                            (mapcar #'list f-names) nil t)))
+             (and (not (= 0 (length f-string)))
+                  (intern f-string)))))))
 
 (defun format-all--buffer-from-hook ()
   "Internal helper function to auto-format current buffer from a hook.
