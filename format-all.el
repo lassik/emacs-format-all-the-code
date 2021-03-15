@@ -1132,7 +1132,8 @@ LANGUAGE is the language ID of the current buffer, from
   "Internal function to choose a formatter for LANGUAGE."
   (let ((f-names (gethash language format-all--language-table)))
     (cond ((null f-names)
-           (error "No supported formatters for %s" language))
+           (error "No supported formatters for %s"
+                  (or language "this language")))
           ((null (cdr f-names))
            (car f-names))
           (t
