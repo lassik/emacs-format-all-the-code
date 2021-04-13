@@ -112,7 +112,7 @@
   '(("Assembly" asmfmt)
     ("ATS" atsfmt)
     ("Bazel" buildifier)
-    ("BibTeX" bibtex-mode)
+    ("BibTeX" emacs-bibtex)
     ("C" clang-format)
     ("C#" clang-format)
     ("C++" clang-format)
@@ -565,13 +565,6 @@ Consult the existing formatters for examples of BODY."
   (:languages "Shell")
   (:format (format-all--buffer-easy executable "-")))
 
-(define-format-all-formatter bibtex-mode
-  (:executable)
-  (:install)
-  (:languages "BibTeX")
-  (:format (format-all--buffer-native
-            'bibtex-mode 'bibtex-reformat 'bibtex-sort-buffer)))
-
 (define-format-all-formatter black
   (:executable "black")
   (:install "pip install black")
@@ -684,6 +677,18 @@ Consult the existing formatters for examples of BODY."
                                 executable "--yes" "--stdin")
      (let ((error-output (format-all--remove-ansi-color error-output)))
        (list output error-output)))))
+
+(define-format-all-formatter emacs-bibtex
+  (:executable)
+  (:install)
+  (:languages "BibTeX")
+  (:format (format-all--buffer-native 'bibtex-mode 'bibtex-reformat)))
+
+(define-format-all-formatter emacs-bibtex-sort
+  (:executable)
+  (:install)
+  (:languages "BibTeX")
+  (:format (format-all--buffer-native 'bibtex-mode 'bibtex-sort-buffer)))
 
 (define-format-all-formatter emacs-lisp
   (:executable)
