@@ -557,7 +557,10 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "LaTeX")
   (:format (format-all--buffer-native
-            'latex-mode (lambda () (LaTeX-fill-buffer nil)))))
+            'latex-mode
+            (lambda ()
+              (let ((f (symbol-function 'LaTeX-fill-buffer)))
+                (when f (funcall f nil)))))))
 
 (define-format-all-formatter beautysh
   (:executable "beautysh")
