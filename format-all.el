@@ -1029,9 +1029,10 @@ unofficial languages IDs are prefixed with \"_\"."
   (let ((executable (gethash formatter format-all--executable-table)))
     (when executable
       (or (executable-find executable)
-          (error (format-all--please-install
-                  executable
-                  (gethash formatter format-all--install-table)))))))
+          (signal 'fmt-exec-not-found
+                  (format-all--please-install
+                   executable
+                   (gethash formatter format-all--install-table)))))))
 
 (defun format-all--show-errors-buffer (error-output show-errors-p)
   "Internal shorthand function to update and show error output.
