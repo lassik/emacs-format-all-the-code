@@ -1029,7 +1029,7 @@ unofficial languages IDs are prefixed with \"_\"."
   (let ((executable (gethash formatter format-all--executable-table)))
     (when executable
       (or (executable-find executable)
-          (signal 'fmt-exec-not-found
+          (signal 'format-all-executable-not-found
                   (format-all--please-install
                    executable
                    (gethash formatter format-all--install-table)))))))
