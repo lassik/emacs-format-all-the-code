@@ -66,7 +66,6 @@
 ;; - Python (black, yapf)
 ;; - R (styler)
 ;; - Reason (bsrefmt)
-;; - ReScript (resfmt)
 ;; - ReScript (rescript)
 ;; - Ruby (rubocop, rufo, standardrb)
 ;; - Rust (rustfmt)
