@@ -65,7 +65,7 @@ Supported languages
 * **Python** ([*black*](https://github.com/ambv/black), [*yapf*](https://github.com/google/yapf))
 * **R** ([*styler*](https://github.com/r-lib/styler))
 * **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
-* **ReScript** ([*resfmt*](https://pypi.org/project/resfmt/))
+* **ReScript** ([*rescript format*](https://www.npmjs.com/package/rescript))
 * **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
 * **Scala** ([*scalafmt*](https://github.com/scalameta/scalafmt))
