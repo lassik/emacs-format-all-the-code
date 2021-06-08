@@ -66,7 +66,7 @@ Supported languages
 * **R** ([*styler*](https://github.com/r-lib/styler))
 * **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
 * **ReScript** ([*rescript format*](https://www.npmjs.com/package/rescript))
-* **Ruby** ([*rufo*](https://github.com/ruby-formatter/rufo))
+* **Ruby** ([*rubocop*](https://github.com/rubocop/rubocop), [*rufo*](https://github.com/ruby-formatter/rufo), [*standardrb*](https://github.com/testdouble/standard))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
 * **Scala** ([*scalafmt*](https://github.com/scalameta/scalafmt))
 * **Shell script** ([*beautysh*](https://github.com/lovesegfault/beautysh), [*shfmt*](https://github.com/mvdan/sh))
