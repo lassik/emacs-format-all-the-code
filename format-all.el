@@ -47,7 +47,7 @@
 ;; - GLSL (clang-format)
 ;; - Go (gofmt, goimports)
 ;; - GraphQL (prettier)
-;; - Haskell (brittany, hindent, ormolu, stylish-haskell)
+;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format, astyle)
 ;; - JavaScript/JSON/JSX (prettier, standard)
@@ -67,6 +67,7 @@
 ;; - R (styler)
 ;; - Reason (bsrefmt)
 ;; - ReScript (resfmt)
+;; - ReScript (rescript)
 ;; - Ruby (rubocop, rufo, standardrb)
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
@@ -112,7 +113,7 @@
   '(("Assembly" asmfmt)
     ("ATS" atsfmt)
     ("Bazel" buildifier)
-    ("BibTeX" bibtex-mode)
+    ("BibTeX" emacs-bibtex)
     ("C" clang-format)
     ("C#" clang-format)
     ("C++" clang-format)
@@ -155,7 +156,7 @@
     ("Python" black)
     ("R" styler)
     ("Reason" bsrefmt)
-    ("ReScript" resfmt)
+    ("ReScript" rescript)
     ("Ruby" rufo)
     ("Rust" rustfmt)
     ("Scala" scalafmt)
@@ -591,20 +592,16 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "LaTeX")
   (:format (format-all--buffer-native
-            'latex-mode (lambda () (LaTeX-fill-buffer nil)))))
+            'latex-mode
+            (lambda ()
+              (let ((f (symbol-function 'LaTeX-fill-buffer)))
+                (when f (funcall f nil)))))))
 
 (define-format-all-formatter beautysh
   (:executable "beautysh")
   (:install "pip install beautysh")
   (:languages "Shell")
   (:format (format-all--buffer-easy executable "-")))
-
-(define-format-all-formatter bibtex-mode
-  (:executable)
-  (:install)
-  (:languages "BibTeX")
-  (:format (format-all--buffer-native
-            'bibtex-mode 'bibtex-reformat 'bibtex-sort-buffer)))
 
 (define-format-all-formatter black
   (:executable "black")
@@ -719,6 +716,18 @@ Consult the existing formatters for examples of BODY."
      (let ((error-output (format-all--remove-ansi-color error-output)))
        (list output error-output)))))
 
+(define-format-all-formatter emacs-bibtex
+  (:executable)
+  (:install)
+  (:languages "BibTeX")
+  (:format (format-all--buffer-native 'bibtex-mode 'bibtex-reformat)))
+
+(define-format-all-formatter emacs-bibtex-sort
+  (:executable)
+  (:install)
+  (:languages "BibTeX")
+  (:format (format-all--buffer-native 'bibtex-mode 'bibtex-sort-buffer)))
+
 (define-format-all-formatter emacs-lisp
   (:executable)
   (:install)
@@ -732,6 +741,12 @@ Consult the existing formatters for examples of BODY."
   (:executable "fish_indent")
   (:install (macos "brew install fish OR port install fish"))
   (:languages "Fish")
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter fourmolu
+  (:executable "fourmolu")
+  (:install "stack install fourmolu")
+  (:languages "Haskell" "Literate Haskell")
   (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter fprettify
@@ -895,11 +910,16 @@ Consult the existing formatters for examples of BODY."
   (:languages "PureScript")
   (:format (format-all--buffer-easy executable "-")))
 
-(define-format-all-formatter resfmt
-  (:executable "resfmt")
-  (:install "pip install resfmt")
+(define-format-all-formatter rescript
+  (:executable "rescript")
+  (:install "npm install --global rescript")
   (:languages "ReScript")
-  (:format (format-all--buffer-easy executable)))
+  (:format
+   (format-all--buffer-easy
+    executable "format" "-stdin"
+    (let ((ext (if (not (buffer-file-name)) ""
+                   (file-name-extension (buffer-file-name)))))
+      (concat "." (if (equal ext "") "res" ext))))))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
@@ -1006,14 +1026,14 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter styler
   (:executable "Rscript")
-  (:install "Rscript -e 'install.packages(\"styler\")'")
+  (:install "Rscript -e \"install.packages('styler')\"")
   (:languages "R")
   (:format
    (format-all--buffer-easy
     executable "--vanilla"
     "-e" (concat
           "options(styler.colored_print.vertical=FALSE);"
-          " con <- file(\"stdin\");"
+          " con <- file('stdin');"
           " out <- styler::style_text(readLines(con));"
           " close(con);"
           " out"))))
@@ -1080,9 +1100,10 @@ unofficial languages IDs are prefixed with \"_\"."
   (let ((executable (gethash formatter format-all--executable-table)))
     (when executable
       (or (executable-find executable)
-          (error (format-all--please-install
-                  executable
-                  (gethash formatter format-all--install-table)))))))
+          (signal 'format-all-executable-not-found
+                  (format-all--please-install
+                   executable
+                   (gethash formatter format-all--install-table)))))))
 
 (defun format-all--show-errors-buffer (error-output show-errors-p)
   "Internal shorthand function to update and show error output.
@@ -1190,13 +1211,17 @@ LANGUAGE is the language ID of the current buffer, from
 (defun format-all--prompt-for-formatter (language)
   "Internal function to choose a formatter for LANGUAGE."
   (let ((f-names (gethash language format-all--language-table)))
-    (cond ((null f-names) (error "No supported formatters for %s" language))
-          ((null (cdr f-names)) (car f-names))
-          (t (let ((f-string (completing-read
-                              (format "Formatter for %s: " language)
-                              (mapcar #'list f-names) nil t)))
-               (and (not (= 0 (length f-string)))
-                    (intern f-string)))))))
+    (cond ((null f-names)
+           (error "No supported formatters for %s"
+                  (or language "this language")))
+          ((null (cdr f-names))
+           (car f-names))
+          (t
+           (let ((f-string (completing-read
+                            (format "Formatter for %s: " language)
+                            (mapcar #'list f-names) nil t)))
+             (and (not (= 0 (length f-string)))
+                  (intern f-string)))))))
 
 (defun format-all--buffer-from-hook ()
   "Internal helper function to auto-format current buffer from a hook.
