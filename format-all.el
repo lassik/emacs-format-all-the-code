@@ -881,7 +881,10 @@ Consult the existing formatters for examples of BODY."
   (:languages "ReScript")
   (:format
    (format-all--buffer-easy
-    executable "format" "-stdin" (or (buffer-file-name) ".res"))))
+    executable "format" "-stdin"
+    (let ((ext (if (not (buffer-file-name)) ""
+                   (file-name-extension (buffer-file-name)))))
+      (concat "." (if (equal ext "") "res" ext))))))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
