@@ -66,7 +66,7 @@
 ;; - Python (black, yapf)
 ;; - R (styler)
 ;; - Reason (bsrefmt)
-;; - ReScript (resfmt)
+;; - ReScript (rescript)
 ;; - Ruby (rufo)
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
@@ -155,7 +155,7 @@
     ("Python" black)
     ("R" styler)
     ("Reason" bsrefmt)
-    ("ReScript" resfmt)
+    ("ReScript" rescript)
     ("Ruby" rufo)
     ("Rust" rustfmt)
     ("Scala" scalafmt)
@@ -875,11 +875,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "PureScript")
   (:format (format-all--buffer-easy executable "-")))
 
-(define-format-all-formatter resfmt
-  (:executable "resfmt")
-  (:install "pip install resfmt")
+(define-format-all-formatter rescript
+  (:executable "rescript")
+  (:install "npm install --global rescript")
   (:languages "ReScript")
-  (:format (format-all--buffer-easy executable)))
+  (:format
+   (format-all--buffer-easy
+    executable "format" "-stdin" (or (buffer-file-name) ".res"))))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
