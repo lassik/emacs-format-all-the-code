@@ -46,7 +46,7 @@ Supported languages
 * **GLSL** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/), [*goimports*](https://godoc.org/golang.org/x/tools/cmd/goimports))
 * **GraphQL** ([*prettier*](https://prettier.io/))
-* **Haskell** ([*brittany*](https://github.com/lspitzner/brittany), [*fourmolu*](https://github.com/fourmolu/fourmolu) [*hindent*](https://github.com/commercialhaskell/hindent), [*ormolu*](https://github.com/tweag/ormolu), [*stylish-haskell*](https://github.com/jaspervdj/stylish-haskell))
+* **Haskell** ([*brittany*](https://github.com/lspitzner/brittany), [*fourmolu*](https://github.com/fourmolu/fourmolu), [*hindent*](https://github.com/commercialhaskell/hindent), [*ormolu*](https://github.com/tweag/ormolu), [*stylish-haskell*](https://github.com/jaspervdj/stylish-haskell))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/))
