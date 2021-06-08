@@ -708,6 +708,12 @@ Consult the existing formatters for examples of BODY."
   (:languages "Fish")
   (:format (format-all--buffer-easy executable)))
 
+(define-format-all-formatter fourmolu
+  (:executable "fourmolu")
+  (:install "stack install fourmolu")
+  (:languages "Haskell" "Literate Haskell")
+  (:format (format-all--buffer-easy executable)))
+
 (define-format-all-formatter fprettify
   (:executable "fprettify")
   (:install "pip install fprettify")
