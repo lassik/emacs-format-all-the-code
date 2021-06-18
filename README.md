@@ -77,6 +77,7 @@ Supported languages
 * **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))
 * **TOML** ([*prettier-plugin-toml*](https://github.com/bd82/toml-tools/tree/master/packages/prettier-plugin-toml))
 * **TypeScript/TSX** ([*prettier*](https://prettier.io/))
+* **V** ([*v fmt*](https://github.com/vlang/v))
 * **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter))
 * **YAML** ([*prettier*](https://prettier.io/))
 

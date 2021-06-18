@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.4.0
-;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.12"))
+;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.13"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -78,6 +78,7 @@
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier prettier-plugin-toml)
 ;; - TypeScript/TSX (prettier)
+;; - V (v fmt)
 ;; - Verilog (iStyle)
 ;; - YAML (prettier)
 ;;
@@ -168,6 +169,7 @@
     ("TOML" prettier)
     ("TSX" prettier)
     ("TypeScript" prettier)
+    ("V" v-fmt)
     ("Verilog" istyle-verilog)
     ("Vue" prettier)
     ("XML" html-tidy)
@@ -1058,6 +1060,12 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install terraform"))
   (:languages "Terraform")
   (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
+
+(define-format-all-formatter v-fmt
+  (:executable "v")
+  (:install)
+  (:languages "V")
+  (:format (format-all--buffer-easy executable "fmt")))
 
 (define-format-all-formatter yapf
   (:executable "yapf")
