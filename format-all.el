@@ -922,18 +922,6 @@ Consult the existing formatters for examples of BODY."
                    (file-name-extension (buffer-file-name)))))
       (concat "." (if (equal ext "") "res" ext))))))
 
-(define-format-all-formatter rufo
-  (:executable "rufo")
-  (:install "gem install rufo")
-  (:languages "Ruby")
-  (:format
-   (format-all--buffer-hard-ruby
-    "rufo" nil nil nil
-    "rufo"
-    "--simple-exit"
-    (when (buffer-file-name)
-      (list "--filename" (buffer-file-name))))))
-
 (define-format-all-formatter rubocop
   (:executable "rubocop")
   (:install "gem install rubocop:'>=1.4.0'")
@@ -946,6 +934,18 @@ Consult the existing formatters for examples of BODY."
     "--format" "quiet"
     "--stderr"
     "--stdin" (or (buffer-file-name) (buffer-name)))))
+
+(define-format-all-formatter rufo
+  (:executable "rufo")
+  (:install "gem install rufo")
+  (:languages "Ruby")
+  (:format
+   (format-all--buffer-hard-ruby
+    "rufo" nil nil nil
+    "rufo"
+    "--simple-exit"
+    (when (buffer-file-name)
+      (list "--filename" (buffer-file-name))))))
 
 (define-format-all-formatter rustfmt
   (:executable "rustfmt")
