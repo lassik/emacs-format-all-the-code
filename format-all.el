@@ -929,7 +929,7 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-hard-ruby
     "rubocop" '(0 1) nil nil
-    "rubocop"
+    executable
     "--auto-correct"
     "--format" "quiet"
     "--stderr"
@@ -942,7 +942,7 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-hard-ruby
     "rufo" nil nil nil
-    "rufo"
+    executable
     "--simple-exit"
     (when (buffer-file-name)
       (list "--filename" (buffer-file-name))))))
@@ -1021,7 +1021,7 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-hard-ruby
     "standard" '(0 1) nil nil
-    "standardrb"
+    executable
     "--fix"
     "--stdin" (or (buffer-file-name) (buffer-name)))))
 
