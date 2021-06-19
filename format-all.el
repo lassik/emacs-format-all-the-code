@@ -498,18 +498,23 @@ need to be shell-quoted."
 GEM-NAME is the name of a Ruby gem required to run EXECUTABLE.
 
 For OK-STATUSES, ERROR-REGEXP, ROOT-FILES, EXECUTABLE and ARGS, see `format-all--buffer-hard'."
-  (let* ((error-regexp
-          (apply #'regexp-or
-                 "Bundler::GemNotFound"
-                 (concat "bundler: failed to load command: "
-                         (regexp-quote executable))
-                 (concat (regexp-or "bundle" (regexp-quote executable))
-                         ": command not found")
-                 (if error-regexp (list error-regexp))))
+  (let* ((command (file-name-nondirectory executable))
+         (error-regexp
+          (regexp-opt
+           (append
+            (if error-regexp (list error-regexp))
+            (list
+             "Bundler::GemNotFound"
+             (concat "bundler: failed to load command: "
+                     (regexp-quote command))
+             (concat (regexp-opt (list "bundle" (regexp-quote command)))
+                     ": command not found")))))
          (command-args
-          (append (if (format-all--ruby-gem-bundled-p gem-name)
-                      '("bundle" "exec"))
-                  (cons executable (format-all--flatten-once args)))))
+          (append
+           (if (format-all--ruby-gem-bundled-p gem-name)
+               (list "bundle" "exec" command)
+             (list executable))
+           (format-all--flatten-once args))))
     (format-all--buffer-hard
      ok-statuses error-regexp root-files
      (car command-args)
