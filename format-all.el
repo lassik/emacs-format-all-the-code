@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.4.0
-;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.13"))
+;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.14"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -25,6 +25,7 @@
 ;; - Angular/Vue (prettier)
 ;; - Assembly (asmfmt)
 ;; - ATS (atsfmt)
+;; - Awk (gawk)
 ;; - Bazel Starlark (buildifier)
 ;; - BibTeX (Emacs)
 ;; - C/C++/Objective-C (clang-format, astyle)
@@ -760,6 +761,12 @@ Consult the existing formatters for examples of BODY."
   (:install "pip install fprettify")
   (:languages "_Fortran 90")
   (:format (format-all--buffer-easy executable "--silent")))
+
+(define-format-all-formatter gawk
+  (:executable "gawk")
+  (:install (macos "brew install gawk"))
+  (:languages "Awk")
+  (:format (format-all--buffer-easy executable "-f" "-" "--pretty-print=-")))
 
 (define-format-all-formatter gleam
   (:executable "gleam")
