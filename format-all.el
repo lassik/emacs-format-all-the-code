@@ -1,27 +1,27 @@
 ;;; format-all.el --- Auto-format C, C++, JS, Python, Ruby and 50 other languages -*- lexical-binding: t -*-
-;;
+
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.4.0
 ;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.15"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
-;;
+
 ;; This file is not part of GNU Emacs.
-;;
+
 ;;; Commentary:
-;;
+
 ;; Lets you auto-format source code in many languages using the same
 ;; command for all languages, instead of learning a different Emacs
 ;; package and formatting command for each language.
-;;
+
 ;; Just do M-x format-all-buffer and it will try its best to do the
 ;; right thing.  To auto-format code on save, use the minor mode
 ;; format-all-mode.  Please see the documentation for that function
 ;; for instructions.
-;;
+
 ;; Supported languages:
-;;
+
 ;; - Angular/Vue (prettier)
 ;; - Assembly (asmfmt)
 ;; - ATS (atsfmt)
@@ -83,19 +83,19 @@
 ;; - V (v fmt)
 ;; - Verilog (iStyle)
 ;; - YAML (prettier)
-;;
+
 ;; You will need to install external programs to do the formatting.
 ;; If `format-all-buffer` can't find the right program, it will try to
 ;; tell you how to install it.
-;;
+
 ;; Many of the external formatters support configuration files in the
 ;; source code directory to control their formatting.  Please see the
 ;; documentation for each formatter.
-;;
+
 ;; New external formatters can be added easily if they can read code
 ;; from standard input and format it to standard output.  Feel free to
 ;; submit a pull request or ask for help in GitHub issues.
-;;
+
 ;;; Code:
 
 (require 'cl-lib)
