@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.4.0
-;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.14"))
+;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.15"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 ;;
@@ -75,6 +75,7 @@
 ;; - Snakemake (snakefmt)
 ;; - Solidity (prettier prettier-plugin-solidity)
 ;; - SQL (pgformatter, sqlformat)
+;; - Svelte (prettier prettier-plugin-svelte)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier prettier-plugin-toml)
@@ -165,6 +166,7 @@
     ("Shell" shfmt)
     ("Solidity" prettier)
     ("SQL" sqlformat)
+    ("Svelte" prettier)
     ("Swift" swiftformat)
     ("Terraform" terraform-fmt)
     ("TOML" prettier)
@@ -897,10 +899,10 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter prettier
   (:executable "prettier")
-  (:install "npm install --global prettier @prettier/plugin-lua @prettier/plugin-php prettier-plugin-solidity prettier-plugin-toml")
+  (:install "npm install --global prettier @prettier/plugin-lua @prettier/plugin-php prettier-plugin-solidity prettier-plugin-svelte prettier-plugin-toml")
   (:languages
    "CSS" "GraphQL" "HTML" "JavaScript" "JSON" "JSX" "Less" "Lua" "Markdown"
-   "PHP" "SCSS" "Solidity" "TOML" "TSX" "TypeScript" "Vue" "YAML"
+   "PHP" "SCSS" "Solidity" "Svelte" "TOML" "TSX" "TypeScript" "Vue" "YAML"
    "_Angular" "_Flow")
   (:format
    (format-all--buffer-easy
