@@ -2,7 +2,7 @@
 
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
-;; Version: 0.4.0
+;; Version: 0.5.0
 ;; Package-Requires: ((emacs "24.3") (inheritenv "0.1") (language-id "0.15"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
