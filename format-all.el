@@ -63,7 +63,7 @@
 ;; - Perl (perltidy)
 ;; - PHP (prettier plugin)
 ;; - Protocol Buffers (clang-format)
-;; - PureScript (purty)
+;; - PureScript (purty, purs-tidy)
 ;; - Python (black, yapf)
 ;; - R (styler)
 ;; - Reason (bsrefmt)
@@ -918,6 +918,12 @@ Consult the existing formatters for examples of BODY."
     (when (buffer-file-name) (list "--stdin-filepath" (buffer-file-name)))
     (let ((ignore-file (format-all--locate-file ".prettierignore")))
       (when ignore-file (list "--ignore-path" ignore-file))))))
+
+(define-format-all-formatter purs-tidy
+  (:executable "purs-tidy")
+  (:install "npm install --global purs-tidy")
+  (:languages "PureScript")
+  (:format (format-all--buffer-easy executable "format")))
 
 (define-format-all-formatter purty
   (:executable "purty")
