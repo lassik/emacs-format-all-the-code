@@ -919,6 +919,12 @@ Consult the existing formatters for examples of BODY."
     (let ((ignore-file (format-all--locate-file ".prettierignore")))
       (when ignore-file (list "--ignore-path" ignore-file))))))
 
+(define-format-all-formatter purescript-tidy
+  (:executable "purs-tidy")
+  (:install "npm install --global purs-tidy")
+  (:languages "PureScript")
+  (:format (format-all--buffer-easy executable "format")))
+
 (define-format-all-formatter purty
   (:executable "purty")
   (:install "npm install --global purty")

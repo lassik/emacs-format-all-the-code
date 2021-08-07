@@ -62,7 +62,7 @@ Supported languages
 * **Perl** ([*perltidy*](http://perltidy.sourceforge.net/))
 * **PHP** ([*prettier plugin*](https://github.com/prettier/plugin-php))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
-* **PureScript** ([*purty*](https://gitlab.com/joneshf/purty))
+* **PureScript** ([*purty*](https://gitlab.com/joneshf/purty), [*purescript-tidy*](https://github.com/natefaubion/purescript-tidy))
 * **Python** ([*black*](https://github.com/ambv/black), [*yapf*](https://github.com/google/yapf))
 * **R** ([*styler*](https://github.com/r-lib/styler))
 * **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
