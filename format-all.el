@@ -538,7 +538,7 @@ see `format-all--buffer-hard'."
 (defvar format-all--language-table (make-hash-table :test 'equal)
   "Internal table of major mode formatter lists for format-all.")
 
-(defvar format-all--features-table (make-hash-table :test 'equal)
+(defvar format-all--features-table (make-hash-table)
   "Internal table of formatter feature lists for format-all.")
 
 (defvar format-all--format-table (make-hash-table)
@@ -692,7 +692,6 @@ Consult the existing formatters for examples of BODY."
                       ("Java"            . ".java")
                       ("Objective-C"     . ".m")
                       ("Protocol Buffer" . ".proto")))))
-
     (when region
       (list "--offset" (number-to-string (1- (car region)))
             "--length" (number-to-string (- (cdr region) (car region))))))))
