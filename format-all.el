@@ -485,13 +485,17 @@ need to be shell-quoted."
   (apply 'format-all--buffer-hard nil nil nil executable args))
 
 (defun format-all--ruby-gem-bundled-p (gem-name)
-  "Internal helper function to check if GEM-NAME is listed in the current project's Gemfile.lock."
+  "Internal helper function to check for a Ruby gem.
+
+Returns t if GEM-NAME is listed in the current project's
+Gemfile.lock, nil otherwise."
   (let* ((lockfile "Gemfile.lock")
          (dir (locate-dominating-file (buffer-file-name) lockfile)))
     (and dir
          (with-temp-buffer
            (insert-file-contents (expand-file-name lockfile dir))
-           (re-search-forward (format "^    %s " (regexp-quote gem-name)) nil t))
+           (re-search-forward (format "^    %s " (regexp-quote gem-name))
+                              nil t))
          t)))
 
 (defun format-all--buffer-hard-ruby
@@ -500,7 +504,8 @@ need to be shell-quoted."
 
 GEM-NAME is the name of a Ruby gem required to run EXECUTABLE.
 
-For OK-STATUSES, ERROR-REGEXP, ROOT-FILES, EXECUTABLE and ARGS, see `format-all--buffer-hard'."
+For OK-STATUSES, ERROR-REGEXP, ROOT-FILES, EXECUTABLE and ARGS,
+see `format-all--buffer-hard'."
   (let* ((command (file-name-nondirectory executable))
          (error-regexp
           (regexp-opt
@@ -863,7 +868,8 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter nixfmt
   (:executable "nixfmt")
-  (:install "nix-env -f https://github.com/serokell/nixfmt/archive/master.tar.gz -i")
+  (:install
+   "nix-env -f https://github.com/serokell/nixfmt/archive/master.tar.gz -i")
   (:languages "Nix")
   (:format (format-all--buffer-easy executable)))
 
