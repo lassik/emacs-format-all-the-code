@@ -43,6 +43,7 @@
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (Emacs)
+;; - F# (fantomas)
 ;; - Fish Shell (fish_indent)
 ;; - Fortran Free Form (fprettify)
 ;; - Gleam (gleam format)
@@ -134,6 +135,7 @@
     ("Elixir" mix-format)
     ("Elm" elm-format)
     ("Emacs Lisp" emacs-lisp)
+    ("F#" fantomas)
     ("Fish" fish-indent)
     ("Fortran Free Form" fprettify)
     ("GLSL" clang-format)
@@ -790,6 +792,13 @@ Consult the existing formatters for examples of BODY."
     (if region
         (lambda () (indent-region (car region) (cdr region)))
         (lambda () (indent-region (point-min) (point-max)))))))
+
+(define-format-all-formatter fantomas
+  (:executable "fantomas")
+  (:install "dotnet tool install -g fantomas-tool")
+  (:languages "F#")
+  (:features)
+  (:format (format-all--buffer-easy executable "--stdin" "--stdout")))
 
 (define-format-all-formatter fish-indent
   (:executable "fish_indent")
