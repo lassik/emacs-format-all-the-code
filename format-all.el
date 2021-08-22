@@ -690,6 +690,7 @@ Consult the existing formatters for examples of BODY."
                     '(("C"               . ".c")
                       ("C#"              . ".cs")
                       ("C++"             . ".cpp")
+                      ("Cuda"            . ".cu")
                       ("GLSL"            . ".glsl")
                       ("Java"            . ".java")
                       ("Objective-C"     . ".m")
