@@ -34,6 +34,7 @@ Supported languages
 * **CMake** ([*cmake-format*](https://github.com/cheshirekow/cmake_format))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
+* **Cuda** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
 * **Dart** ([*dartfmt*](https://github.com/dart-lang/dart_style))
 * **Dhall** ([*dhall format*](https://github.com/dhall-lang/dhall-lang))
