@@ -43,7 +43,7 @@ Supported languages
 * **Elm** ([*elm-format*](https://github.com/avh4/elm-format))
 * **Emacs Lisp** (Emacs)
 * **Fish Shell** ([*fish_indent*](https://fishshell.com/docs/current/commands.html#fish_indent))
-* **Fortran 90** ([*fprettify*](https://github.com/pseewald/fprettify))
+* **Fortran Free Form** ([*fprettify*](https://github.com/pseewald/fprettify))
 * **Gleam** ([*gleam format*](https://gleam.run/))
 * **GLSL** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **Go** ([*gofmt*](https://golang.org/cmd/gofmt/), [*goimports*](https://godoc.org/golang.org/x/tools/cmd/goimports))
