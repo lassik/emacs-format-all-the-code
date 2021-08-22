@@ -41,6 +41,7 @@ Supported languages
 * **Elixir** ([*mix format*](https://hexdocs.pm/mix/master/Mix.Tasks.Format.html))
 * **Elm** ([*elm-format*](https://github.com/avh4/elm-format))
 * **Emacs Lisp** (Emacs)
+* **F#** ([*fantomas*](https://github.com/fsprojects/fantomas))
 * **Fish Shell** ([*fish_indent*](https://fishshell.com/docs/current/commands.html#fish_indent))
 * **Fortran 90** ([*fprettify*](https://github.com/pseewald/fprettify))
 * **Gleam** ([*gleam format*](https://gleam.run/))
