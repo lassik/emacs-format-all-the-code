@@ -1,5 +1,5 @@
 (with-temp-buffer
-  (insert-file-contents "format-all.el")
+  (insert-file-contents "../format-all.el")
   (let (forms)
     (condition-case () (while t (push (read (current-buffer)) forms))
       (end-of-file (setq forms (reverse forms))))
