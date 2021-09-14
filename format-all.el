@@ -874,6 +874,7 @@ Consult the existing formatters for examples of BODY."
     executable
     "-q"
     "--tidy-mark" "no"
+    "--mute" "NESTED_EMPHASIS"
     "-indent"
     (when (equal language "XML") "-xml"))))
 
