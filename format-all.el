@@ -1138,6 +1138,7 @@ Consult the existing formatters for examples of BODY."
    (format-all--buffer-hard-ruby
     "standard" '(0 1) nil nil
     executable
+    "--stderr"
     "--fix"
     "--stdin" (or (buffer-file-name) (buffer-name)))))
 
