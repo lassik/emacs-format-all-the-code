@@ -37,7 +37,7 @@
 ;; - CSS/Less/SCSS (prettier)
 ;; - Cuda (clang-format)
 ;; - D (dfmt)
-;; - Dart (dartfmt)
+;; - Dart (dartfmt, dart-format)
 ;; - Dhall (dhall format)
 ;; - Dockerfile (dockfmt)
 ;; - Elixir (mix format)
@@ -129,7 +129,7 @@
     ("CSS" prettier)
     ("Cuda" clang-format)
     ("D" dfmt)
-    ("Dart" dartfmt)
+    ("Dart" dart-format)
     ("Dhall" dhall)
     ("Dockerfile" dockfmt)
     ("Elixir" mix-format)
@@ -735,6 +735,14 @@ Consult the existing formatters for examples of BODY."
     executable
     (when (buffer-file-name)
       (list "--stdin-name" (buffer-file-name))))))
+
+(define-format-all-formatter dart-format
+  (:executable "dart")
+  (:install (macos "brew tap dart-lang/dart && brew install dart"))
+  (:languages "Dart")
+  (:features)
+  (:format
+   (format-all--buffer-easy executable "format" "--output" "show")))
 
 (define-format-all-formatter dfmt
   (:executable "dfmt")
