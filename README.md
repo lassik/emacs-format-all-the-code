@@ -36,7 +36,7 @@ Supported languages
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
 * **Cuda** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
-* **Dart** ([*dartfmt*](https://github.com/dart-lang/dart_style))
+* **Dart** ([*dartfmt*](https://github.com/dart-lang/dart_style), [*dart-format*](https://dart.dev/tools/dart-format))
 * **Dhall** ([*dhall format*](https://github.com/dhall-lang/dhall-lang))
 * **Dockerfile** ([*dockfmt*](https://github.com/jessfraz/dockfmt))
 * **Elixir** ([*mix format*](https://hexdocs.pm/mix/master/Mix.Tasks.Format.html))
