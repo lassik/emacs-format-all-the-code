@@ -67,6 +67,7 @@ Supported languages
 * **PureScript** ([*purty*](https://gitlab.com/joneshf/purty), [*purescript-tidy*](https://github.com/natefaubion/purescript-tidy))
 * **Python** ([*black*](https://github.com/ambv/black), [*yapf*](https://github.com/google/yapf))
 * **R** ([*styler*](https://github.com/r-lib/styler))
+* **Racket** ([*raco fmt*](https://docs.racket-lang.org/fmt/))
 * **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
 * **ReScript** ([*rescript format*](https://www.npmjs.com/package/rescript))
 * **Ruby** ([*rubocop*](https://github.com/rubocop/rubocop), [*rufo*](https://github.com/ruby-formatter/rufo), [*standardrb*](https://github.com/testdouble/standard))

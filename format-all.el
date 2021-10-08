@@ -68,6 +68,7 @@
 ;; - PureScript (purty, purs-tidy)
 ;; - Python (black, yapf)
 ;; - R (styler)
+;; - Racket (raco-fmt)
 ;; - Reason (bsrefmt)
 ;; - ReScript (rescript)
 ;; - Ruby (rubocop, rufo, standardrb)
@@ -1024,6 +1025,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "PureScript")
   (:features)
   (:format (format-all--buffer-easy executable "-")))
+
+(define-format-all-formatter raco-fmt
+  (:executable "raco")
+  (:install "raco pkg install fmt")
+  (:languages "Racket")
+  (:features)
+  (:format (format-all--buffer-easy executable "fmt")))
 
 (define-format-all-formatter rescript
   (:executable "rescript")
