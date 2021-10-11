@@ -256,7 +256,7 @@ association list. Using \".dir-locals.el\" is convenient since
 the rules for an entire source tree can be given in one file.")
 
 (define-error 'format-all-executable-not-found
-  "Formatter executable not found")
+  "Formatter command not found")
 
 (defun format-all--proper-list-p (object)
   "Return t if OBJECT is a proper list, nil otherwise."
@@ -1241,9 +1241,9 @@ unofficial languages IDs are prefixed with \"_\"."
 
 (defun format-all--please-install (executable installer)
   "Internal helper function for error about missing EXECUTABLE and INSTALLER."
-  (concat (format "You need the %S command." executable)
+  (concat (format "You need the %s command." executable)
           (if (not installer) ""
-            (format " You may be able to install it via %S." installer))))
+            (format " You may be able to install it via: %s" installer))))
 
 (defun format-all--formatter-executable (formatter)
   "Internal helper function to get the external program for FORMATTER."
@@ -1251,9 +1251,9 @@ unofficial languages IDs are prefixed with \"_\"."
     (when executable
       (or (executable-find executable)
           (signal 'format-all-executable-not-found
-                  (format-all--please-install
-                   executable
-                   (gethash formatter format-all--install-table)))))))
+                  (list (format-all--please-install
+                         executable
+                         (gethash formatter format-all--install-table))))))))
 
 (defun format-all--show-errors-buffer (error-output show-errors-p)
   "Internal shorthand function to update and show error output.
