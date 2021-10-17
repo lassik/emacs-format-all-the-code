@@ -1165,7 +1165,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-easy
-    executable "--vanilla"
+    executable
     "-e" (concat
           "options(styler.colored_print.vertical=FALSE);"
           " con <- file('stdin');"
