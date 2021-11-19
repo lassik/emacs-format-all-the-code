@@ -59,6 +59,7 @@ Supported languages
 * **Ledger** ([*ledger-mode*](https://github.com/ledger/ledger-mode))
 * **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt), [*prettier plugin*](https://github.com/prettier/plugin-lua))
 * **Markdown** ([*prettier*](https://prettier.io/))
+* **Nginx** ([*nginxfmt*](https://github.com/slomkowski/nginx-config-formatter))
 * **Nix** ([*nixpkgs-fmt*](https://github.com/nix-community/nixpkgs-fmt), [*nixfmt*](https://github.com/serokell/nixfmt))
 * **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
 * **Perl** ([*perltidy*](http://perltidy.sourceforge.net/))
@@ -85,7 +86,6 @@ Supported languages
 * **V** ([*v fmt*](https://github.com/vlang/v))
 * **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter))
 * **YAML** ([*prettier*](https://prettier.io/))
-* **Nginx** ([*nginxfmt*](https://github.com/slomkowski/nginx-config-formatter))
 
 How to install
 --------------

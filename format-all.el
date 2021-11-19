@@ -60,6 +60,7 @@
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, prettier plugin)
 ;; - Markdown (prettier)
+;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
@@ -86,7 +87,6 @@
 ;; - V (v fmt)
 ;; - Verilog (iStyle)
 ;; - YAML (prettier)
-;; - Nginx (nginxfmt)
 
 ;; You will need to install external programs to do the formatting.
 ;; If `format-all-buffer` can't find the right program, it will try to
@@ -190,8 +190,8 @@
     ("_Flow" prettier)
     ("_Gleam" gleam)
     ("_Ledger" ledger-mode)
-    ("_Snakemake" snakefmt)
-    ("_Nginx" nginxfmt))
+    ("_Nginx" nginxfmt)
+    ("_Snakemake" snakefmt))
   "Default formatter to use for each language."
   :type '(repeat (list string symbol))
   :group 'format-all)
@@ -945,6 +945,13 @@ Consult the existing formatters for examples of BODY."
       (when config-file (list "--dot-formatter" config-file)))
     "-")))
 
+(define-format-all-formatter nginxfmt
+  (:executable "nginxfmt")
+  (:install  "pip install nginxfmt")
+  (:languages "_Nginx")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
+
 (define-format-all-formatter nixfmt
   (:executable "nixfmt")
   (:install
@@ -1113,13 +1120,6 @@ Consult the existing formatters for examples of BODY."
   (:executable "snakefmt")
   (:install)
   (:languages "_Snakemake")
-  (:features)
-  (:format (format-all--buffer-easy executable "-")))
-
-(define-format-all-formatter nginxfmt
-  (:executable "nginxfmt")
-  (:install  "pip install nginxfmt")
-  (:languages "_Nginx")
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
