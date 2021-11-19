@@ -728,6 +728,14 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "tool" "format" "-")))
 
+(define-format-all-formatter dart-format
+  (:executable "dart")
+  (:install (macos "brew tap dart-lang/dart && brew install dart"))
+  (:languages "Dart")
+  (:features)
+  (:format
+   (format-all--buffer-easy executable "format" "--output" "show")))
+
 (define-format-all-formatter dartfmt
   (:executable "dartfmt")
   (:install (macos "brew tap dart-lang/dart && brew install dart"))
@@ -738,14 +746,6 @@ Consult the existing formatters for examples of BODY."
     executable
     (when (buffer-file-name)
       (list "--stdin-name" (buffer-file-name))))))
-
-(define-format-all-formatter dart-format
-  (:executable "dart")
-  (:install (macos "brew tap dart-lang/dart && brew install dart"))
-  (:languages "Dart")
-  (:features)
-  (:format
-   (format-all--buffer-easy executable "format" "--output" "show")))
 
 (define-format-all-formatter dfmt
   (:executable "dfmt")
