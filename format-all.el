@@ -1245,8 +1245,8 @@ unofficial languages IDs are prefixed with \"_\"."
            "_Flow")
       (and (equal major-mode 'gleam-mode) "_Gleam")
       (and (equal major-mode 'ledger-mode) "_Ledger")
-      (and (equal major-mode 'snakemake-mode) "_Snakemake")
       (and (equal major-mode 'nginx-mode) "_Nginx")
+      (and (equal major-mode 'snakemake-mode) "_Snakemake")
       (language-id-buffer)))
 
 (defun format-all--please-install (executable installer)
