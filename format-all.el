@@ -86,6 +86,7 @@
 ;; - V (v fmt)
 ;; - Verilog (iStyle)
 ;; - YAML (prettier)
+;; - Nginx (nginxfmt)
 
 ;; You will need to install external programs to do the formatting.
 ;; If `format-all-buffer` can't find the right program, it will try to
@@ -189,7 +190,8 @@
     ("_Flow" prettier)
     ("_Gleam" gleam)
     ("_Ledger" ledger-mode)
-    ("_Snakemake" snakefmt))
+    ("_Snakemake" snakefmt)
+    ("_Nginx" nginxfmt))
   "Default formatter to use for each language."
   :type '(repeat (list string symbol))
   :group 'format-all)
@@ -1114,6 +1116,13 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
+(define-format-all-formatter nginxfmt
+  (:executable "nginxfmt")
+  (:install  "pip install nginxfmt")
+  (:languages "_Nginx")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
+
 (define-format-all-formatter sqlformat
   (:executable "sqlformat")
   (:install "pip install sqlparse")
@@ -1237,6 +1246,7 @@ unofficial languages IDs are prefixed with \"_\"."
       (and (equal major-mode 'gleam-mode) "_Gleam")
       (and (equal major-mode 'ledger-mode) "_Ledger")
       (and (equal major-mode 'snakemake-mode) "_Snakemake")
+      (and (equal major-mode 'nginx-mode) "_Nginx")
       (language-id-buffer)))
 
 (defun format-all--please-install (executable installer)

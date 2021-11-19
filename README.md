@@ -85,6 +85,7 @@ Supported languages
 * **V** ([*v fmt*](https://github.com/vlang/v))
 * **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter))
 * **YAML** ([*prettier*](https://prettier.io/))
+* **Nginx** ([*nginxfmt*](https://github.com/slomkowski/nginx-config-formatter))
 
 How to install
 --------------
