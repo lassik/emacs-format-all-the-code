@@ -30,7 +30,7 @@ Supported languages
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
 * **C#** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
 * **Cabal** ([*cabal-fmt*](https://github.com/phadej/cabal-fmt))
-* **Clojure/ClojureScript** ([*node-cljfmt*](https://github.com/snoe/node-cljfmt))
+* **Clojure/ClojureScript** ([*node-cljfmt*](https://github.com/snoe/node-cljfmt), [*zprint*](https://github.com/kkinnear/zprint))
 * **CMake** ([*cmake-format*](https://github.com/cheshirekow/cmake_format))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/))
