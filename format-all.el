@@ -83,7 +83,7 @@
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier plugin)
-;; - TypeScript/TSX (prettier)
+;; - TypeScript/TSX (prettier, ts-standard)
 ;; - V (v fmt)
 ;; - Verilog (iStyle)
 ;; - YAML (prettier)
@@ -1211,6 +1211,23 @@ Consult the existing formatters for examples of BODY."
   (:languages "Terraform")
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-no-color" "-")))
+
+(define-format-all-formatter ts-standard
+  (:executable "ts-standard")
+  (:install "npm install --global ts-standard")
+  (:languages "TypeScript" "TSX")
+  (:features)
+  (:format
+   ;; `ts-standard --stdin` properly uses zero vs non-zero exit codes to
+   ;; indicate success vs error. However, it checks for quite a broad
+   ;; range of errors, all the way up to undeclared identifiers and
+   ;; such. To catch only syntax errors, we need to look specifically
+   ;; for the text "Parsing error:".
+   (format-all--buffer-hard
+    '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" '("tsconfig.json")
+    executable "--fix" "--stdin"
+    (when (buffer-file-name)
+      (list "--stdin-filename" (buffer-file-name))))))
 
 (define-format-all-formatter v-fmt
   (:executable "v")
