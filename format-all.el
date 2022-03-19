@@ -67,7 +67,7 @@
 ;; - PHP (prettier plugin)
 ;; - Protocol Buffers (clang-format)
 ;; - PureScript (purty, purs-tidy)
-;; - Python (black, yapf)
+;; - Python (black, yapf, isort)
 ;; - R (styler)
 ;; - Racket (raco-fmt)
 ;; - Reason (bsrefmt)
@@ -887,6 +887,13 @@ Consult the existing formatters for examples of BODY."
     "--tidy-mark" "no"
     "-indent"
     (when (equal language "XML") "-xml"))))
+
+(define-format-all-formatter isort
+  (:executable "isort")
+  (:install "pip install isort")
+  (:languages "Python")
+  (:features)
+  (:format (format-all--buffer-easy executable "-q" "-")))
 
 (define-format-all-formatter istyle-verilog
   (:executable "iStyle")
