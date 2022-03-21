@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.5.0
-;; Package-Requires: ((emacs "24.4") (inheritenv "0.1") (language-id "0.16"))
+;; Package-Requires: ((emacs "24.4") (inheritenv "0.1") (language-id "0.18"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 
@@ -148,6 +148,7 @@
     ("Java" clang-format)
     ("JavaScript" prettier)
     ("JSON" prettier)
+    ("JSON5" prettier)
     ("Jsonnet" jsonnetfmt)
     ("JSX" prettier)
     ("Kotlin" ktlint)
@@ -1006,8 +1007,9 @@ Consult the existing formatters for examples of BODY."
   (:executable "prettier")
   (:install "npm install --global prettier @prettier/plugin-lua @prettier/plugin-php prettier-plugin-solidity prettier-plugin-svelte prettier-plugin-toml")
   (:languages
-   "CSS" "GraphQL" "HTML" "JavaScript" "JSON" "JSX" "Less" "Lua" "Markdown"
-   "PHP" "SCSS" "Solidity" "Svelte" "TOML" "TSX" "TypeScript" "Vue" "YAML"
+   "CSS" "GraphQL" "HTML" "JavaScript" "JSON" "JSON5" "JSX" "Less" "Lua"
+   "Markdown" "PHP" "SCSS" "Solidity" "Svelte" "TOML" "TSX" "TypeScript"
+   "Vue" "YAML"
    "_Angular" "_Flow")
   (:features region)
   (:format
