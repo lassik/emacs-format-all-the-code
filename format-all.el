@@ -714,13 +714,6 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable)))
 
-(define-format-all-formatter zprint
-  (:executable "zprint")
-  (:install)
-  (:languages "Clojure")
-  (:features)
-  (:format (format-all--buffer-easy executable)))
-
 (define-format-all-formatter cmake-format
   (:executable "cmake-format")
   (:install "pip install cmake-format")
@@ -1254,6 +1247,13 @@ Consult the existing formatters for examples of BODY."
   (:executable "yapf")
   (:install "pip install yapf")
   (:languages "Python")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter zprint
+  (:executable "zprint")
+  (:install)
+  (:languages "Clojure")
   (:features)
   (:format (format-all--buffer-easy executable)))
 
