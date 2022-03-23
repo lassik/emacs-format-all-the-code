@@ -982,6 +982,13 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable)))
 
+(define-format-all-formatter ocamlformat
+  (:executable "ocamlformat")
+  (:install "opam install ocamlformat")
+  (:languages "OCaml")
+  (:features)
+  (:format (format-all--buffer-easy executable "-" (concat "--name=" (buffer-file-name)))))
+
 (define-format-all-formatter ormolu
   (:executable "ormolu")
   (:install "stack install ormolu")
