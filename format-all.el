@@ -58,7 +58,7 @@
 ;; - Kotlin (ktlint)
 ;; - LaTeX (latexindent, auctex)
 ;; - Ledger (ledger-mode)
-;; - Lua (lua-fmt, prettier plugin)
+;; - Lua (lua-fmt, stylua, prettier plugin)
 ;; - Markdown (prettier)
 ;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt)
@@ -931,6 +931,13 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-native 'ledger-mode 'ledger-mode-clean-buffer)))
+
+(define-format-all-formatter stylua
+  (:executable "stylua")
+  (:install "cargo install stylua")
+  (:languages "Lua")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
