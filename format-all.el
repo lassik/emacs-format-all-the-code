@@ -264,7 +264,8 @@ the rules for an entire source tree can be given in one file.")
 (defun format-all--proper-list-p (object)
   "Return t if OBJECT is a proper list, nil otherwise."
   ;; If we could depend on Emacs 27.1 this function would be built in.
-  (and (listp object) (not (null (cl-list-length object)))))
+  (condition-case _ (not (null (cl-list-length object)))
+    (wrong-type-argument nil)))
 
 (defun format-all--normalize-formatter (formatter)
   "Internal function to convert FORMATTER spec into normal form."
