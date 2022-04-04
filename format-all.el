@@ -1027,17 +1027,21 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-easy
     executable
-    "--parser" (let ((pair (assoc language
-                                  '(("_Angular"   . "angular")
-                                    ("_Flow"      . "flow")
-                                    ("JavaScript" . "babel")
-                                    ("JSX"        . "babel")
-                                    ("Solidity"   . "solidity-parse")
-                                    ("TSX"        . "typescript")))))
-                 (if pair (cdr pair) (downcase language)))
-    (when (buffer-file-name) (list "--stdin-filepath" (buffer-file-name)))
+    (unless (buffer-file-name)
+      (list "--parser"
+            (let ((pair (assoc language
+                               '(("_Angular"   . "angular")
+                                 ("_Flow"      . "flow")
+                                 ("JavaScript" . "babel")
+                                 ("JSX"        . "babel")
+                                 ("Solidity"   . "solidity-parse")
+                                 ("TSX"        . "typescript")))))
+              (if pair (cdr pair) (downcase language)))))
+    (when (buffer-file-name)
+      (list "--stdin-filepath" (buffer-file-name)))
     (let ((ignore-file (format-all--locate-file ".prettierignore")))
-      (when ignore-file (list "--ignore-path" ignore-file)))
+      (when ignore-file
+        (list "--ignore-path" ignore-file)))
     (when region
       (list "--range-start" (number-to-string (1- (car region)))
             "--range-end"   (number-to-string (1- (cdr region))))))))
