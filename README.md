@@ -86,6 +86,7 @@ Supported languages
 * **V** ([*v fmt*](https://github.com/vlang/v))
 * **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter))
 * **YAML** ([*prettier*](https://prettier.io/))
+* **Zig** ([*zig*](https://ziglang.org/))
 
 How to install
 --------------

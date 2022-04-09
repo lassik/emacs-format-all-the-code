@@ -3,7 +3,7 @@
 ;; Author: Lassi Kortela <lassi@lassi.io>
 ;; URL: https://github.com/lassik/emacs-format-all-the-code
 ;; Version: 0.5.0
-;; Package-Requires: ((emacs "24.4") (inheritenv "0.1") (language-id "0.18"))
+;; Package-Requires: ((emacs "24.4") (inheritenv "0.1") (language-id "0.19"))
 ;; Keywords: languages util
 ;; SPDX-License-Identifier: MIT
 
@@ -87,6 +87,7 @@
 ;; - V (v fmt)
 ;; - Verilog (iStyle)
 ;; - YAML (prettier)
+;; - Zig (zig)
 
 ;; You will need to install external programs to do the formatting.
 ;; If `format-all-buffer` can't find the right program, it will try to
@@ -186,6 +187,7 @@
     ("Vue" prettier)
     ("XML" html-tidy)
     ("YAML" prettier)
+    ("Zig" zig)
 
     ("_Angular" prettier)
     ("_Flow" prettier)
@@ -1252,6 +1254,12 @@ Consult the existing formatters for examples of BODY."
   (:languages "Python")
   (:features)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter zig
+  (:executable "zig")
+  (:install)
+  (:languages "Zig")
+  (:format (format-all--buffer-easy executable "fmt" "--stdin")))
 
 (define-format-all-formatter zprint
   (:executable "zprint")
