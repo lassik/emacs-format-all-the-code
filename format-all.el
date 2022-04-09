@@ -1135,12 +1135,6 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
-(define-format-all-formatter zig
-  (:executable "zig")
-  (:install)
-  (:languages "Zig")
-  (:format (format-all--buffer-easy executable "fmt" "--stdin")))
-
 (define-format-all-formatter sqlformat
   (:executable "sqlformat")
   (:install "pip install sqlparse")
@@ -1260,6 +1254,12 @@ Consult the existing formatters for examples of BODY."
   (:languages "Python")
   (:features)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter zig
+  (:executable "zig")
+  (:install)
+  (:languages "Zig")
+  (:format (format-all--buffer-easy executable "fmt" "--stdin")))
 
 (define-format-all-formatter zprint
   (:executable "zprint")
