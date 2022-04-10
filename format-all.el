@@ -1259,6 +1259,7 @@ Consult the existing formatters for examples of BODY."
   (:executable "zig")
   (:install)
   (:languages "Zig")
+  (:features)
   (:format (format-all--buffer-easy executable "fmt" "--stdin")))
 
 (define-format-all-formatter zprint
