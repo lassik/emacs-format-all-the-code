@@ -775,6 +775,13 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "fmt")))
 
+(define-format-all-formatter efmt
+  (:executable "efmt")
+  (:install "cargo install efmt")
+  (:languages "Erlang")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
+
 (define-format-all-formatter elm-format
   (:executable "elm-format")
   (:install (macos "brew install elm"))
@@ -957,13 +964,6 @@ Consult the existing formatters for examples of BODY."
     (let ((config-file (format-all--locate-file ".formatter.exs")))
       (when config-file (list "--dot-formatter" config-file)))
     "-")))
-
-(define-format-all-formatter efmt
-  (:executable "efmt")
-  (:install "cargo install efmt")
-  (:languages "Erlang")
-  (:features)
-  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
