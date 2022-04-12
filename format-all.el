@@ -944,13 +944,6 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-native 'ledger-mode 'ledger-mode-clean-buffer)))
 
-(define-format-all-formatter stylua
-  (:executable "stylua")
-  (:install "cargo install stylua")
-  (:languages "Lua")
-  (:features)
-  (:format (format-all--buffer-easy executable "-")))
-
 (define-format-all-formatter lua-fmt
   (:executable "luafmt")
   (:install "npm install --global lua-fmt")
@@ -1216,6 +1209,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "Haskell")
   (:features)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter stylua
+  (:executable "stylua")
+  (:install "cargo install stylua")
+  (:languages "Lua")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter swiftformat
   (:executable "swiftformat")
