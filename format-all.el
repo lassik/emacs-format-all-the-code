@@ -43,6 +43,7 @@
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (Emacs)
+;; - Erlang (efmt)
 ;; - F# (fantomas)
 ;; - Fish Shell (fish_indent)
 ;; - Fortran Free Form (fprettify)
@@ -138,6 +139,7 @@
     ("Elixir" mix-format)
     ("Elm" elm-format)
     ("Emacs Lisp" emacs-lisp)
+    ("Erlang" efmt)
     ("F#" fantomas)
     ("Fish" fish-indent)
     ("Fortran Free Form" fprettify)
@@ -772,6 +774,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "Dockerfile")
   (:features)
   (:format (format-all--buffer-easy executable "fmt")))
+
+(define-format-all-formatter efmt
+  (:executable "efmt")
+  (:install "cargo install efmt")
+  (:languages "Erlang")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter elm-format
   (:executable "elm-format")
