@@ -58,7 +58,7 @@ Supported languages
 * **Kotlin** ([*ktlint*](https://github.com/shyiko/ktlint))
 * **LaTeX** ([*latexindent*](https://github.com/cmhughes/latexindent.pl), [*auctex*](https://www.gnu.org/software/auctex/))
 * **Ledger** ([*ledger-mode*](https://github.com/ledger/ledger-mode))
-* **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt), [*prettier plugin*](https://github.com/prettier/plugin-lua))
+* **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt), [stylua](https://github.com/JohnnyMorganz/StyLua),  [*prettier plugin*](https://github.com/prettier/plugin-lua))
 * **Markdown** ([*prettier*](https://prettier.io/))
 * **Nginx** ([*nginxfmt*](https://github.com/slomkowski/nginx-config-formatter))
 * **Nix** ([*nixpkgs-fmt*](https://github.com/nix-community/nixpkgs-fmt), [*nixfmt*](https://github.com/serokell/nixfmt))
