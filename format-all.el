@@ -22,7 +22,7 @@
 
 ;; Supported languages:
 
-;; - Angular/Vue (prettier)
+;; - Angular (prettier)
 ;; - Assembly (asmfmt)
 ;; - ATS (atsfmt)
 ;; - Awk (gawk)
@@ -34,7 +34,7 @@
 ;; - Clojure/ClojureScript (zprint, node-cljfmt)
 ;; - CMake (cmake-format)
 ;; - Crystal (crystal tool format)
-;; - CSS/Less/SCSS (prettier)
+;; - CSS/Less/SCSS (prettier, prettierd)
 ;; - Cuda (clang-format)
 ;; - D (dfmt)
 ;; - Dart (dartfmt, dart-format)
@@ -50,17 +50,17 @@
 ;; - Gleam (gleam format)
 ;; - GLSL (clang-format)
 ;; - Go (gofmt, goimports)
-;; - GraphQL (prettier)
+;; - GraphQL (prettier, prettierd)
 ;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format, astyle)
-;; - JavaScript/JSON/JSX (prettier, standard)
+;; - JavaScript/JSON/JSX (prettier, standard, prettierd)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
 ;; - LaTeX (latexindent, auctex)
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, stylua, prettier plugin)
-;; - Markdown (prettier)
+;; - Markdown (prettier, prettierd)
 ;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt)
 ;; - OCaml (ocp-indent)
@@ -84,10 +84,11 @@
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier plugin)
-;; - TypeScript/TSX (prettier, ts-standard)
+;; - TypeScript/TSX (prettier, ts-standard, prettierd)
 ;; - V (v fmt)
+;; - Vue (prettier, prettierd)
 ;; - Verilog (iStyle)
-;; - YAML (prettier)
+;; - YAML (prettier, prettierd)
 ;; - Zig (zig)
 
 ;; You will need to install external programs to do the formatting.
@@ -1045,6 +1046,16 @@ Consult the existing formatters for examples of BODY."
     (when region
       (list "--range-start" (number-to-string (1- (car region)))
             "--range-end"   (number-to-string (1- (cdr region))))))))
+
+(define-format-all-formatter prettierd
+	(:executable "prettierd")
+	(:install "npm install --global @fsouza/prettierd")
+	(:languages
+	"HTML" "CSS" "SCSS" "Less" "JSON" "JSON5" "YAML"
+	"JavaScript" "TypeScript" "JSX" "TSX" "Vue" "RJSX" "Javascript-IDE"
+	"Markdown" "GraphQL")
+	(:features)
+	(:format (format-all--buffer-easy executable (or (buffer-file-name) (buffer-name)))))
 
 (define-format-all-formatter purs-tidy
   (:executable "purs-tidy")
