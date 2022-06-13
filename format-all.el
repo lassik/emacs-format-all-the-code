@@ -1027,7 +1027,8 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-easy
     executable
-    (unless (buffer-file-name)
+    (unless (and (buffer-file-name)
+                 (= 0 (call-process "prettier" (buffer-file-name))))
       (list "--parser"
             (let ((pair (assoc language
                                '(("_Angular"   . "angular")
