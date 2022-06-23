@@ -62,7 +62,7 @@
 ;; - Lua (lua-fmt, stylua, prettier plugin)
 ;; - Markdown (prettier)
 ;; - Nginx (nginxfmt)
-;; - Nix (nixpkgs-fmt, nixfmt)
+;; - Nix (nixpkgs-fmt, nixfmt, alejandra)
 ;; - OCaml (ocp-indent)
 ;; - Perl (perltidy)
 ;; - PHP (prettier plugin)
@@ -605,6 +605,13 @@ Consult the existing formatters for examples of BODY."
             (puthash ',formatter ',features format-all--features-table)
             (puthash ',formatter ,format format-all--format-table)
             ',formatter)))
+
+(define-format-all-formatter alejandra
+  (:executable "alejandra")
+  (:install "nix-env -if https://github.com/kamadorueda/alejandra/tarball/master")
+  (:languages "Nix")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter asmfmt
   (:executable "asmfmt")
