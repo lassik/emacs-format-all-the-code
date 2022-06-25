@@ -43,6 +43,7 @@
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (Emacs)
+;; - Erb (erb-format)
 ;; - Erlang (efmt)
 ;; - F# (fantomas)
 ;; - Fish Shell (fish_indent)
@@ -148,6 +149,7 @@
     ("GraphQL" prettier)
     ("Haskell" brittany)
     ("HTML" html-tidy)
+    ("HTML+ERB" erb-format)
     ("Java" clang-format)
     ("JavaScript" prettier)
     ("JSON" prettier)
@@ -819,6 +821,13 @@ Consult the existing formatters for examples of BODY."
     (if region
         (lambda () (indent-region (car region) (cdr region)))
         (lambda () (indent-region (point-min) (point-max)))))))
+
+(define-format-all-formatter erb-format
+  (:executable "erb-format")
+  (:install "gem install erb-formatter")
+  (:languages "HTML+ERB")
+  (:features)
+  (:format (format-all--buffer-easy executable "--stdin")))
 
 (define-format-all-formatter fantomas
   (:executable "fantomas")
