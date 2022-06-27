@@ -1059,7 +1059,7 @@ Consult the existing formatters for examples of BODY."
   (:install "npm install --global @fsouza/prettierd")
   (:languages
    "HTML" "CSS" "SCSS" "Less" "JSON" "JSON5" "YAML"
-   "JavaScript" "TypeScript" "JSX" "TSX" "Vue" "RJSX" "Javascript-IDE"
+   "JavaScript" "TypeScript" "JSX" "TSX" "Vue"
    "Markdown" "GraphQL")
   (:features)
   (:format
