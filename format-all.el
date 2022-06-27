@@ -1058,9 +1058,8 @@ Consult the existing formatters for examples of BODY."
   (:executable "prettierd")
   (:install "npm install --global @fsouza/prettierd")
   (:languages
-   "HTML" "CSS" "SCSS" "Less" "JSON" "JSON5" "YAML"
-   "JavaScript" "TypeScript" "JSX" "TSX" "Vue"
-   "Markdown" "GraphQL")
+   "CSS" "GraphQL" "HTML" "JavaScript" "JSON" "JSON5" "JSX"
+   "Less" "Markdown" "SCSS" "TSX" "TypeScript" "Vue" "YAML")
   (:features)
   (:format
    (format-all--buffer-easy
