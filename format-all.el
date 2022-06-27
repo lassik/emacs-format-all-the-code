@@ -1055,14 +1055,18 @@ Consult the existing formatters for examples of BODY."
             "--range-end"   (number-to-string (1- (cdr region))))))))
 
 (define-format-all-formatter prettierd
-	(:executable "prettierd")
-	(:install "npm install --global @fsouza/prettierd")
-	(:languages
-	"HTML" "CSS" "SCSS" "Less" "JSON" "JSON5" "YAML"
-	"JavaScript" "TypeScript" "JSX" "TSX" "Vue" "RJSX" "Javascript-IDE"
-	"Markdown" "GraphQL")
-	(:features)
-	(:format (format-all--buffer-easy executable (or (buffer-file-name) (buffer-name)))))
+  (:executable "prettierd")
+  (:install "npm install --global @fsouza/prettierd")
+  (:languages
+   "HTML" "CSS" "SCSS" "Less" "JSON" "JSON5" "YAML"
+   "JavaScript" "TypeScript" "JSX" "TSX" "Vue" "RJSX" "Javascript-IDE"
+   "Markdown" "GraphQL")
+  (:features)
+  (:format
+   (format-all--buffer-easy
+    executable
+    (or (buffer-file-name)
+        (buffer-name)))))
 
 (define-format-all-formatter purs-tidy
   (:executable "purs-tidy")
