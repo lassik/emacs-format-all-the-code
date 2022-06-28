@@ -84,7 +84,7 @@ Supported languages
 * **Svelte** ([*prettier plugin*](https://github.com/sveltejs/prettier-plugin-svelte))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
 * **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))
-* **TOML** ([*prettier plugin*](https://github.com/bd82/toml-tools/tree/master/packages/prettier-plugin-toml))
+* **TOML** ([*prettier plugin*](https://github.com/bd82/toml-tools/tree/master/packages/prettier-plugin-toml), [*taplo fmt*](https://taplo.tamasfe.dev/cli/usage/formatting.html))
 * **TypeScript/TSX** ([*prettier*](https://prettier.io/), [*ts-standard*](https://standardjs.com/), [*prettierd*](https://github.com/fsouza/prettierd))
 * **V** ([*v fmt*](https://github.com/vlang/v))
 * **Vue** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))
