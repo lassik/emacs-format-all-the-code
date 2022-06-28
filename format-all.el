@@ -84,7 +84,7 @@
 ;; - Svelte (prettier plugin)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
-;; - TOML (prettier plugin)
+;; - TOML (prettier plugin, taplo fmt)
 ;; - TypeScript/TSX (prettier, ts-standard, prettierd)
 ;; - V (v fmt)
 ;; - Vue (prettier, prettierd)
@@ -1266,6 +1266,13 @@ Consult the existing formatters for examples of BODY."
       (list "--linerange" (format "%d,%d"
                                   (line-number-at-pos (car region))
                                   (line-number-at-pos (cdr region))))))))
+
+(define-format-all-formatter taplo-fmt
+  (:executable "taplo")
+  (:install "npm install --global @taplo/cli")
+  (:languages "TOML")
+  (:features)
+  (:format (format-all--buffer-easy executable "fmt" "-")))
 
 (define-format-all-formatter terraform-fmt
   (:executable "terraform")
