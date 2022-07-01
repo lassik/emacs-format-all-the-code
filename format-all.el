@@ -1044,7 +1044,19 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-easy
     executable
-    (unless (buffer-file-name)
+    (when (let* ((file (buffer-file-name))
+                 (info (and file
+                            (with-temp-buffer
+                              (call-process executable nil t nil
+                                            "--file-info" file)
+                              (buffer-string)))))
+            (when (and format-all-debug info)
+              (message "Format-All: --file-info: %s" info))
+            (or (not info)
+                (save-match-data
+                  (string-match
+                   (regexp-quote "\"inferredParser\": null")
+                   info))))
       (list "--parser"
             (let ((pair (assoc language
                                '(("_Angular"   . "angular")
