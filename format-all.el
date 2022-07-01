@@ -1386,10 +1386,10 @@ STATUS and ERROR-OUTPUT come from the formatter."
   (let* ((has-warnings-p (not (= 0 (length error-output))))
          (has-errors-p (eq status :error))
          (show-errors-p (cl-case format-all-show-errors
-                          (never nil)
-                          (always t)
-                          (warnings (or has-errors-p has-warnings-p))
-                          (errors has-errors-p))))
+                          ((never) nil)
+                          ((always) t)
+                          ((warnings) (or has-errors-p has-warnings-p))
+                          ((errors) has-errors-p))))
     (format-all--show-errors-buffer error-output show-errors-p)))
 
 (defun format-all--save-line-number (thunk)
