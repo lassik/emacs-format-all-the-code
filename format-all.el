@@ -163,6 +163,7 @@
     ("Literate Haskell" brittany)
     ("Lua" lua-fmt)
     ("Markdown" prettier)
+    ("Mint" mint)
     ("Nix" nixpkgs-fmt)
     ("Objective-C" clang-format)
     ("OCaml" ocp-indent)
@@ -744,6 +745,13 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "tool" "format" "-")))
 
+(define-format-all-formatter mint
+  (:executable "mint")
+  (:install (macos "brew install mint-lang"))
+  (:languages "Mint")
+  (:features)
+  (:format (format-all--buffer-easy executable "format" "--stdin")))
+
 (define-format-all-formatter dart-format
   (:executable "dart")
   (:install (macos "brew tap dart-lang/dart && brew install dart"))
@@ -828,7 +836,7 @@ Consult the existing formatters for examples of BODY."
     'emacs-lisp-mode
     (if region
         (lambda () (indent-region (car region) (cdr region)))
-        (lambda () (indent-region (point-min) (point-max)))))))
+      (lambda () (indent-region (point-min) (point-max)))))))
 
 (define-format-all-formatter erb-format
   (:executable "erb-format")
@@ -1106,7 +1114,7 @@ Consult the existing formatters for examples of BODY."
    (format-all--buffer-easy
     executable "format" "-stdin"
     (let ((ext (if (not (buffer-file-name)) ""
-                   (file-name-extension (buffer-file-name)))))
+                 (file-name-extension (buffer-file-name)))))
       (concat "." (if (equal ext "") "res" ext))))))
 
 (define-format-all-formatter rubocop
@@ -1567,7 +1575,7 @@ The PROMPT argument works as for `format-all-buffer'."
    (let ((prompt (if current-prefix-arg 'always t)))
      (if (use-region-p)
          (list (region-beginning) (region-end) prompt)
-         (error "The region is not active now"))))
+       (error "The region is not active now"))))
   (format-all--buffer-or-region prompt (cons start end)))
 
 (defun format-all-ensure-formatter ()
