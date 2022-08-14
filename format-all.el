@@ -856,7 +856,7 @@ Consult the existing formatters for examples of BODY."
   (:install "stack install fourmolu")
   (:languages "Haskell" "Literate Haskell")
   (:features)
-  (:format (format-all--buffer-easy executable)))
+  (:format (format-all--buffer-easy executable "--stdin-input-file" (buffer-file-name))))
 
 (define-format-all-formatter fprettify
   (:executable "fprettify")
