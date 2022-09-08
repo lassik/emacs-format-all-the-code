@@ -212,6 +212,12 @@
                  (const :tag "Never" never))
   :group 'format-all)
 
+(defcustom format-all-mode-lighter " FmtAll"
+  "Lighter for command `format-all-mode'."
+  :type '(string :tag "Lighter")
+  :risky t
+  :group 'format-all)
+
 (defvar format-all-after-format-functions nil
   "Hook run after each time `format-all-buffer' has formatted a buffer.
 
@@ -1624,7 +1630,7 @@ this too:
 When `format-all-mode' is called as a Lisp function, the mode is
 toggled if ARG is ‘toggle’, disabled if ARG is a negative integer
 or zero, and enabled otherwise."
-  :lighter " FmtAll"
+  :lighter format-all-mode-lighter
   :global nil
   (if format-all-mode
       (add-hook 'before-save-hook
