@@ -1588,6 +1588,11 @@ The PROMPT argument works as for `format-all-buffer'."
          (error "The region is not active now"))))
   (format-all--buffer-or-region prompt (cons start end)))
 
+(defun format-all-reset-local-formatters ()
+  "Reset format-all-formatters locally for the current buffer."
+  (interactive)
+  (setq-local format-all-formatters nil))
+
 (defun format-all-ensure-formatter ()
   "Ensure current buffer has a formatter, using default if not."
   (interactive)
