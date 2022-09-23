@@ -201,7 +201,12 @@
     ("_Nginx" nginxfmt)
     ("_Snakemake" snakefmt))
   "Default formatter to use for each language."
-  :type '(repeat (list string symbol))
+  :type '(repeat (list (string :tag "Language")
+                       (choice (symbol :tag "Formatter Only")
+                               (cons :tag "Formatter with Custom Arguments"
+                                     (symbol :tag "Formatter")
+                                     (repeat :tag "Custom Arguments"
+                                             (string :tag "Argument"))))))
   :group 'format-all)
 
 (defcustom format-all-show-errors 'errors
