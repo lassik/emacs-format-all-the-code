@@ -88,7 +88,7 @@
 ;; - TypeScript/TSX (prettier, ts-standard, prettierd)
 ;; - V (v fmt)
 ;; - Vue (prettier, prettierd)
-;; - Verilog (iStyle)
+;; - Verilog (iStyle, Verible)
 ;; - YAML (prettier, prettierd)
 ;; - Zig (zig)
 
@@ -1320,6 +1320,13 @@ Consult the existing formatters for examples of BODY."
     executable "--fix" "--stdin"
     (when (buffer-file-name)
       (list "--stdin-filename" (buffer-file-name))))))
+
+(define-format-all-formatter verible 
+  (:executable "verible-verilog-format")
+  (:install)
+  (:languages "Verilog" "SystemVerilog")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter v-fmt
   (:executable "v")
