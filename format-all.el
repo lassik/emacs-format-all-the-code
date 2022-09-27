@@ -1600,6 +1600,7 @@ The PROMPT argument works as for `format-all-buffer'."
          (error "The region is not active now"))))
   (format-all--buffer-or-region prompt (cons start end)))
 
+;;;###autoload
 (defun format-all-ensure-formatter ()
   "Ensure current buffer has a formatter, using default if not."
   (interactive)
