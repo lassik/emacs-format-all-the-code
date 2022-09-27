@@ -88,7 +88,7 @@ Supported languages
 * **TypeScript/TSX** ([*prettier*](https://prettier.io/), [*ts-standard*](https://standardjs.com/), [*prettierd*](https://github.com/fsouza/prettierd))
 * **V** ([*v fmt*](https://github.com/vlang/v))
 * **Vue** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))
-* **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter))
+* **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter), [*Verible*](https://github.com/chipsalliance/verible/tree/master/verilog/tools/formatter))
 * **YAML** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))
 * **Zig** ([*zig*](https://ziglang.org/))
 
