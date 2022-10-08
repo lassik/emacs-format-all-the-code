@@ -64,7 +64,7 @@ Supported languages
 * **Nginx** ([*nginxfmt*](https://github.com/slomkowski/nginx-config-formatter))
 * **Nix** ([*nixpkgs-fmt*](https://github.com/nix-community/nixpkgs-fmt), [*nixfmt*](https://github.com/serokell/nixfmt),
 [*alejandra*](https://github.com/kamadorueda/alejandra))
-* **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/))
+* **OCaml** ([*ocp-indent*](https://opam.ocaml.org/packages/ocp-indent/), [*ocamlformat*](https://github.com/ocaml-ppx/ocamlformat))
 * **Perl** ([*perltidy*](http://perltidy.sourceforge.net/))
 * **PHP** ([*prettier plugin*](https://github.com/prettier/plugin-php))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
