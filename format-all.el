@@ -151,6 +151,7 @@
     ("Haskell" brittany)
     ("HTML" html-tidy)
     ("HTML+ERB" erb-format)
+    ("HTML+EEX" mix-format)
     ("Java" clang-format)
     ("JavaScript" prettier)
     ("JSON" prettier)
@@ -982,7 +983,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter mix-format
   (:executable "mix")
   (:install (macos "brew install elixir"))
-  (:languages "Elixir")
+  (:languages "Elixir" "HTML+EEX")
   (:features)
   (:format
    (format-all--buffer-hard
@@ -991,6 +992,8 @@ Consult the existing formatters for examples of BODY."
     "format"
     (let ((config-file (format-all--locate-file ".formatter.exs")))
       (when config-file (list "--dot-formatter" config-file)))
+    "--stdin-filename"
+    (buffer-file-name)
     "-")))
 
 (define-format-all-formatter nginxfmt
