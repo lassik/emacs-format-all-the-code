@@ -955,7 +955,7 @@ Consult the existing formatters for examples of BODY."
   (:install (macos "brew install ktlint"))
   (:languages "Kotlin")
   (:features)
-  (:format (format-all--buffer-easy executable "--format" "--stdin")))
+  (:format (format-all--buffer-easy executable "--log-level=none" "--format" "--stdin")))
 
 (define-format-all-formatter latexindent
   (:executable "latexindent")
