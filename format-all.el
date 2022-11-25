@@ -55,13 +55,13 @@
 ;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format, astyle)
-;; - JavaScript/JSON/JSX (prettier, standard, prettierd)
+;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
 ;; - LaTeX (latexindent, auctex)
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, stylua, prettier plugin)
-;; - Markdown (prettier, prettierd)
+;; - Markdown (prettier, prettierd, deno)
 ;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt, alejandra)
 ;; - OCaml (ocp-indent, ocamlformat)
@@ -85,7 +85,7 @@
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier plugin, taplo fmt)
-;; - TypeScript/TSX (prettier, ts-standard, prettierd)
+;; - TypeScript/TSX (prettier, ts-standard, prettierd, deno)
 ;; - V (v fmt)
 ;; - Vue (prettier, prettierd)
 ;; - Verilog (iStyle, Verible)
@@ -773,6 +773,27 @@ Consult the existing formatters for examples of BODY."
     executable
     (when (buffer-file-name)
       (list "--stdin-name" (buffer-file-name))))))
+
+(define-format-all-formatter deno
+  (:executable "deno")
+  (:install (macos "brew install deno"))
+  (:languages
+   "JavaScript" "JSX"
+   "TypeScript" "TSX"
+   "JSON" "JSON5"
+   "Markdown")
+  (:features)
+  (:format
+   (format-all--buffer-easy
+    executable
+    "fmt"
+    "--ext" (let ((pair (assoc language
+                               '(("JavaScript" . "js")
+                                 ("TypeScript" . "ts")
+                                 ("JSON5" . "jsonc")
+                                 ("Markdown" . "md")))))
+              (if pair (cdr pair) (downcase language)))
+    "-")))
 
 (define-format-all-formatter dfmt
   (:executable "dfmt")
