@@ -150,6 +150,7 @@
     ("GraphQL" prettier)
     ("Haskell" brittany)
     ("HTML" html-tidy)
+    ("HTML+EEX" mix-format)
     ("HTML+ERB" erb-format)
     ("Java" clang-format)
     ("JavaScript" prettier)
@@ -1008,7 +1009,7 @@ Consult the existing formatters for examples of BODY."
 (define-format-all-formatter mix-format
   (:executable "mix")
   (:install (macos "brew install elixir"))
-  (:languages "Elixir")
+  (:languages "Elixir" "HTML+EEX")
   (:features)
   (:format
    (format-all--buffer-hard
@@ -1017,7 +1018,12 @@ Consult the existing formatters for examples of BODY."
     "format"
     (let ((config-file (format-all--locate-file ".formatter.exs")))
       (when config-file (list "--dot-formatter" config-file)))
-    "-")))
+    (cond ((buffer-file-name)
+       (list "--stdin-filename" (buffer-file-name) "-"))
+      ((equal language "HTML+EEX")
+       (list "--stdin-filename" "stdin.heex" "-"))
+      (t
+       (list))))))
 
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
