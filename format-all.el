@@ -1019,11 +1019,12 @@ Consult the existing formatters for examples of BODY."
     (let ((config-file (format-all--locate-file ".formatter.exs")))
       (when config-file (list "--dot-formatter" config-file)))
     (cond ((buffer-file-name)
-       (list "--stdin-filename" (buffer-file-name) "-"))
-      ((equal language "HTML+EEX")
-       (list "--stdin-filename" "stdin.heex" "-"))
-      (t
-       (list))))))
+           (list "--stdin-filename" (buffer-file-name)))
+          ((equal language "HTML+EEX")
+           (list "--stdin-filename" "stdin.heex"))
+          (t
+           (list)))
+    "-")))
 
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
