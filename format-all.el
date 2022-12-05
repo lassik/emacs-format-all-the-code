@@ -31,6 +31,7 @@
 ;; - C/C++/Objective-C (clang-format, astyle)
 ;; - C# (clang-format, astyle)
 ;; - Cabal (cabal-fmt)
+;; - Caddyfile (caddy fmt)
 ;; - Clojure/ClojureScript (zprint, node-cljfmt)
 ;; - CMake (cmake-format)
 ;; - Crystal (crystal tool format)
@@ -129,6 +130,7 @@
     ("C#" clang-format)
     ("C++" clang-format)
     ("Cabal Config" cabal-fmt)
+    ("Caddyfile" caddy-fmt)
     ("Clojure" zprint)
     ("CMake" cmake-format)
     ("Crystal" crystal)
@@ -709,6 +711,15 @@ Consult the existing formatters for examples of BODY."
   (:languages "Cabal Config")
   (:features)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter caddy-fmt
+  (:executable "caddy")
+  (:install
+   (macos "brew install caddy")
+   (windows "scoop install caddy"))
+  (:languages "Caddyfile")
+  (:features)
+  (:format (format-all--buffer-easy executable "fmt" "-")))
 
 (define-format-all-formatter clang-format
   (:executable "clang-format")
