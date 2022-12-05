@@ -130,7 +130,6 @@
     ("C#" clang-format)
     ("C++" clang-format)
     ("Cabal Config" cabal-fmt)
-    ("Caddyfile" caddy-fmt)
     ("Clojure" zprint)
     ("CMake" cmake-format)
     ("Crystal" crystal)
@@ -198,6 +197,7 @@
     ("Zig" zig)
 
     ("_Angular" prettier)
+    ("_Caddyfile" caddy-fmt)
     ("_Flow" prettier)
     ("_Gleam" gleam)
     ("_Ledger" ledger-mode)
@@ -717,7 +717,7 @@ Consult the existing formatters for examples of BODY."
   (:install
    (macos "brew install caddy")
    (windows "scoop install caddy"))
-  (:languages "Caddyfile")
+  (:languages "_Caddyfile")
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-")))
 
@@ -1431,6 +1431,7 @@ unofficial languages IDs are prefixed with \"_\"."
            (boundp 'flow-minor-mode)
            (not (null (symbol-value 'flow-minor-mode)))
            "_Flow")
+      (and (equal major-mode 'caddyfile-mode) "_Caddyfile")
       (and (equal major-mode 'gleam-mode) "_Gleam")
       (and (equal major-mode 'ledger-mode) "_Ledger")
       (and (equal major-mode 'nginx-mode) "_Nginx")
