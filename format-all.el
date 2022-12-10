@@ -1484,12 +1484,15 @@ STATUS and ERROR-OUTPUT come from the formatter."
 (defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
   (let ((old-line-number (line-number-at-pos))
-        (old-column (current-column)))
+        (old-column (current-column))
+        (old-window (selected-window))
+        (old-window-start (window-start)))
     (funcall thunk)
     (goto-char (point-min))
     (forward-line (1- old-line-number))
     (let ((line-length (- (point-at-eol) (point-at-bol))))
-      (goto-char (+ (point) (min old-column line-length))))))
+      (goto-char (+ (point) (min old-column line-length))))
+    (set-window-start old-window old-window-start)))
 
 (defun format-all--run-chain (language chain region)
   "Internal function to run a formatter CHAIN on the current buffer.
