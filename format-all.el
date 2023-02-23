@@ -29,7 +29,7 @@
 ;; - Bazel Starlark (buildifier)
 ;; - BibTeX (Emacs)
 ;; - C/C++/Objective-C (clang-format, astyle)
-;; - C# (clang-format, astyle)
+;; - C# (clang-format, astyle, csharpier)
 ;; - Cabal (cabal-fmt)
 ;; - Caddyfile (caddy fmt)
 ;; - Clojure/ClojureScript (zprint, node-cljfmt)
@@ -127,7 +127,7 @@
     ("Bazel" buildifier)
     ("BibTeX" emacs-bibtex)
     ("C" clang-format)
-    ("C#" clang-format)
+    ("C#" csharpier)
     ("C++" clang-format)
     ("Cabal Config" cabal-fmt)
     ("Clojure" zprint)
@@ -767,6 +767,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "Crystal")
   (:features)
   (:format (format-all--buffer-easy executable "tool" "format" "-")))
+
+(define-format-all-formatter csharpier
+  (:executable "dotnet-csharpier")
+  (:install "dotnet install -g csharpier")
+  (:languages "C#")
+  (:features)
+  (:format (format-all--buffer-easy executable "--write-stdout")))
 
 (define-format-all-formatter dart-format
   (:executable "dart")
