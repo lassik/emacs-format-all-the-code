@@ -768,6 +768,13 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "tool" "format" "-")))
 
+(define-format-all-formatter csharpier
+  (:executable "dotnet-csharpier")
+  (:install "dotnet install -g csharpier")
+  (:languages "C#")
+  (:features)
+  (:format (format-all--buffer-easy executable "--write-stdout")))
+
 (define-format-all-formatter dart-format
   (:executable "dart")
   (:install (macos "brew tap dart-lang/dart && brew install dart"))
@@ -830,12 +837,6 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "fmt")))
 
-(define-format-all-formatter csharpier
-  (:executable "dotnet-csharpier")
-  (:install "dotnet install -g csharpier")
-  (:languages "C#")
-  (:features)
-  (:format (format-all--buffer-easy executable "--write-stdout")))
 (define-format-all-formatter efmt
   (:executable "efmt")
   (:install "cargo install efmt")

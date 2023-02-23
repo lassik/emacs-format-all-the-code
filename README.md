@@ -28,7 +28,7 @@ Supported languages
 * **Bazel Starlark** ([*buildifier*](https://github.com/bazelbuild/buildtools/tree/master/buildifier))
 * **BibTeX** (Emacs)
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
-* **C#** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
+* **C#** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/), [*csharpier*](https://github.com/belav/csharpier))
 * **Cabal** ([*cabal-fmt*](https://github.com/phadej/cabal-fmt))
 * **Caddyfile** ([*caddy-fmt*](https://caddyserver.com/docs/command-line#caddy-fmt))
 * **Clojure/ClojureScript** ([*zprint*](https://github.com/kkinnear/zprint), [*node-cljfmt*](https://github.com/snoe/node-cljfmt))
