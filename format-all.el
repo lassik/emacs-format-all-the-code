@@ -127,7 +127,7 @@
     ("Bazel" buildifier)
     ("BibTeX" emacs-bibtex)
     ("C" clang-format)
-    ("C#" dotnet-csharpier)
+    ("C#" csharpier)
     ("C++" clang-format)
     ("Cabal Config" cabal-fmt)
     ("Clojure" zprint)
@@ -830,13 +830,12 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "fmt")))
 
-(define-format-all-formatter dotnet-csharpier
+(define-format-all-formatter csharpier
   (:executable "dotnet-csharpier")
   (:install "dotnet install -g csharpier")
   (:languages "C#")
   (:features)
   (:format (format-all--buffer-easy executable "--write-stdout")))
-
 (define-format-all-formatter efmt
   (:executable "efmt")
   (:install "cargo install efmt")
