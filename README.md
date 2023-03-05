@@ -75,7 +75,7 @@ Supported languages
 * **Racket** ([*raco fmt*](https://docs.racket-lang.org/fmt/))
 * **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
 * **ReScript** ([*rescript format*](https://www.npmjs.com/package/rescript))
-* **Ruby** ([*rubocop*](https://github.com/rubocop/rubocop), [*rufo*](https://github.com/ruby-formatter/rufo), [*standardrb*](https://github.com/testdouble/standard), [*syntax_tree*](https://github.com/ruby-syntax-tree/syntax_tree))
+* **Ruby** ([*rubocop*](https://github.com/rubocop/rubocop), [*rufo*](https://github.com/ruby-formatter/rufo), [*standardrb*](https://github.com/testdouble/standard), [*stree (syntax_tree)*](https://github.com/ruby-syntax-tree/syntax_tree))
 * **Rust** ([*rustfmt*](https://github.com/rust-lang-nursery/rustfmt))
 * **Scala** ([*scalafmt*](https://github.com/scalameta/scalafmt))
 * **Shell script** ([*beautysh*](https://github.com/lovesegfault/beautysh), [*shfmt*](https://github.com/mvdan/sh))

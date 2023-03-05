@@ -75,7 +75,7 @@
 ;; - Racket (raco-fmt)
 ;; - Reason (bsrefmt)
 ;; - ReScript (rescript)
-;; - Ruby (rubocop, rufo, standardrb, syntax-tree)
+;; - Ruby (rubocop, rufo, standardrb, stree)
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
 ;; - Shell script (beautysh, shfmt)
@@ -1355,14 +1355,14 @@ Consult the existing formatters for examples of BODY."
                                   (line-number-at-pos (car region))
                                   (line-number-at-pos (cdr region))))))))
 
-(define-format-all-formatter syntax_tree
+(define-format-all-formatter stree
   (:executable "stree")
   (:install "gem install syntax_tree:'>=2.0.1'")
   (:languages "Ruby")
   (:features)
   (:format
    (format-all--buffer-hard-ruby
-    "syntax_tree" '(0 1) nil '(".streerc")
+    "stree" '(0 1) nil '(".streerc")
     executable
     "format"
     (or (buffer-file-name) (buffer-name)))))
