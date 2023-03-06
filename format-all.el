@@ -75,7 +75,7 @@
 ;; - Racket (raco-fmt)
 ;; - Reason (bsrefmt)
 ;; - ReScript (rescript)
-;; - Ruby (rubocop, rufo, standardrb)
+;; - Ruby (rubocop, rufo, standardrb, stree)
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
 ;; - Shell script (beautysh, shfmt)
@@ -1354,6 +1354,18 @@ Consult the existing formatters for examples of BODY."
       (list "--linerange" (format "%d,%d"
                                   (line-number-at-pos (car region))
                                   (line-number-at-pos (cdr region))))))))
+
+(define-format-all-formatter stree
+  (:executable "stree")
+  (:install "gem install syntax_tree:'>=2.0.1'")
+  (:languages "Ruby")
+  (:features)
+  (:format
+   (format-all--buffer-hard-ruby
+    "stree" '(0 1) nil '(".streerc")
+    executable
+    "format"
+    )))
 
 (define-format-all-formatter taplo-fmt
   (:executable "taplo")
