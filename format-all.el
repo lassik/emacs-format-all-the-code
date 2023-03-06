@@ -1365,7 +1365,7 @@ Consult the existing formatters for examples of BODY."
     "stree" '(0 1) nil '(".streerc")
     executable
     "format"
-    (or (buffer-file-name) (buffer-name)))))
+    )))
 
 (define-format-all-formatter taplo-fmt
   (:executable "taplo")
