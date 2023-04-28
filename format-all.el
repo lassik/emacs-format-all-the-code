@@ -1512,6 +1512,14 @@ STATUS and ERROR-OUTPUT come from the formatter."
       (goto-char (+ (point) (min old-column line-length))))
     (set-window-start old-window old-window-start)))
 
+(defun format-all--save-mark-ring (thunk)
+  "Internal helper function to run THUNK and restore the mark ring."
+  (let ((old-mark-ring (mapcar #'marker-position mark-ring))
+        (old-mark (marker-position (mark-marker))))
+    (funcall thunk)
+    (set-marker (mark-marker) old-mark (current-buffer))
+    (setq mark-ring (mapcar #'copy-marker old-mark-ring))))
+
 (defun format-all--run-chain (language chain region)
   "Internal function to run a formatter CHAIN on the current buffer.
 
@@ -1533,45 +1541,47 @@ entire buffer."
       (when unsupported
         (error "The format-all-region command is not supported for %s"
                (string-join (mapcar #'symbol-name unsupported) ", "))))
-    (format-all--save-line-number
+    (format-all--save-mark-ring
      (lambda ()
-       (cl-loop
-        (unless (and chain-tail (= 0 (length error-output)))
-          (cl-return))
-        (let* ((formatter (car chain-tail))
-               (f-name (car formatter))
-               (f-args (cdr formatter))
-               (f-function (gethash f-name format-all--format-table))
-               (f-executable (format-all--formatter-executable f-name)))
-          (when format-all-debug
-            (message
-             "Format-All: Formatting %s as %s using %S%s"
-             (buffer-name) language f-name
-             (with-temp-buffer
-               (dolist (arg f-args) (insert " " (shell-quote-argument arg)))
-               (buffer-string))))
-          (cl-destructuring-bind (f-output f-error-output)
-              (let ((format-all--user-args f-args))
-                (funcall f-function f-executable language region))
-            (let ((f-status :already-formatted))
-              (cond ((null f-output)
-                     (setq error-output f-error-output)
-                     (setq f-status :error))
-                    ((not (equal f-output t))
-                     (setq reformatted-by
-                           (append reformatted-by (list f-name)))
-                     (let ((inhibit-read-only t))
-                       (erase-buffer)
-                       (insert f-output))
-                     (setq f-status :reformatted)))
-              (run-hook-with-args 'format-all-after-format-functions
-                                  f-name f-status)
-              (format-all--update-errors-buffer f-status f-error-output))))
-        (setq chain-tail (cdr chain-tail)))
-       (message "%s"
-                (cond ((not (= 0 (length error-output))) "Formatting error")
-                      ((not reformatted-by) "Already formatted")
-                      (t "Reformatted!")))))))
+       (format-all--save-line-number
+        (lambda ()
+          (cl-loop
+           (unless (and chain-tail (= 0 (length error-output)))
+             (cl-return))
+           (let* ((formatter (car chain-tail))
+                  (f-name (car formatter))
+                  (f-args (cdr formatter))
+                  (f-function (gethash f-name format-all--format-table))
+                  (f-executable (format-all--formatter-executable f-name)))
+             (when format-all-debug
+               (message
+                "Format-All: Formatting %s as %s using %S%s"
+                (buffer-name) language f-name
+                (with-temp-buffer
+                  (dolist (arg f-args) (insert " " (shell-quote-argument arg)))
+                  (buffer-string))))
+             (cl-destructuring-bind (f-output f-error-output)
+                 (let ((format-all--user-args f-args))
+                   (funcall f-function f-executable language region))
+               (let ((f-status :already-formatted))
+                 (cond ((null f-output)
+                        (setq error-output f-error-output)
+                        (setq f-status :error))
+                       ((not (equal f-output t))
+                        (setq reformatted-by
+                              (append reformatted-by (list f-name)))
+                        (let ((inhibit-read-only t))
+                          (erase-buffer)
+                          (insert f-output))
+                        (setq f-status :reformatted)))
+                 (run-hook-with-args 'format-all-after-format-functions
+                                     f-name f-status)
+                 (format-all--update-errors-buffer f-status f-error-output))))
+           (setq chain-tail (cdr chain-tail)))
+          (message "%s"
+                   (cond ((not (= 0 (length error-output))) "Formatting error")
+                         ((not reformatted-by) "Already formatted")
+                         (t "Reformatted!")))))))))
 
 (defun format-all--get-default-chain (language)
   "Internal function to get the default formatter chain for LANGUAGE."
