@@ -25,6 +25,7 @@ Supported languages
 * **Assembly** ([*asmfmt*](https://github.com/klauspost/asmfmt))
 * **ATS** ([*atsfmt*](https://hackage.haskell.org/package/ats-format))
 * **Awk** ([*gawk*](https://www.gnu.org/software/gawk/))
+* **Beancount** ([*beancount*](https://beancount.github.io/))
 * **Bazel Starlark** ([*buildifier*](https://github.com/bazelbuild/buildtools/tree/master/buildifier))
 * **BibTeX** (Emacs)
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
