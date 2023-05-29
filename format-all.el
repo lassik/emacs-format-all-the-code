@@ -27,6 +27,7 @@
 ;; - ATS (atsfmt)
 ;; - Awk (gawk)
 ;; - Bazel Starlark (buildifier)
+;; - Beancount (bean-format)
 ;; - BibTeX (Emacs)
 ;; - C/C++/Objective-C (clang-format, astyle)
 ;; - C# (clang-format, astyle, csharpier)
@@ -197,6 +198,7 @@
     ("Zig" zig)
 
     ("_Angular" prettier)
+    ("_Beancount" bean-format)
     ("_Caddyfile" caddy-fmt)
     ("_Flow" prettier)
     ("_Gleam" gleam)
@@ -651,6 +653,13 @@ Consult the existing formatters for examples of BODY."
   (:executable "atsfmt")
   (:install "cabal new-install ats-format --happy-options='-gcsa' -O2")
   (:languages "ATS")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter bean-format
+  (:executable "bean-format")
+  (:install "pip install beancount")
+  (:languages "_Beancount")
   (:features)
   (:format (format-all--buffer-easy executable)))
 
@@ -1449,6 +1458,7 @@ unofficial languages IDs are prefixed with \"_\"."
            (boundp 'flow-minor-mode)
            (not (null (symbol-value 'flow-minor-mode)))
            "_Flow")
+      (and (equal major-mode 'beancount-mode) "_Beancount")
       (and (equal major-mode 'caddyfile-mode) "_Caddyfile")
       (and (equal major-mode 'gleam-mode) "_Gleam")
       (and (equal major-mode 'ledger-mode) "_Ledger")
