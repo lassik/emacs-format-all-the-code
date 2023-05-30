@@ -26,6 +26,7 @@ Supported languages
 * **ATS** ([*atsfmt*](https://hackage.haskell.org/package/ats-format))
 * **Awk** ([*gawk*](https://www.gnu.org/software/gawk/))
 * **Bazel Starlark** ([*buildifier*](https://github.com/bazelbuild/buildtools/tree/master/buildifier))
+* **Beancount** ([*bean-format*](https://beancount.github.io/))
 * **BibTeX** (Emacs)
 * **C/C++/Objective-C** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
 * **C#** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/), [*csharpier*](https://github.com/belav/csharpier))
