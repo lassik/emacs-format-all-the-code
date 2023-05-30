@@ -656,13 +656,6 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable)))
 
-(define-format-all-formatter bean-format
-  (:executable "bean-format")
-  (:install "pip install beancount")
-  (:languages "_Beancount")
-  (:features)
-  (:format (format-all--buffer-easy executable)))
-
 (define-format-all-formatter auctex
   (:executable)
   (:install)
@@ -673,6 +666,13 @@ Consult the existing formatters for examples of BODY."
             (lambda ()
               (let ((f (symbol-function 'LaTeX-fill-buffer)))
                 (when f (funcall f nil)))))))
+
+(define-format-all-formatter bean-format
+  (:executable "bean-format")
+  (:install "pip install beancount")
+  (:languages "_Beancount")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter beautysh
   (:executable "beautysh")
