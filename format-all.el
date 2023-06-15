@@ -1654,6 +1654,18 @@ If REGION is non-nil, it is a (START . END) pair passed to the formatter."
     (format-all--run-chain language chain region)))
 
 ;;;###autoload
+(defun format-all-region-or-buffer (&optional prompt)
+  "Auto-format the source code in the current region or buffer.
+In Transient Mark mode when the mark is active, call `format-all-region'.
+Otherwise, call `format-all-buffer'.
+
+The PROMPT argument works as for `format-all-buffer'."
+  (interactive (list (if current-prefix-arg 'always t)))
+  (if (use-region-p)
+      (format-all-region (region-beginning) (region-end) prompt)
+    (format-all-buffer prompt)))
+
+;;;###autoload
 (defun format-all-buffer (&optional prompt)
   "Auto-format the source code in the current buffer.
 
