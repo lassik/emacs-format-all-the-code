@@ -590,6 +590,7 @@ FORMATTER is a symbol naming the formatter.  The name of the
 command used to run the formatter is usually a good choice.
 
 Consult the existing formatters for examples of BODY."
+  (declare (indent 1))
   (let (executable install languages features format)
     (cl-assert
      (equal (mapcar 'car body)
