@@ -1108,7 +1108,7 @@ Consult the existing formatters for examples of BODY."
   (:install "cpan install Perl::Tidy")
   (:languages "Perl")
   (:features)
-  (:format (format-all--buffer-easy executable)))
+  (:format (format-all--buffer-easy executable "--standard-error-output")))
 
 (define-format-all-formatter pgformatter
   (:executable "pg_format")
