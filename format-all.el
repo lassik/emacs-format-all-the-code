@@ -389,7 +389,7 @@ the rules for an entire source tree can be given in one file.")
                                     (buffer-file-name)))
                     extensions)))))
 
-(defun format-all--buffer-thunk (thunk)
+(defun format-all--buffer-thunk (thunk regionp)
   "Internal helper function to implement formatters.
 
 THUNK is a function that implements a particular formatter.  It
@@ -400,7 +400,8 @@ code output to the temp buffer.  It should return (ERRORP
 ERROR-OUTPUT).  ERRORP is a boolean indicating whether the formatter
 caused an error and hence the contents of the temp buffer should
 be discarded.  ERROR-OUTPUT is a string containing all error/warning
-output from the formatter.
+output from the formatter.  REGIONP is a boolean indicating whether
+we should format just the active region.
 
 Note that in some cases we can use the output of the formatter
 even if it produced warnings.  Not all warnings are errors."
@@ -408,7 +409,9 @@ even if it produced warnings.  Not all warnings are errors."
     (save-restriction
       (widen)
       (let ((inbuf (current-buffer))
-            (input (buffer-string)))
+            (input (if regionp
+                       (buffer-substring (region-beginning) (region-end))
+                     (buffer-string))))
         (inheritenv
          (with-temp-buffer
            (cl-destructuring-bind (errorp error-output) (funcall thunk input)
@@ -419,7 +422,7 @@ even if it produced warnings.  Not all warnings are errors."
                     (output (cond (errorp nil)
                                   (no-chg t)
                                   (t (buffer-string)))))
-               (list output error-output)))))))))
+               (list output error-output regionp)))))))))
 
 (defun format-all--buffer-native (mode &rest funcs)
   "Internal helper function to implement formatters.
@@ -433,7 +436,8 @@ functions to avoid warnings from the Emacs byte compiler."
      (insert input)
      (mapc #'funcall funcs)
      (format-all--fix-trailing-whitespace)
-     (list nil ""))))
+     (list nil ""))
+   nil))
 
 (defun format-all--locate-file (filename)
   "Internal helper to locate dominating copy of FILENAME for current buffer."
@@ -460,7 +464,7 @@ for using `locate-dominating-file'.  Details in documentation for
         default-directory)))
 
 (defun format-all--buffer-hard
-    (ok-statuses error-regexp root-files executable &rest args)
+    (ok-statuses error-regexp root-files region executable &rest args)
   "Internal helper function to implement formatters.
 
 Runs the external program EXECUTABLE.  The program shall read
@@ -484,7 +488,10 @@ will be the deepest directory (starting from the file being
 formatted) containing one of these files.  If ROOT-FILES is nil,
 or none of ROOT-FILES are found in any parent directories, the
 working directory will be the one where the formatted file is.
-ROOT-FILES is ignored for buffers that are not visiting a file."
+ROOT-FILES is ignored for buffers that are not visiting a file.
+
+If REGION is given, it must be a (START . END) cons cell, and
+only the contents of that region will be sent to the formatter."
   (let ((ok-statuses (or ok-statuses '(0)))
         (args (append format-all--user-args (format-all--flatten-once args)))
         (default-directory (format-all--locate-default-directory root-files)))
@@ -506,7 +513,8 @@ ROOT-FILES is ignored for buffers that are not visiting a file."
                           (and error-regexp
                                (save-match-data
                                  (string-match error-regexp error-output))))))
-         (list errorp error-output))))))
+         (list errorp error-output)))
+     (consp region))))
 
 (defun format-all--buffer-easy (executable &rest args)
   "Internal helper function to implement formatters.
@@ -518,7 +526,26 @@ on success/failure.
 
 If ARGS are given, those are arguments to EXECUTABLE.  They don't
 need to be shell-quoted."
-  (apply 'format-all--buffer-hard nil nil nil executable args))
+  (apply 'format-all--buffer-hard nil nil nil nil executable args))
+
+(defun format-all--region-easy (region executable &rest args)
+  "Internal helper function to implement formatters.
+
+Runs the external program EXECUTABLE, passing in the code in
+REGION to the formatter.  REGION is a (START . END) pair.
+
+The program shall read unformatted region code from stdin, write
+its formatted equivalent to stdout, write errors/warnings to
+stderr, and exit zero/non-zero on success/failure.
+
+Careful: this function only passes a region of code to the
+formatter's stdin, not the entire source file.  To use this
+function correctly, the formatter must be able to handle such
+partial source code input (not all formatters do).
+
+If ARGS are given, those are arguments to EXECUTABLE.  They don't
+need to be shell-quoted."
+  (apply 'format-all--buffer-hard nil nil nil region executable args))
 
 (defun format-all--ruby-gem-bundled-p (gem-name)
   "Internal helper function to check for a Ruby gem.
@@ -560,7 +587,7 @@ see `format-all--buffer-hard'."
              (list executable))
            (format-all--flatten-once args))))
     (format-all--buffer-hard
-     ok-statuses error-regexp root-files
+     ok-statuses error-regexp root-files nil
      (car command-args)
      (cdr command-args))))
 
@@ -830,7 +857,7 @@ Consult the existing formatters for examples of BODY."
   (:languages "D")
   (:features)
   (:format
-   (format-all--buffer-hard nil (regexp-quote "[error]") nil executable)))
+   (format-all--buffer-hard nil (regexp-quote "[error]") nil nil executable)))
 
 (define-format-all-formatter dhall
   (:executable "dhall")
@@ -860,10 +887,10 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (cl-destructuring-bind (output error-output)
-       (format-all--buffer-hard nil nil '("elm.json" "elm-package.json")
+       (format-all--buffer-hard nil nil '("elm.json" "elm-package.json") nil
                                 executable "--yes" "--stdin")
      (let ((error-output (format-all--remove-ansi-color error-output)))
-       (list output error-output)))))
+       (list output error-output nil)))))
 
 (define-format-all-formatter emacs-bibtex
   (:executable)
@@ -976,7 +1003,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-hard
-    '(0 1) nil nil
+    '(0 1) nil nil nil
     executable
     "-q"
     "--tidy-mark" "no"
@@ -1040,7 +1067,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-hard
-    nil nil '("mix.exs")
+    nil nil '("mix.exs") nil
     executable
     "format"
     (let ((config-file (format-all--locate-file ".formatter.exs")))
@@ -1107,8 +1134,8 @@ Consult the existing formatters for examples of BODY."
   (:executable "perltidy")
   (:install "cpan install Perl::Tidy")
   (:languages "Perl")
-  (:features)
-  (:format (format-all--buffer-easy executable "--standard-error-output")))
+  (:features region)
+  (:format (format-all--region-easy region executable "--standard-error-output")))
 
 (define-format-all-formatter pgformatter
   (:executable "pg_format")
@@ -1213,7 +1240,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-hard-ruby
-    "rubocop" '(0 1) nil nil
+    "rubocop" '(0 1) nil nil nil
     executable
     "--auto-correct"
     "--format" "quiet"
@@ -1227,7 +1254,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-hard-ruby
-    "rufo" nil nil nil
+    "rufo" nil nil nil nil
     executable
     "--simple-exit"
     (when (buffer-file-name)
@@ -1303,7 +1330,7 @@ Consult the existing formatters for examples of BODY."
    ;; such. To catch only syntax errors, we need to look specifically
    ;; for the text "Parsing error:".
    (format-all--buffer-hard
-    '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" nil
+    '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" nil nil
     executable "--fix" "--stdin")))
 
 (define-format-all-formatter standardrb
@@ -1313,7 +1340,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-hard-ruby
-    "standard" '(0 1) nil nil
+    "standard" '(0 1) nil nil nil
     executable
     "--stderr"
     "--fix"
@@ -1371,7 +1398,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-hard-ruby
-    "stree" '(0 1) nil '(".streerc")
+    "stree" '(0 1) nil '(".streerc") nil
     executable
     "format")))
 
@@ -1401,7 +1428,7 @@ Consult the existing formatters for examples of BODY."
    ;; such. To catch only syntax errors, we need to look specifically
    ;; for the text "Parsing error:".
    (format-all--buffer-hard
-    '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" '("tsconfig.json")
+    '(0 1) ".*?:.*?:[0-9]+:[0-9]+: Parsing error:" '("tsconfig.json") nil
     executable "--fix" "--stdin"
     (when (buffer-file-name)
       (list "--stdin-filename" (buffer-file-name))))))
@@ -1570,7 +1597,7 @@ entire buffer."
                 (with-temp-buffer
                   (dolist (arg f-args) (insert " " (shell-quote-argument arg)))
                   (buffer-string))))
-             (cl-destructuring-bind (f-output f-error-output)
+             (cl-destructuring-bind (f-output f-error-output regionp)
                  (let ((format-all--user-args f-args))
                    (funcall f-function f-executable language region))
                (let ((f-status :already-formatted))
@@ -1581,7 +1608,9 @@ entire buffer."
                         (setq reformatted-by
                               (append reformatted-by (list f-name)))
                         (let ((inhibit-read-only t))
-                          (erase-buffer)
+                          (if regionp
+                              (delete-active-region)
+                            (erase-buffer))
                           (insert f-output))
                         (setq f-status :reformatted)))
                  (run-hook-with-args 'format-all-after-format-functions
