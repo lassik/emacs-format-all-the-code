@@ -1512,14 +1512,20 @@ STATUS and ERROR-OUTPUT come from the formatter."
 (defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
   (let ((old-line-number (line-number-at-pos))
-        (old-column (current-column))
+        ;; NOTE: Not the same as what's returned by `current-column'.
+        ;; Column refers to the width of the character, and point
+        ;; refers to actual character.  For example, if you go over a
+        ;; tab character, point will increase by 1, but the column
+        ;; with increase by 8 (assuming the width of tab is set to 8).
+        (old-line-position (- (point) (line-beginning-position)))
+
         (old-window (selected-window))
         (old-window-start (window-start)))
     (funcall thunk)
     (goto-char (point-min))
     (forward-line (1- old-line-number))
-    (let ((line-length (- (point-at-eol) (point-at-bol))))
-      (goto-char (+ (point) (min old-column line-length))))
+    (let ((line-length (- (line-end-position) (line-beginning-position))))
+      (goto-char (+ (point) (min old-line-position line-length))))
     (set-window-start old-window old-window-start)))
 
 (defun format-all--save-mark-ring (thunk)
