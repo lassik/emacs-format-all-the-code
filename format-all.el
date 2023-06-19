@@ -525,12 +525,13 @@ need to be shell-quoted."
 
 Returns t if GEM-NAME is listed in the current project's
 Gemfile.lock, nil otherwise."
-  (let* ((lockfile "Gemfile.lock")
-         (file (buffer-file-name))
-         (dir (and file (locate-dominating-file file lockfile))))
-    (and dir
+  (let* ((file (buffer-file-name))
+         (lockfile "Gemfile.lock")
+         (lockdir (and file (locate-dominating-file file lockfile)))
+         (lockfile (and lockdir (expand-file-name lockfile lockdir))))
+    (and lockfile
          (with-temp-buffer
-           (insert-file-contents (expand-file-name lockfile dir))
+           (insert-file-contents lockfile)
            (re-search-forward (format "^    %s " (regexp-quote gem-name))
                               nil t))
          t)))
