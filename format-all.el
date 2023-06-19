@@ -1488,14 +1488,9 @@ unofficial languages IDs are prefixed with \"_\"."
 
 ERROR-OUTPUT come from the formatter.  SHOW-ERRORS-P determines
 whether or not to display the errors buffer."
-  (save-selected-window
-    (with-current-buffer (get-buffer-create "*format-all-errors*")
-      (erase-buffer)
-      (insert error-output)
-      (if show-errors-p
-          (display-buffer (current-buffer))
-        (let ((error-window (get-buffer-window (current-buffer))))
-          (when error-window (quit-window nil error-window)))))))
+  (when show-errors-p
+    (with-help-window "*format-all-errors*"
+      (princ error-output))))
 
 (defun format-all--update-errors-buffer (status error-output)
   "Internal helper function to update *format-all-errors*.
