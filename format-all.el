@@ -526,7 +526,8 @@ need to be shell-quoted."
 Returns t if GEM-NAME is listed in the current project's
 Gemfile.lock, nil otherwise."
   (let* ((lockfile "Gemfile.lock")
-         (dir (locate-dominating-file (buffer-file-name) lockfile)))
+         (file (buffer-file-name))
+         (dir (and file (locate-dominating-file file lockfile))))
     (and dir
          (with-temp-buffer
            (insert-file-contents (expand-file-name lockfile dir))
