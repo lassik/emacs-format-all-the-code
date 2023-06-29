@@ -1485,14 +1485,16 @@ unofficial languages IDs are prefixed with \"_\"."
                          executable
                          (gethash formatter format-all--install-table))))))))
 
-(defun format-all--show-errors-buffer (error-output show-errors-p)
-  "Internal shorthand function to update and show error output.
-
-ERROR-OUTPUT come from the formatter.  SHOW-ERRORS-P determines
-whether or not to display the errors buffer."
-  (when show-errors-p
-    (with-help-window "*format-all-errors*"
-      (princ error-output))))
+(defun format-all--hide-errors-buffer ()
+  "Internal helper function to update *format-all-errors*."
+  (let ((buffer (get-buffer "*format-all-errors*")))
+    (when buffer
+      (with-current-buffer buffer
+        (let ((inhibit-read-only t))
+          (erase-buffer)))
+      (let ((window (get-buffer-window buffer)))
+        (when window
+          (quit-window nil window))))))
 
 (defun format-all--update-errors-buffer (status error-output)
   "Internal helper function to update *format-all-errors*.
@@ -1505,7 +1507,10 @@ STATUS and ERROR-OUTPUT come from the formatter."
                           ((always) t)
                           ((warnings) (or has-errors-p has-warnings-p))
                           ((errors) has-errors-p))))
-    (format-all--show-errors-buffer error-output show-errors-p)))
+    (if show-errors-p
+        (with-help-window "*format-all-errors*"
+          (princ error-output))
+      (format-all--hide-errors-buffer))))
 
 (defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
