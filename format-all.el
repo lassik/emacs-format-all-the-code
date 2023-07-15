@@ -115,12 +115,21 @@
 
 (defgroup format-all nil
   "Lets you auto-format source code."
+  :group 'tools)
+
+(defgroup format-all-verible nil
+  "Customize Verible arguments."
   :group 'format-all)
 
 (defcustom format-all-debug nil
   "When non-nil, troubleshooting info is written into the *Messages* buffer."
   :type 'boolean
   :group 'format-all)
+
+(defcustom format-all-verible-config-file ".verible-format"
+  "Verible config file"
+  :type 'string
+  :group 'format-all-verible)
 
 (defcustom format-all-default-formatters
   '(("Assembly" asmfmt)
@@ -1414,7 +1423,8 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "Verilog" "SystemVerilog")
   (:features)
-  (:format (format-all--buffer-easy executable "-")))
+  (:format (format-all--buffer-easy executable (let ((veriblerc (format-all--locate-file format-all-verible-config-file)))
+                                                 (when veriblerc (concat "--flagfile=" veriblerc))) "-")))
 
 (define-format-all-formatter v-fmt
   (:executable "v")
