@@ -1110,8 +1110,15 @@ Consult the existing formatters for examples of BODY."
   (:executable "perltidy")
   (:install "cpan install Perl::Tidy")
   (:languages "Perl")
-  (:features)
-  (:format (format-all--buffer-easy executable "--standard-error-output")))
+  (:features region)
+  (:format
+   (format-all--buffer-easy
+    executable
+    "--standard-error-output"
+    (when region
+      (format "--line-range-tidy=%d:%d"
+              (line-number-at-pos (car region))
+              (line-number-at-pos (cdr region)))))))
 
 (define-format-all-formatter pgformatter
   (:executable "pg_format")
