@@ -64,6 +64,7 @@
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, stylua, prettier plugin)
 ;; - Markdown (prettier, prettierd, deno)
+;; - Meson (muon fmt)
 ;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt, alejandra)
 ;; - OCaml (ocp-indent, ocamlformat)
@@ -166,6 +167,7 @@
     ("Literate Haskell" brittany)
     ("Lua" lua-fmt)
     ("Markdown" prettier)
+    ("Meson" muon-fmt)
     ("Nix" nixpkgs-fmt)
     ("Objective-C" clang-format)
     ("OCaml" ocp-indent)
@@ -1055,6 +1057,13 @@ Consult the existing formatters for examples of BODY."
           (t
            (list)))
     "-")))
+
+(define-format-all-formatter muon-fmt
+  (:executable "muon")
+  (:install (macos "brew install muon"))
+  (:languages "Meson")
+  (:features)
+  (:format (format-all--buffer-easy executable "fmt" "-")))
 
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
