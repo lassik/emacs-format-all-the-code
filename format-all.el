@@ -1329,6 +1329,17 @@ Consult the existing formatters for examples of BODY."
     "--fix"
     "--stdin" (or (buffer-file-name) (buffer-name)))))
 
+(define-format-all-formatter stree
+  (:executable "stree")
+  (:install "gem install syntax_tree:'>=2.0.1'")
+  (:languages "Ruby")
+  (:features)
+  (:format
+   (format-all--buffer-hard-ruby
+    "stree" '(0 1) nil '(".streerc")
+    executable
+    "format")))
+
 (define-format-all-formatter styler
   (:executable "Rscript")
   (:install "Rscript -e \"install.packages('styler')\"")
@@ -1374,17 +1385,6 @@ Consult the existing formatters for examples of BODY."
                                   (line-number-at-pos (car region))
                                   (line-number-at-pos (cdr region))))))))
 
-(define-format-all-formatter stree
-  (:executable "stree")
-  (:install "gem install syntax_tree:'>=2.0.1'")
-  (:languages "Ruby")
-  (:features)
-  (:format
-   (format-all--buffer-hard-ruby
-    "stree" '(0 1) nil '(".streerc")
-    executable
-    "format")))
-
 (define-format-all-formatter taplo-fmt
   (:executable "taplo")
   (:install "npm install --global @taplo/cli")
@@ -1416,19 +1416,19 @@ Consult the existing formatters for examples of BODY."
     (when (buffer-file-name)
       (list "--stdin-filename" (buffer-file-name))))))
 
-(define-format-all-formatter verible
-  (:executable "verible-verilog-format")
-  (:install)
-  (:languages "Verilog" "SystemVerilog")
-  (:features)
-  (:format (format-all--buffer-easy executable "-")))
-
 (define-format-all-formatter v-fmt
   (:executable "v")
   (:install)
   (:languages "V")
   (:features)
   (:format (format-all--buffer-easy executable "fmt")))
+
+(define-format-all-formatter verible
+  (:executable "verible-verilog-format")
+  (:install)
+  (:languages "Verilog" "SystemVerilog")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter yapf
   (:executable "yapf")
