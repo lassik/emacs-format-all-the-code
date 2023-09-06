@@ -1266,7 +1266,7 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format
    (format-all--buffer-easy
-    executable "--stdin" "--non-interactive" "--quiet")))
+    executable "--stdin" "--non-interactive" "--quiet" "--stdout")))
 
 (define-format-all-formatter shfmt
   (:executable "shfmt")
