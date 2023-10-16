@@ -71,6 +71,7 @@
 ;; - Perl (perltidy)
 ;; - PHP (prettier plugin)
 ;; - Protocol Buffers (clang-format)
+;; - Puppet (puppet-lint)
 ;; - PureScript (purty, purs-tidy)
 ;; - Python (black, yapf, isort)
 ;; - R (styler)
@@ -174,6 +175,7 @@
     ("Perl" perltidy)
     ("PHP" prettier)
     ("Protocol Buffer" clang-format)
+    ("Puppet" puppet-lint)
     ("PureScript" purty)
     ("Python" black)
     ("R" styler)
@@ -1198,6 +1200,12 @@ Consult the existing formatters for examples of BODY."
   (:languages "PureScript")
   (:features)
   (:format (format-all--buffer-easy executable "format")))
+
+(define-format-all-formatter puppet-lint
+  (:executable "puppet-lint-wrapper")
+  (:install "gem install --global puppet-lint")
+  (:languages "Puppet")
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter purty
   (:executable "purty")
