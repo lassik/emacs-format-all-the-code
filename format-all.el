@@ -55,6 +55,7 @@
 ;; - Go (gofmt, goimports)
 ;; - GraphQL (prettier, prettierd)
 ;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
+;; - HCL (hclfmt)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Java (clang-format, astyle)
 ;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno)
@@ -152,6 +153,7 @@
     ("Go" gofmt)
     ("GraphQL" prettier)
     ("Haskell" brittany)
+    ("HCL" hclfmt)
     ("HTML" html-tidy)
     ("HTML+EEX" mix-format)
     ("HTML+ERB" erb-format)
@@ -962,6 +964,13 @@ Consult the existing formatters for examples of BODY."
   (:executable "goimports")
   (:install "go get golang.org/x/tools/cmd/goimports")
   (:languages "Go")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter hclfmt
+  (:executable "hclfmt")
+  (:install "go install github.com/hashicorp/hcl/v2/cmd/hclfmt@latest")
+  (:languages "HCL")
   (:features)
   (:format (format-all--buffer-easy executable)))
 
