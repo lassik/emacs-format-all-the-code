@@ -55,6 +55,7 @@ Supported languages
 * **GraphQL** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany), [*fourmolu*](https://github.com/fourmolu/fourmolu), [*hindent*](https://github.com/commercialhaskell/hindent), [*ormolu*](https://github.com/tweag/ormolu), [*stylish-haskell*](https://github.com/jaspervdj/stylish-haskell))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
+* **HCL** ([*hclfmt*](https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt))
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/), [*prettierd*](https://github.com/fsouza/prettierd), [*deno*](https://deno.land/manual/tools/formatter))
 * **Jsonnet** ([*jsonnetfmt*](https://jsonnet.org/))
