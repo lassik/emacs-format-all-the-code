@@ -143,6 +143,13 @@ Additionally, many of the external formatters support configuration
 files in the source code directory to control their formatting. Please
 see the documentation for each formatter.
 
+Examples
+--------
+
+    (setq format-all-formatters
+          '((\"Shell\" (shfmt \"-i\" \"4\" \"-ci\"))))
+
+
 How to add new languages
 ------------------------
 
