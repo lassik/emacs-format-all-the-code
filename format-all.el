@@ -1288,7 +1288,13 @@ Consult the existing formatters for examples of BODY."
    (format-all--buffer-easy
     executable
     (if (buffer-file-name)
-        (list "-filename" (buffer-file-name))
+        (list "-filename"
+	      (cl-case (and (eql major-mode 'sh-mode)
+                            (boundp 'sh-shell)
+                            (symbol-value 'sh-shell))
+                (bash (concatenate 'string buffer-file-name ".bash"))
+                (mksh (concatenate 'string buffer-file-name ".mksh"))
+                (t buffer-file-name)))
       (list "-ln" (cl-case (and (eql major-mode 'sh-mode)
                                 (boundp 'sh-shell)
                                 (symbol-value 'sh-shell))
