@@ -57,6 +57,7 @@
 ;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
 ;; - HCL (hclfmt)
 ;; - HTML/XHTML/XML (tidy)
+;; - Hy (Emacs)
 ;; - Java (clang-format, astyle)
 ;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno)
 ;; - Jsonnet (jsonnetfmt)
@@ -157,6 +158,7 @@
     ("HTML" html-tidy)
     ("HTML+EEX" mix-format)
     ("HTML+ERB" erb-format)
+    ("Hy" emacs-hy)
     ("Java" clang-format)
     ("JavaScript" prettier)
     ("JSON" prettier)
@@ -894,6 +896,18 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-native
     'emacs-lisp-mode
+    (if region
+        (lambda () (indent-region (car region) (cdr region)))
+      (lambda () (indent-region (point-min) (point-max)))))))
+
+(define-format-all-formatter emacs-hy
+  (:executable)
+  (:install)
+  (:languages "Hy")
+  (:features region)
+  (:format
+   (format-all--buffer-native
+    'hy-mode
     (if region
         (lambda () (indent-region (car region) (cdr region)))
       (lambda () (indent-region (point-min) (point-max)))))))
