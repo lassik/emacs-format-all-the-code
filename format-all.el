@@ -888,18 +888,6 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-native 'bibtex-mode 'bibtex-sort-buffer)))
 
-(define-format-all-formatter emacs-lisp
-  (:executable)
-  (:install)
-  (:languages "Emacs Lisp")
-  (:features region)
-  (:format
-   (format-all--buffer-native
-    'emacs-lisp-mode
-    (if region
-        (lambda () (indent-region (car region) (cdr region)))
-      (lambda () (indent-region (point-min) (point-max)))))))
-
 (define-format-all-formatter emacs-hy
   (:executable)
   (:install)
@@ -908,6 +896,18 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-native
     'hy-mode
+    (if region
+        (lambda () (indent-region (car region) (cdr region)))
+      (lambda () (indent-region (point-min) (point-max)))))))
+
+(define-format-all-formatter emacs-lisp
+  (:executable)
+  (:install)
+  (:languages "Emacs Lisp")
+  (:features region)
+  (:format
+   (format-all--buffer-native
+    'emacs-lisp-mode
     (if region
         (lambda () (indent-region (car region) (cdr region)))
       (lambda () (indent-region (point-min) (point-max)))))))
