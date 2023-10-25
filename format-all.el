@@ -1294,6 +1294,7 @@ Consult the existing formatters for examples of BODY."
                             (symbol-value 'sh-shell))
                 (bash (concat buffer-file-name ".bash"))
                 (mksh (concat buffer-file-name ".mksh"))
+                (sh (concat buffer-file-name ".sh"))
                 (t buffer-file-name)))
       (list "-ln" (cl-case (and (eql major-mode 'sh-mode)
                                 (boundp 'sh-shell)
