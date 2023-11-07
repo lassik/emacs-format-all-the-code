@@ -74,7 +74,7 @@ Supported languages
 * **PHP** ([*prettier plugin*](https://github.com/prettier/plugin-php))
 * **Protocol Buffers** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **PureScript** ([*purty*](https://gitlab.com/joneshf/purty), [*purescript-tidy*](https://github.com/natefaubion/purescript-tidy))
-* **Python** ([*black*](https://github.com/ambv/black), [*isort*](https://github.com/PyCQA/isort)), [*ruff format*](https://docs.astral.sh/ruff/formatter/), [*yapf*](https://github.com/google/yapf)
+* **Python** ([*black*](https://github.com/ambv/black), [*isort*](https://github.com/PyCQA/isort), [*ruff format*](https://docs.astral.sh/ruff/formatter/), [*yapf*](https://github.com/google/yapf))
 * **R** ([*styler*](https://github.com/r-lib/styler))
 * **Racket** ([*raco fmt*](https://docs.racket-lang.org/fmt/))
 * **Reason** ([*bsrefmt*](https://github.com/glennsl/bs-refmt))
@@ -148,7 +148,7 @@ Examples
 --------
 
     (setq format-all-formatters
-          '((\"Shell\" (shfmt \"-i\" \"4\" \"-ci\"))))
+          '(("Shell" (shfmt "-i" "4" "-ci"))))
 
 
 How to add new languages
