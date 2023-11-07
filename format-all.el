@@ -74,7 +74,7 @@
 ;; - PHP (prettier plugin)
 ;; - Protocol Buffers (clang-format)
 ;; - PureScript (purty, purs-tidy)
-;; - Python (black, yapf, isort)
+;; - Python (black, isort, ruff format, yapf)
 ;; - R (styler)
 ;; - Racket (raco-fmt)
 ;; - Reason (bsrefmt)
@@ -1261,6 +1261,17 @@ Consult the existing formatters for examples of BODY."
     "--format" "quiet"
     "--stderr"
     "--stdin" (or (buffer-file-name) (buffer-name)))))
+
+(define-format-all-formatter ruff
+  (:executable "ruff")
+  (:install "pip install ruff")
+  (:languages "Python")
+  (:features)
+  (:format (format-all--buffer-easy
+            executable "format"
+            "--silent"
+            "--stdin-filename" (or (buffer-file-name) (buffer-name))
+            "-")))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
