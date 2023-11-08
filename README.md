@@ -147,9 +147,26 @@ see the documentation for each formatter.
 Examples
 --------
 
-    (setq format-all-formatters
-          '(("Shell" (shfmt "-i" "4" "-ci"))))
+### Simple example
+[comment]: <> (I couldn't figure out a better name for this)
+    (setq format-all-formatters '(("Shell" (shfmt "-i" "4" "-ci"))))
+    
+### Setting default formatters with `use-package`
+     (use-package format-all
+       :commands format-all-mode
+       :hook (prog-mode . format-all-mode)
+       :config
+       (setq-default format-all-formatters '(("C"     (astyle "--mode=c" "--pad-comma" "--pad-header"))
+                                             ("Shell" (shfmt "-i" "4" "-ci")))))
 
+This config will assure that:
+1. `format-all` will be loaded after `format-all-mode` command
+2. `format-all-mode` will be executed each time you enter a mode that emacs recognized as designed for programing
+3. only after `format-all` is loaded it will set `format-all-formatters` globally for all buffers
+
+Alternatively you can replace `:config` with `:init` and `setq-default` with `setq`. It will also work but will be less efficient.
+
+[comment]: <> (I think this sentence either needs expanding or deleting ^)
 
 How to add new languages
 ------------------------
