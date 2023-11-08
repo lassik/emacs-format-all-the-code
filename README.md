@@ -168,6 +168,21 @@ Alternatively you can replace `:config` with `:init` and `setq-default` with `se
 
 [comment]: <> (I think this sentence either needs expanding or deleting ^)
 
+### Setting the default formatter for each mode
+This approach allows you to split your default formatters accross many
+places in your config.
+
+    (add-hook 'java-mode-hook (setq format-all-formatters '(("Java" (astyle "--mode=java")))))
+
+If you want to optimize your config to defer setting variables, you may
+remove the `:config` section from `use-package` snippet and use this variant
+
+     (eval-after-load 'format-all
+       '(add-hook 'java-mode-hook
+                  (lambda() (setq format-all-formatters '(("Java" (astyle "--mode=java")))))))
+
+
+
 How to add new languages
 ------------------------
 
