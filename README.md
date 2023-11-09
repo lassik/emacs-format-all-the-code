@@ -147,8 +147,40 @@ see the documentation for each formatter.
 Examples
 --------
 
-    (setq format-all-formatters
-          '(("Shell" (shfmt "-i" "4" "-ci"))))
+### Simple example
+[comment]: <> (I couldn't figure out a better name for this)
+    (setq format-all-formatters '(("Shell" (shfmt "-i" "4" "-ci"))))
+    
+### Setting default formatters with `use-package`
+     (use-package format-all
+       :commands format-all-mode
+       :hook (prog-mode . format-all-mode)
+       :config
+       (setq-default format-all-formatters '(("C"     (astyle "--mode=c"))
+                                             ("Shell" (shfmt "-i" "4" "-ci")))))
+
+This config will assure that:
+1. `format-all` will be loaded after `format-all-mode` command
+2. `format-all-mode` will be executed each time you enter a mode that emacs recognized as designed for programing
+3. only after `format-all` is loaded it will set `format-all-formatters` globally for all buffers
+
+Alternatively you can replace `:config` with `:init` and `setq-default` with `setq`. It will also work but will be less efficient.
+
+[comment]: <> (I think this sentence either needs expanding or deleting ^)
+
+### Setting the default formatter for each mode
+This approach allows you to split your default formatters accross many
+places in your config.
+
+    (add-hook 'java-mode-hook (setq format-all-formatters '(("Java" (astyle "--mode=java")))))
+
+If you want to optimize your config to defer setting variables, you may
+remove the `:config` section from `use-package` snippet and use this variant
+
+     (eval-after-load 'format-all
+       '(add-hook 'java-mode-hook
+                  (lambda() (setq format-all-formatters '(("Java" (astyle "--mode=java")))))))
+
 
 
 How to add new languages
