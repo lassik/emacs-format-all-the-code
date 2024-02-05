@@ -191,6 +191,22 @@ remove the `:config` section from `use-package` snippet and use this variant
                    (setq format-all-formatters
                          '(("Java" (astyle "--mode=java")))))))
 
+### sqlformat
+
+The formatter `sqlformat` confuses many people. It does not to do any
+formatting by default. When you run it, nothing seems to happen.
+
+This appears to be a deliberate design decision. Please contact the
+maintainer of `sqlformat` if you would like it to change.
+
+You can add your own command line flags using a hook. The following
+example sets the `-r` option.
+
+    (add-hook 'sql-mode-hook
+              (lambda ()
+                (setq format-all-formatters
+                      '(("SQL" (sqlformat "-r"))))))
+
 How to add new languages
 ------------------------
 
