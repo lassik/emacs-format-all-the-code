@@ -172,7 +172,10 @@ Alternatively you can replace `:config` with `:init` and `setq-default` with `se
 This approach allows you to split your default formatters accross many
 places in your config.
 
-    (add-hook 'java-mode-hook (setq format-all-formatters '(("Java" (astyle "--mode=java")))))
+    (add-hook 'java-mode-hook
+              (lambda ()
+                (setq format-all-formatters
+                      '(("Java" (astyle "--mode=java"))))))
 
 If you want to optimize your config to defer setting variables, you may
 remove the `:config` section from `use-package` snippet and use this variant
