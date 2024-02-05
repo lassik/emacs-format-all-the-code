@@ -149,8 +149,8 @@ Examples
 
 ### Simple example
 
-[comment]: <> (I couldn't figure out a better name for this)
-    (setq format-all-formatters '(("Shell" (shfmt "-i" "4" "-ci"))))
+    (setq format-all-formatters
+          '(("Shell" (shfmt "-i" "4" "-ci"))))
 
 ### Setting default formatters with `use-package`
 
