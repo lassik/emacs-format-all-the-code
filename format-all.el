@@ -26,6 +26,7 @@
 ;; - Assembly (asmfmt)
 ;; - ATS (atsfmt)
 ;; - Awk (gawk)
+;; - AZSL (clang-format)
 ;; - Bazel Starlark (buildifier)
 ;; - Beancount (bean-format)
 ;; - BibTeX (Emacs)
@@ -56,6 +57,7 @@
 ;; - GraphQL (prettier, prettierd)
 ;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
 ;; - HCL (hclfmt)
+;; - HLSL (clang-format)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Hy (Emacs)
 ;; - Java (clang-format, astyle)
@@ -155,6 +157,7 @@
     ("GraphQL" prettier)
     ("Haskell" brittany)
     ("HCL" hclfmt)
+    ("HLSL" clang-format)
     ("HTML" html-tidy)
     ("HTML+EEX" mix-format)
     ("HTML+ERB" erb-format)
@@ -204,6 +207,7 @@
     ("Zig" zig)
 
     ("_Angular" prettier)
+    ("_AZSL" clang-format)
     ("_Beancount" bean-format)
     ("_Caddyfile" caddy-fmt)
     ("_Flow" prettier)
@@ -745,7 +749,7 @@ Consult the existing formatters for examples of BODY."
    (macos "brew install clang-format")
    (windows "scoop install llvm"))
   (:languages
-   "C" "C#" "C++" "Cuda" "GLSL" "Java" "Objective-C" "Protocol Buffer")
+   "_AZSL" "C" "C#" "C++" "Cuda" "GLSL" "HLSL" "Java" "Objective-C" "Protocol Buffer")
   (:features region)
   (:format
    (format-all--buffer-easy
@@ -1511,6 +1515,7 @@ unofficial languages IDs are prefixed with \"_\"."
            (boundp 'flow-minor-mode)
            (not (null (symbol-value 'flow-minor-mode)))
            "_Flow")
+      (and (equal major-mode 'azsl-mode) "_AZSL")
       (and (equal major-mode 'beancount-mode) "_Beancount")
       (and (equal major-mode 'caddyfile-mode) "_Caddyfile")
       (and (equal major-mode 'gleam-mode) "_Gleam")
