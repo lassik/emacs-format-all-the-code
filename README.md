@@ -58,7 +58,7 @@ Supported languages
 * **HCL** ([*hclfmt*](https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt))
 * **HLSL** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
-* **Hy** (Emacs)
+* **Hy** ([*hy-mode*](https://github.com/hylang/hy-mode))
 * **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/), [*prettierd*](https://github.com/fsouza/prettierd), [*deno*](https://deno.land/manual/tools/formatter))
 * **Jsonnet** ([*jsonnetfmt*](https://jsonnet.org/))
