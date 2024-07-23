@@ -33,7 +33,7 @@ Supported languages
 * **C#** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/), [*csharpier*](https://github.com/belav/csharpier))
 * **Cabal** ([*cabal-fmt*](https://github.com/phadej/cabal-fmt))
 * **Caddyfile** ([*caddy-fmt*](https://caddyserver.com/docs/command-line#caddy-fmt))
-* **Clojure/ClojureScript** ([*zprint*](https://github.com/kkinnear/zprint), [*node-cljfmt*](https://github.com/snoe/node-cljfmt))
+* **Clojure/ClojureScript** ([*zprint*](https://github.com/kkinnear/zprint), [*node-cljfmt*](https://github.com/snoe/node-cljfmt), [*cider*](https://github.com/clojure-emacs/cider))
 * **CMake** ([*cmake-format*](https://github.com/cheshirekow/cmake_format))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
 * **CSS/Less/SCSS** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))

@@ -34,7 +34,7 @@
 ;; - C# (clang-format, astyle, csharpier)
 ;; - Cabal (cabal-fmt)
 ;; - Caddyfile (caddy fmt)
-;; - Clojure/ClojureScript (zprint, node-cljfmt)
+;; - Clojure/ClojureScript (zprint, node-cljfmt, cider)
 ;; - CMake (cmake-format)
 ;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier, prettierd)
@@ -742,6 +742,18 @@ Consult the existing formatters for examples of BODY."
   (:languages "_Caddyfile")
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-")))
+
+(define-format-all-formatter cider
+  (:executable)
+  (:install)
+  (:languages "Clojure")
+  (:features region)
+  (:format
+   (format-all--buffer-native
+    'clojurec-mode
+    (if region
+        (lambda () (cider-format-region (car region) (cdr region)))
+      (lambda () (cider-format-region (point-min) (point-max)))))))
 
 (define-format-all-formatter clang-format
   (:executable "clang-format")
