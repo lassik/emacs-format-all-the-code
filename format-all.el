@@ -751,10 +751,9 @@ Consult the existing formatters for examples of BODY."
   (:format
    (format-all--buffer-native
     'clojurec-mode
-    (let ((f (symbol-function 'cider-format-region)))
-      (if region
-          (lambda () (when f (funcall f (car region) (cdr region))))
-        (lambda () (when f (funcall f (point-min) (point-max)))))))))
+    (if region
+        (lambda () (cider-format-region (car region) (cdr region)))
+      (lambda () (cider-format-region (point-min) (point-max)))))))
 
 (define-format-all-formatter clang-format
   (:executable "clang-format")
