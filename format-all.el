@@ -60,7 +60,7 @@
 ;; - HLSL (clang-format)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Hy (Emacs)
-;; - Java (clang-format, astyle)
+;; - Java (clang-format, astyle, google-java-format)
 ;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
@@ -292,7 +292,7 @@ association list. Using \".dir-locals.el\" is convenient since
 the rules for an entire source tree can be given in one file.")
 
 (define-error 'format-all-executable-not-found
-  "Formatter not found")
+              "Formatter not found")
 
 (defun format-all--proper-list-p (object)
   "Return t if OBJECT is a proper list, nil otherwise."
@@ -661,6 +661,13 @@ Consult the existing formatters for examples of BODY."
             executable
             (let ((astylerc (format-all--locate-file ".astylerc")))
               (when astylerc (concat "--options=" astylerc))))))
+
+(define-format-all-formatter google-java-format
+  (:executable "google-java-format")
+  (:install)
+  (:languages "Java")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter atsfmt
   (:executable "atsfmt")
