@@ -34,7 +34,7 @@
 ;; - C# (clang-format, astyle, csharpier)
 ;; - Cabal (cabal-fmt)
 ;; - Caddyfile (caddy fmt)
-;; - Clojure/ClojureScript (zprint, node-cljfmt)
+;; - Clojure/ClojureScript (cljfmt, zprint)
 ;; - CMake (cmake-format)
 ;; - Crystal (crystal tool format)
 ;; - CSS/Less/SCSS (prettier, prettierd)
@@ -771,7 +771,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter cljfmt
   (:executable "cljfmt")
-  (:install "npm install --global node-cljfmt")
+  (:install)
   (:languages "Clojure")
   (:features)
   (:format (format-all--buffer-easy executable)))
