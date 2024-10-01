@@ -743,6 +743,14 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-")))
 
+(define-format-all-formatter cargo-fmt
+  ;; This is the same formatter as rustfmt, but run via `cargo fmt`.
+  (:executable "cargo")
+  (:install "rustup component add rustfmt")
+  (:languages "Rust")
+  (:features)
+  (:format (format-all--buffer-easy executable "fmt")))
+
 (define-format-all-formatter clang-format
   (:executable "clang-format")
   (:install
