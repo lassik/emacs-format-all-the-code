@@ -60,7 +60,7 @@
 ;; - HLSL (clang-format)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Hy (Emacs)
-;; - Java (clang-format, astyle, google-java-format)
+;; - Java (google-java-format, clang-format, astyle)
 ;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
@@ -162,7 +162,7 @@
     ("HTML+EEX" mix-format)
     ("HTML+ERB" erb-format)
     ("Hy" emacs-hy)
-    ("Java" clang-format)
+    ("Java" google-java-format)
     ("JavaScript" prettier)
     ("JSON" prettier)
     ("JSON5" prettier)
@@ -292,7 +292,7 @@ association list. Using \".dir-locals.el\" is convenient since
 the rules for an entire source tree can be given in one file.")
 
 (define-error 'format-all-executable-not-found
-              "Formatter not found")
+  "Formatter not found")
 
 (defun format-all--proper-list-p (object)
   "Return t if OBJECT is a proper list, nil otherwise."
@@ -667,7 +667,7 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "Java")
   (:features)
-  (:format (format-all--buffer-easy executable)))
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter atsfmt
   (:executable "atsfmt")
