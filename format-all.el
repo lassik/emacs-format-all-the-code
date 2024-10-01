@@ -60,7 +60,7 @@
 ;; - HLSL (clang-format)
 ;; - HTML/XHTML/XML (tidy)
 ;; - Hy (Emacs)
-;; - Java (clang-format, astyle)
+;; - Java (astyle, clang-format, google-java-format)
 ;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
@@ -162,7 +162,7 @@
     ("HTML+EEX" mix-format)
     ("HTML+ERB" erb-format)
     ("Hy" emacs-hy)
-    ("Java" clang-format)
+    ("Java" google-java-format)
     ("JavaScript" prettier)
     ("JSON" prettier)
     ("JSON5" prettier)
@@ -984,6 +984,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "Go")
   (:features)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter google-java-format
+  (:executable "google-java-format")
+  (:install)
+  (:languages "Java")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter hclfmt
   (:executable "hclfmt")

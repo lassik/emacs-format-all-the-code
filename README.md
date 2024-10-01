@@ -59,7 +59,7 @@ Supported languages
 * **HLSL** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
 * **Hy** (Emacs)
-* **Java** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*astyle*](http://astyle.sourceforge.net/))
+* **Java** ([*astyle*](http://astyle.sourceforge.net/), [*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*google-java-format*](https://github.com/google/google-java-format))
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/), [*prettierd*](https://github.com/fsouza/prettierd), [*deno*](https://deno.land/manual/tools/formatter))
 * **Jsonnet** ([*jsonnetfmt*](https://jsonnet.org/))
 * **Kotlin** ([*ktlint*](https://github.com/shyiko/ktlint))
