@@ -87,7 +87,7 @@
 ;; - Shell script (beautysh, shfmt)
 ;; - Snakemake (snakefmt)
 ;; - Solidity (prettier plugin)
-;; - SQL (pgformatter, sqlformat)
+;; - SQL (pgformatter, sql-formatter)
 ;; - Svelte (prettier plugin)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
@@ -192,7 +192,7 @@
     ("SCSS" prettier)
     ("Shell" shfmt)
     ("Solidity" prettier)
-    ("SQL" sqlformat)
+    ("SQL" sql-formatter)
     ("Svelte" prettier)
     ("Swift" swiftformat)
     ("Terraform" terraform-fmt)
@@ -1347,9 +1347,9 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
-(define-format-all-formatter sqlformat
-  (:executable "sqlformat")
-  (:install "pip install sqlparse")
+(define-format-all-formatter sql-formatter
+  (:executable "sql-formatter")
+  (:install "npm install -g sql-formatter")
   (:languages "SQL")
   (:features)
   (:format
@@ -1361,7 +1361,7 @@ Consult the existing formatters for examples of BODY."
                                  'utf-8)))
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
-     (format-all--buffer-easy executable "--encoding" ienc "-"))))
+     (format-all--buffer-easy executable))))
 
 (define-format-all-formatter standard
   (:executable "standard")
