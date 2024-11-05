@@ -87,7 +87,7 @@
 ;; - Shell script (beautysh, shfmt)
 ;; - Snakemake (snakefmt)
 ;; - Solidity (prettier plugin)
-;; - SQL (pgformatter, sqlformat)
+;; - SQL (pgformatter, sqlformat, sqlfluff)
 ;; - Svelte (prettier plugin)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
@@ -1362,6 +1362,13 @@ Consult the existing formatters for examples of BODY."
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
      (format-all--buffer-easy executable "--encoding" ienc "-"))))
+
+(define-format-all-formatter sqlfluff
+  (:executable "sqlfluff")
+  (:install "pip install sqlfluff")
+  (:languages "SQL")
+  (:features)
+  (:format (format-all--buffer-easy executable "fix" "--nocolor" "--dialect=postgres" "-")))
 
 (define-format-all-formatter standard
   (:executable "standard")
