@@ -782,7 +782,7 @@ Consult the existing formatters for examples of BODY."
   (:install)
   (:languages "Clojure")
   (:features)
-  (:format (format-all--buffer-easy executable)))
+  (:format (format-all--buffer-easy executable "fix" "-")))
 
 (define-format-all-formatter cmake-format
   (:executable "cmake-format")
