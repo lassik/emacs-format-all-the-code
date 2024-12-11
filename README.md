@@ -87,7 +87,7 @@ Supported languages
 * **Shell script** ([*beautysh*](https://github.com/lovesegfault/beautysh), [*shfmt*](https://github.com/mvdan/sh))
 * **Snakemake** ([*snakefmt*](https://github.com/snakemake/snakefmt))
 * **Solidity** ([*prettier plugin*](https://github.com/prettier-solidity/prettier-plugin-solidity))
-* **SQL** ([*pgformatter*](https://github.com/darold/pgFormatter), [*sqlformat*](https://pypi.org/project/sqlparse/))
+* **SQL** ([*pgformatter*](https://github.com/darold/pgFormatter), [*sqlformat*](https://pypi.org/project/sqlparse/), [*sqlfluff*](https://sqlfluff.com))
 * **Svelte** ([*prettier plugin*](https://github.com/sveltejs/prettier-plugin-svelte))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
 * **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))
