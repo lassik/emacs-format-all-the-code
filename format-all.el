@@ -68,7 +68,7 @@
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, stylua, prettier plugin)
 ;; - Markdown (prettier, prettierd, deno)
-;; - Meson (muon fmt)
+;; - Meson (muon fmt, meson format)
 ;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt, alejandra)
 ;; - OCaml (ocp-indent, ocamlformat)
@@ -1106,6 +1106,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "Meson")
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-")))
+
+(define-format-all-formatter meson-format
+  (:executable "meson")
+  (:install  "pip install meson")
+  (:languages "Meson")
+  (:features)
+  (:format (format-all--buffer-easy executable "format" "--editor-config" "-")))
 
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
