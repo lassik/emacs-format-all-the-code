@@ -42,7 +42,7 @@
 ;; - D (dfmt)
 ;; - Dart (dartfmt, dart-format)
 ;; - Dhall (dhall format)
-;; - Dockerfile (dockfmt)
+;; - Dockerfile (dockerfmt)
 ;; - Elixir (mix format)
 ;; - Elm (elm-format)
 ;; - Emacs Lisp (Emacs)
@@ -144,7 +144,7 @@
     ("D" dfmt)
     ("Dart" dart-format)
     ("Dhall" dhall)
-    ("Dockerfile" dockfmt)
+    ("Dockerfile" dockerfmt)
     ("Elixir" mix-format)
     ("Elm" elm-format)
     ("Emacs Lisp" emacs-lisp)
@@ -860,9 +860,9 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "format")))
 
-(define-format-all-formatter dockfmt
-  (:executable "dockfmt")
-  (:install "go get github.com/jessfraz/dockfmt")
+(define-format-all-formatter dockerfmt
+  (:executable "dockerfmt")
+  (:install "go install github.com/reteps/dockerfmt@latest")
   (:languages "Dockerfile")
   (:features)
   (:format (format-all--buffer-easy executable "fmt")))
