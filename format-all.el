@@ -698,11 +698,16 @@ Consult the existing formatters for examples of BODY."
   (:executable "black")
   (:install "pip install black")
   (:languages "Python")
-  (:features)
-  (:format (format-all--buffer-easy
-            executable "-q"
-            (when (format-all--buffer-extension-p "pyi") "--pyi")
-            "-")))
+  (:features region)
+  (:format
+   (format-all--buffer-easy
+    executable "-q"
+    (when (format-all--buffer-extension-p "pyi") "--pyi")
+    (when region
+      (format "--line-ranges=%d-%d"
+              (line-number-at-pos (car region))
+              (line-number-at-pos (cdr region))))
+    "-")))
 
 (define-format-all-formatter brittany
   (:executable "brittany")
