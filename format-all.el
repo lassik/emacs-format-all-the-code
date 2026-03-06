@@ -93,6 +93,7 @@
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier plugin, taplo fmt)
 ;; - TypeScript/TSX (prettier, ts-standard, prettierd, deno)
+;; - Typst (typstyle, typstfmt)
 ;; - V (v fmt)
 ;; - Vue (prettier, prettierd)
 ;; - Verilog (iStyle, Verible)
@@ -199,6 +200,7 @@
     ("TOML" prettier)
     ("TSX" prettier)
     ("TypeScript" prettier)
+    ("Typst" typstyle)
     ("V" v-fmt)
     ("Verilog" istyle-verilog)
     ("Vue" prettier)
@@ -1489,6 +1491,22 @@ Consult the existing formatters for examples of BODY."
     executable "--fix" "--stdin"
     (when (buffer-file-name)
       (list "--stdin-filename" (buffer-file-name))))))
+
+(define-format-all-formatter typstyle
+  (:executable "typstyle")
+  (:install
+   (macos "brew install typstyle")
+   (windows "scoop install typstyle"))
+  (:languages "Typst")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter typstfmt
+  (:executable "typstfmt")
+  (:install (macos "brew install typstfmt"))
+  (:languages "Typst")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter v-fmt
   (:executable "v")
