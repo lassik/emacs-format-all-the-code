@@ -806,11 +806,11 @@ Consult the existing formatters for examples of BODY."
   (:format (format-all--buffer-easy executable "tool" "format" "-")))
 
 (define-format-all-formatter csharpier
-  (:executable "dotnet-csharpier")
+  (:executable "csharpier")
   (:install "dotnet install -g csharpier")
   (:languages "C#")
   (:features)
-  (:format (format-all--buffer-easy executable "--write-stdout")))
+  (:format (format-all--buffer-easy executable "format" "--write-stdout")))
 
 (define-format-all-formatter dart-format
   (:executable "dart")
