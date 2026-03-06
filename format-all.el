@@ -1496,8 +1496,14 @@ Consult the existing formatters for examples of BODY."
   (:executable "yapf")
   (:install "pip install yapf")
   (:languages "Python")
-  (:features)
-  (:format (format-all--buffer-easy executable)))
+  (:features region)
+  (:format
+   (format-all--buffer-easy
+    executable
+    (when region
+      (format "--lines=%d-%d"
+              (line-number-at-pos (car region))
+              (line-number-at-pos (cdr region)))))))
 
 (define-format-all-formatter zig
   (:executable "zig")
