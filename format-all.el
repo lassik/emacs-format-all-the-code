@@ -1290,12 +1290,19 @@ Consult the existing formatters for examples of BODY."
   (:executable "ruff")
   (:install "pip install ruff")
   (:languages "Python")
-  (:features)
-  (:format (format-all--buffer-easy
-            executable "format"
-            "--silent"
-            "--stdin-filename" (or (buffer-file-name) (buffer-name))
-            "-")))
+  (:features region)
+  (:format
+   (format-all--buffer-easy
+    executable "format"
+    "--silent"
+    "--stdin-filename" (or (buffer-file-name) (buffer-name))
+    (when region
+      (let ((begin-line-column (format-all--line-and-column-at-pos (car region)))
+            (end-line-column (format-all--line-and-column-at-pos (cdr region))))
+        (format "--range=%d:%d-%d:%d"
+                (car begin-line-column) (cdr begin-line-column)
+                (car end-line-column) (cdr end-line-column))))
+    "-")))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
@@ -1592,6 +1599,14 @@ STATUS and ERROR-OUTPUT come from the formatter."
         (with-help-window "*format-all-errors*"
           (princ error-output))
       (format-all--hide-errors-buffer))))
+
+(defun format-all--line-and-column-at-pos (pos)
+  "Return a cons of the line and column number at POS.
+
+Contrary to the usual Emacs convention, the column number is 1-based."
+  (save-excursion
+    (goto-char pos)
+    (cons (line-number-at-pos) (1+ (- (point) (line-beginning-position))))))
 
 (defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
