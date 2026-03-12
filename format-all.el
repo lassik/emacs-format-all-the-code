@@ -857,6 +857,7 @@ Consult the existing formatters for examples of BODY."
                                '(("JavaScript" . "js")
                                  ("TypeScript" . "ts")
                                  ("JSON5" . "jsonc")
+                                 ("HTML" . "html")                                 
                                  ("Markdown" . "md")))))
               (if pair (cdr pair) (downcase language)))
     "-")))
