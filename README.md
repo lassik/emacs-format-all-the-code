@@ -67,7 +67,7 @@ Supported languages
 * **Ledger** ([*ledger-mode*](https://github.com/ledger/ledger-mode))
 * **Lua** ([*lua-fmt*](https://github.com/trixnz/lua-fmt), [stylua](https://github.com/JohnnyMorganz/StyLua),  [*prettier plugin*](https://github.com/prettier/plugin-lua))
 * **Markdown** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd), [*deno*](https://deno.land/manual/tools/formatter), [*markdownfmt*](https://github.com/shurcooL/markdownfmt), [*mdformat*](https://github.com/hukkin/mdformat))
-* **Meson** ([*muon fmt*](https://sr.ht/~lattis/muon/))
+* **Meson** ([*muon fmt*](https://sr.ht/~lattis/muon/), [*meson format*](https://mesonbuild.com/))
 * **Nginx** ([*nginxfmt*](https://github.com/slomkowski/nginx-config-formatter))
 * **Nix** ([*nixpkgs-fmt*](https://github.com/nix-community/nixpkgs-fmt), [*nixfmt*](https://github.com/serokell/nixfmt),
 [*alejandra*](https://github.com/kamadorueda/alejandra))
@@ -87,7 +87,7 @@ Supported languages
 * **Shell script** ([*beautysh*](https://github.com/lovesegfault/beautysh), [*shfmt*](https://github.com/mvdan/sh))
 * **Snakemake** ([*snakefmt*](https://github.com/snakemake/snakefmt))
 * **Solidity** ([*prettier plugin*](https://github.com/prettier-solidity/prettier-plugin-solidity))
-* **SQL** ([*pgformatter*](https://github.com/darold/pgFormatter), [*sqlformat*](https://pypi.org/project/sqlparse/))
+* **SQL** ([*pgformatter*](https://github.com/darold/pgFormatter), [*sqlformat*](https://pypi.org/project/sqlparse/), [*sqlfluff*](https://sqlfluff.com))
 * **Svelte** ([*prettier plugin*](https://github.com/sveltejs/prettier-plugin-svelte))
 * **Swift** ([*swiftformat*](https://github.com/nicklockwood/SwiftFormat))
 * **Terraform** ([*terraform fmt*](https://www.terraform.io/docs/commands/fmt.html))

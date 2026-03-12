@@ -68,7 +68,7 @@
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, stylua, prettier plugin)
 ;; - Markdown (prettier, prettierd, deno, markdownfmt, mdformat)
-;; - Meson (muon fmt)
+;; - Meson (muon fmt, meson format)
 ;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt, alejandra)
 ;; - OCaml (ocp-indent, ocamlformat)
@@ -87,12 +87,13 @@
 ;; - Shell script (beautysh, shfmt)
 ;; - Snakemake (snakefmt)
 ;; - Solidity (prettier plugin)
-;; - SQL (pgformatter, sqlformat)
+;; - SQL (pgformatter, sqlformat, sqlfluff)
 ;; - Svelte (prettier plugin)
 ;; - Swift (swiftformat)
 ;; - Terraform (terraform fmt)
 ;; - TOML (prettier plugin, taplo fmt)
 ;; - TypeScript/TSX (prettier, ts-standard, prettierd, deno)
+;; - Typst (typstyle, typstfmt)
 ;; - V (v fmt)
 ;; - Vue (prettier, prettierd)
 ;; - Verilog (iStyle, Verible)
@@ -199,6 +200,7 @@
     ("TOML" prettier)
     ("TSX" prettier)
     ("TypeScript" prettier)
+    ("Typst" typstyle)
     ("V" v-fmt)
     ("Verilog" istyle-verilog)
     ("Vue" prettier)
@@ -277,7 +279,11 @@ language. Each formatter is either:
 * a symbol (e.g. black, clang-format, rufo)
 
 * a list whose first item is that symbol, and any remaining items
-  are extra command line arguments to pass to the formatter
+  are extra command line arguments to pass to the formatter; if
+  it starts with the symbol `:executable' the following item is
+  the program name that overrides EXECUTABLE and can be a
+  relative path from the project root, and the rest items are its
+  arguments.  Those arguments should not be shell-quoted.
 
 If more than one formatter is given for the same language, all of
 them are run as a chain, with the code from each formatter passed
@@ -309,7 +315,9 @@ the rules for an entire source tree can be given in one file.")
       (error "Formatter name missing"))
     (unless (symbolp (car formatter))
       (error "Formatter name is not a symbol: %S" (car formatter)))
-    (unless (cl-every #'stringp (cdr formatter))
+    (unless (or (and (eq (cadr formatter) :executable)
+                     (cl-every #'stringp (cddr formatter)))
+                (cl-every #'stringp (cdr formatter)))
       (error "Formatter command line arguments are not all strings: %S"
              formatter))
     formatter))
@@ -330,12 +338,9 @@ the rules for an entire source tree can be given in one file.")
                (stringp (car chain))
                (cl-every
                 (lambda (formatter)
-                  (and (not (null formatter))
-                       (or (symbolp formatter)
-                           (and (format-all--proper-list-p formatter)
-                                (and (symbolp (car formatter))
-                                     (not (null (car formatter))))
-                                (cl-every #'stringp (cdr formatter))))))
+                  (condition-case nil
+                      (format-all--normalize-formatter formatter)
+                    (error nil)))
                 (cdr chain))))
         formatters)))
 
@@ -486,8 +491,11 @@ OK-STATUSES.  OK-STATUSES and ERROR-REGEXP are hacks to work
 around formatter programs that don't make sensible use of their
 exit status.
 
-If ARGS are given, those are arguments to EXECUTABLE. They should
-not be shell-quoted.
+If ARGS are given, those are arguments to EXECUTABLE.  If it
+starts with the symbol `:executable' the following item is the
+program name that overrides EXECUTABLE and can be a relative path
+from the project root, and the rest items are its arguments.
+Those arguments should not be shell-quoted.
 
 If ROOT-FILES are given, the working directory of the formatter
 will be the deepest directory (starting from the file being
@@ -526,8 +534,11 @@ unformatted code from stdin, write its formatted equivalent to
 stdout, write errors/warnings to stderr, and exit zero/non-zero
 on success/failure.
 
-If ARGS are given, those are arguments to EXECUTABLE.  They don't
-need to be shell-quoted."
+If ARGS are given, those are arguments to EXECUTABLE.  If it
+starts with the symbol `:executable' the following item is the
+program name that overrides EXECUTABLE and can be a relative path
+from the project root, and the rest items are its arguments.
+Those arguments should not be shell-quoted."
   (apply 'format-all--buffer-hard nil nil nil executable args))
 
 (defun format-all--ruby-gem-bundled-p (gem-name)
@@ -698,11 +709,16 @@ Consult the existing formatters for examples of BODY."
   (:executable "black")
   (:install "pip install black")
   (:languages "Python")
-  (:features)
-  (:format (format-all--buffer-easy
-            executable "-q"
-            (when (format-all--buffer-extension-p "pyi") "--pyi")
-            "-")))
+  (:features region)
+  (:format
+   (format-all--buffer-easy
+    executable "-q"
+    (when (format-all--buffer-extension-p "pyi") "--pyi")
+    (when region
+      (format "--line-ranges=%d-%d"
+              (line-number-at-pos (car region))
+              (line-number-at-pos (cdr region))))
+    "-")))
 
 (define-format-all-formatter brittany
   (:executable "brittany")
@@ -799,11 +815,11 @@ Consult the existing formatters for examples of BODY."
   (:format (format-all--buffer-easy executable "tool" "format" "-")))
 
 (define-format-all-formatter csharpier
-  (:executable "dotnet-csharpier")
+  (:executable "csharpier")
   (:install "dotnet install -g csharpier")
   (:languages "C#")
   (:features)
-  (:format (format-all--buffer-easy executable "--write-stdout")))
+  (:format (format-all--buffer-easy executable "format" "--write-stdout")))
 
 (define-format-all-formatter dart-format
   (:executable "dart")
@@ -1121,6 +1137,13 @@ Consult the existing formatters for examples of BODY."
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-")))
 
+(define-format-all-formatter meson-format
+  (:executable "meson")
+  (:install  "pip install meson")
+  (:languages "Meson")
+  (:features)
+  (:format (format-all--buffer-easy executable "format" "--editor-config" "-")))
+
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
   (:install  "pip install nginxfmt")
@@ -1299,12 +1322,19 @@ Consult the existing formatters for examples of BODY."
   (:executable "ruff")
   (:install "pip install ruff")
   (:languages "Python")
-  (:features)
-  (:format (format-all--buffer-easy
-            executable "format"
-            "--silent"
-            "--stdin-filename" (or (buffer-file-name) (buffer-name))
-            "-")))
+  (:features region)
+  (:format
+   (format-all--buffer-easy
+    executable "format"
+    "--silent"
+    "--stdin-filename" (or (buffer-file-name) (buffer-name))
+    (when region
+      (let ((begin-line-column (format-all--line-and-column-at-pos (car region)))
+            (end-line-column (format-all--line-and-column-at-pos (cdr region))))
+        (format "--range=%d:%d-%d:%d"
+                (car begin-line-column) (cdr begin-line-column)
+                (car end-line-column) (cdr end-line-column))))
+    "-")))
 
 (define-format-all-formatter rufo
   (:executable "rufo")
@@ -1376,6 +1406,13 @@ Consult the existing formatters for examples of BODY."
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
      (format-all--buffer-easy executable "--encoding" ienc "-"))))
+
+(define-format-all-formatter sqlfluff
+  (:executable "sqlfluff")
+  (:install "pip install sqlfluff")
+  (:languages "SQL")
+  (:features)
+  (:format (format-all--buffer-easy executable "fix" "--nocolor" "--dialect=postgres" "-")))
 
 (define-format-all-formatter standard
   (:executable "standard")
@@ -1492,6 +1529,22 @@ Consult the existing formatters for examples of BODY."
     (when (buffer-file-name)
       (list "--stdin-filename" (buffer-file-name))))))
 
+(define-format-all-formatter typstyle
+  (:executable "typstyle")
+  (:install
+   (macos "brew install typstyle")
+   (windows "scoop install typstyle"))
+  (:languages "Typst")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter typstfmt
+  (:executable "typstfmt")
+  (:install (macos "brew install typstfmt"))
+  (:languages "Typst")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
 (define-format-all-formatter v-fmt
   (:executable "v")
   (:install)
@@ -1510,8 +1563,14 @@ Consult the existing formatters for examples of BODY."
   (:executable "yapf")
   (:install "pip install yapf")
   (:languages "Python")
-  (:features)
-  (:format (format-all--buffer-easy executable)))
+  (:features region)
+  (:format
+   (format-all--buffer-easy
+    executable
+    (when region
+      (format "--lines=%d-%d"
+              (line-number-at-pos (car region))
+              (line-number-at-pos (cdr region)))))))
 
 (define-format-all-formatter zig
   (:executable "zig")
@@ -1596,6 +1655,14 @@ STATUS and ERROR-OUTPUT come from the formatter."
           (princ error-output))
       (format-all--hide-errors-buffer))))
 
+(defun format-all--line-and-column-at-pos (pos)
+  "Return a cons of the line and column number at POS.
+
+Contrary to the usual Emacs convention, the column number is 1-based."
+  (save-excursion
+    (goto-char pos)
+    (cons (line-number-at-pos) (1+ (- (point) (line-beginning-position))))))
+
 (defun format-all--save-line-number (thunk)
   "Internal helper function to run THUNK and go back to the same line."
   (let ((old-line-number (line-number-at-pos))
@@ -1622,6 +1689,31 @@ STATUS and ERROR-OUTPUT come from the formatter."
     (funcall thunk)
     (set-marker (mark-marker) old-mark (current-buffer))
     (setq mark-ring (mapcar #'copy-marker old-mark-ring))))
+
+(defun format-all--project-root ()
+  "Internal function to get the project root for the current buffer."
+  (or (and (fboundp 'projectile-project-root)
+           (ignore-errors (projectile-project-root)))
+      (ignore-errors (project-root (project-current)))
+      default-directory))
+
+(defun format-all--command-args (formatter)
+  "Internal function to get the full command line arguments for FORMATTER."
+  (let* ((name (car formatter))
+         (args (cdr formatter)))
+    (if (eq (car args) :executable)
+        (let* ((executable (cadr args))
+               (args (cddr args))
+               (executable
+                (or (let ((project-executable (expand-file-name executable (format-all--project-root))))
+                      (and (file-executable-p project-executable)
+                           (file-regular-p project-executable)
+                           project-executable))
+                    (executable-find executable)
+                    (signal 'format-all-executable-not-found
+                            (list (format "You need the %s command." executable))))))
+          (cons executable args))
+      (cons (format-all--formatter-executable name) args))))
 
 (defun format-all--run-chain (language chain region)
   "Internal function to run a formatter CHAIN on the current buffer.
@@ -1653,9 +1745,10 @@ entire buffer."
              (cl-return))
            (let* ((formatter (car chain-tail))
                   (f-name (car formatter))
-                  (f-args (cdr formatter))
-                  (f-function (gethash f-name format-all--format-table))
-                  (f-executable (format-all--formatter-executable f-name)))
+                  (f-command-args (format-all--command-args formatter))
+                  (f-executable (car f-command-args))
+                  (f-args (cdr f-command-args))
+                  (f-function (gethash f-name format-all--format-table)))
              (when format-all-debug
                (message
                 "Format-All: Formatting %s as %s using %S%s"
