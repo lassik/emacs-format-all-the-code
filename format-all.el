@@ -67,7 +67,7 @@
 ;; - LaTeX (latexindent, auctex)
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, stylua, prettier plugin)
-;; - Markdown (prettier, prettierd, deno)
+;; - Markdown (prettier, prettierd, deno, markdownfmt, mdformat)
 ;; - Meson (muon fmt, meson format)
 ;; - Nginx (nginxfmt)
 ;; - Nix (nixpkgs-fmt, nixfmt, alejandra)
@@ -298,7 +298,7 @@ association list. Using \".dir-locals.el\" is convenient since
 the rules for an entire source tree can be given in one file.")
 
 (define-error 'format-all-executable-not-found
-  "Formatter not found")
+              "Formatter not found")
 
 (defun format-all--proper-list-p (object)
   "Return t if OBJECT is a proper list, nil otherwise."
@@ -1095,6 +1095,20 @@ Consult the existing formatters for examples of BODY."
   (:languages "Lua")
   (:features)
   (:format (format-all--buffer-easy executable "--stdin")))
+
+(define-format-all-formatter markdownfmt
+  (:executable "markdownfmt")
+  (:install "go install github.com/shurcooL/markdownfmt@latest")
+  (:languages "Markdown")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter mdformat
+  (:executable "mdformat")
+  (:install "pip install mdformat")
+  (:languages "Markdown")
+  (:features)
+  (:format (format-all--buffer-easy executable "-")))
 
 (define-format-all-formatter mix-format
   (:executable "mix")
