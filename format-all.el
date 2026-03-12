@@ -1089,7 +1089,7 @@ Consult the existing formatters for examples of BODY."
 
 (define-format-all-formatter mdformat
   (:executable "mdformat")
-  (:install "pipx install mdformat")
+  (:install "pip install mdformat")
   (:languages "Markdown")
   (:features)
   (:format (format-all--buffer-easy executable "-")))
