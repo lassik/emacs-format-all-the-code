@@ -777,12 +777,12 @@ Consult the existing formatters for examples of BODY."
           (pcase status
             (204 (progn
                    (insert input)
-                   (list nil nil)))
+                   (list nil "")))
             (200 (progn
                    (url-insert-buffer-contents res url)
-                   (list nil nil)))
+                   (list nil "")))
             (_ (progn
-                 (list 'error
+                 (list t
                        (with-temp-buffer
                          (url-insert-buffer-contents res url)
                          (buffer-string))))))))))))
