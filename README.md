@@ -36,7 +36,7 @@ Supported languages
 * **Clojure/ClojureScript** ([*cljfmt*](https://github.com/weavejester/cljfmt), [*zprint*](https://github.com/kkinnear/zprint))
 * **CMake** ([*cmake-format*](https://github.com/cheshirekow/cmake_format))
 * **Crystal** ([*crystal tool format*](http://www.motion-express.com/blog/crystal-code-formatter))
-* **CSS/Less/SCSS** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))
+* **CSS/Less/SCSS** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd), [*deno*](https://deno.land/manual/tools/formatter))
 * **Cuda** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
 * **D** ([*dfmt*](https://github.com/dlang-community/dfmt))
 * **Dart** ([*dartfmt*](https://github.com/dart-lang/dart_style), [*dart-format*](https://dart.dev/tools/dart-format))
@@ -57,7 +57,8 @@ Supported languages
 * **Haskell** ([*brittany*](https://github.com/lspitzner/brittany), [*fourmolu*](https://github.com/fourmolu/fourmolu), [*hindent*](https://github.com/commercialhaskell/hindent), [*ormolu*](https://github.com/tweag/ormolu), [*stylish-haskell*](https://github.com/jaspervdj/stylish-haskell))
 * **HCL** ([*hclfmt*](https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt))
 * **HLSL** ([*clang-format*](https://clang.llvm.org/docs/ClangFormat.html))
-* **HTML/XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
+* **HTML** ([*tidy*](http://www.html-tidy.org/), [*deno*](https://deno.land/manual/tools/formatter))
+* **XHTML/XML** ([*tidy*](http://www.html-tidy.org/))
 * **Hy** (Emacs)
 * **Java** ([*astyle*](http://astyle.sourceforge.net/), [*clang-format*](https://clang.llvm.org/docs/ClangFormat.html), [*google-java-format*](https://github.com/google/google-java-format))
 * **JavaScript/JSON/JSX** ([*prettier*](https://prettier.io/), [*standard*](https://standardjs.com/), [*prettierd*](https://github.com/fsouza/prettierd), [*deno*](https://deno.land/manual/tools/formatter))
@@ -96,7 +97,7 @@ Supported languages
 * **V** ([*v fmt*](https://github.com/vlang/v))
 * **Vue** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))
 * **Verilog** ([*iStyle*](https://github.com/thomasrussellmurphy/istyle-verilog-formatter), [*Verible*](https://github.com/chipsalliance/verible/tree/master/verilog/tools/formatter))
-* **YAML** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd))
+* **YAML** ([*prettier*](https://prettier.io/), [*prettierd*](https://github.com/fsouza/prettierd), [*deno*](https://deno.land/manual/tools/formatter))
 * **Zig** ([*zig*](https://ziglang.org/))
 
 How to install

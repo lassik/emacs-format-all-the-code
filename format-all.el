@@ -37,7 +37,7 @@
 ;; - Clojure/ClojureScript (cljfmt, zprint)
 ;; - CMake (cmake-format)
 ;; - Crystal (crystal tool format)
-;; - CSS/Less/SCSS (prettier, prettierd)
+;; - CSS/Less/SCSS (prettier, prettierd, deno)
 ;; - Cuda (clang-format)
 ;; - D (dfmt)
 ;; - Dart (dartfmt, dart-format)
@@ -58,7 +58,8 @@
 ;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
 ;; - HCL (hclfmt)
 ;; - HLSL (clang-format)
-;; - HTML/XHTML/XML (tidy)
+;; - HTML (tidy, deno)
+;; - XHTML/XML (tidy)
 ;; - Hy (Emacs)
 ;; - Java (astyle, clang-format, google-java-format)
 ;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno)
@@ -97,7 +98,7 @@
 ;; - V (v fmt)
 ;; - Vue (prettier, prettierd)
 ;; - Verilog (iStyle, Verible)
-;; - YAML (prettier, prettierd)
+;; - YAML (prettier, prettierd, deno)
 ;; - Zig (zig)
 
 ;; You will need to install external programs to do the formatting.
@@ -933,10 +934,11 @@ and waits until the server is accepting connections."
   (:executable "deno")
   (:install (macos "brew install deno"))
   (:languages
+   "CSS" "HTML"
    "JavaScript" "JSX"
    "TypeScript" "TSX"
    "JSON" "JSON5"
-   "Markdown")
+   "Less" "Markdown" "SCSS" "YAML")
   (:features)
   (:format
    (format-all--buffer-easy
