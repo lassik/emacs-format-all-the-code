@@ -119,6 +119,7 @@
 (require 'cl-lib)
 (require 'inheritenv)
 (require 'language-id)
+(require 'project)
 
 (defgroup format-all nil
   "Lets you auto-format source code."
