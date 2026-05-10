@@ -1476,16 +1476,21 @@ and waits until the server is accepting connections."
   (:languages "Shell")
   (:features)
   (:format
-   (format-all--buffer-easy
-    executable
-    (if (buffer-file-name)
-        (list "-filename" (buffer-file-name))
-      (list "-ln" (cl-case (and (eql major-mode 'sh-mode)
-                                (boundp 'sh-shell)
-                                (symbol-value 'sh-shell))
-                    (bash "bash")
-                    (mksh "mksh")
-                    (t "posix")))))))
+   (let ((sh-shell (and (derived-mode-p 'sh-mode)
+                        (bound-and-true-p sh-shell))))
+     (format-all--buffer-easy
+      executable
+      (if (buffer-file-name)
+          (list "-filename"
+                (cl-case sh-shell
+                  (bash (concat (buffer-file-name) ".bash"))
+                  (mksh (concat (buffer-file-name) ".mksh"))
+                  (sh (concat (buffer-file-name) ".sh"))
+                  (t (buffer-file-name))))
+        (list "-ln" (cl-case sh-shell
+                      (bash "bash")
+                      (mksh "mksh")
+                      (t "posix"))))))))
 
 (define-format-all-formatter snakefmt
   (:executable "snakefmt")
