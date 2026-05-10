@@ -705,6 +705,7 @@ Consult the existing formatters for examples of BODY."
             "-")))
 
 (defun format-all--get-unused-port ()
+  "Internal helper to obtain a free TCP port number from the OS."
   (let (process contact)
     (setq process
           (make-network-process
@@ -732,6 +733,10 @@ Consult the existing formatters for examples of BODY."
     (file-error nil)))
 
 (defun format-all--blackd-ensure-process (executable)
+  "Internal helper to start blackd as EXECUTABLE on a free port if not running.
+
+Updates `format-all--blackd-process' and `format-all--blackd-port',
+and waits until the server is accepting connections."
   (when (and format-all--blackd-process
              (not (process-live-p format-all--blackd-process)))
     (delete-process format-all--blackd-process)
