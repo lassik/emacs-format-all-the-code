@@ -720,6 +720,95 @@ Consult the existing formatters for examples of BODY."
               (line-number-at-pos (cdr region))))
     "-")))
 
+(defun format-all--get-unused-port ()
+  "Internal helper to obtain a free TCP port number from the OS."
+  (let (process contact)
+    (setq process
+          (make-network-process
+           :name "get-any-port"
+           :server t
+           :host 'local
+           :service t
+           :noquery t))
+    (unwind-protect
+        (progn
+          (setq contact (process-contact process t t))
+          (plist-get contact :service))
+      (delete-process process))))
+
+(defvar format-all--blackd-port nil)
+(defvar format-all--blackd-process nil)
+
+(defun format-all--check-port-ready (port)
+  "Internal helper to test whether localhost is accepting connections on PORT."
+  (condition-case nil
+      (progn
+        (delete-process
+         (open-network-stream "server-check" nil "localhost" port :type 'plain))
+        t)
+    (file-error nil)))
+
+(defun format-all--blackd-ensure-process (executable)
+  "Internal helper to start blackd as EXECUTABLE on a free port if not running.
+
+Updates `format-all--blackd-process' and `format-all--blackd-port',
+and waits until the server is accepting connections."
+  (when (and format-all--blackd-process
+             (not (process-live-p format-all--blackd-process)))
+    (delete-process format-all--blackd-process)
+    (setq format-all--blackd-process nil))
+  (unless format-all--blackd-process
+    (setq format-all--blackd-port (number-to-string (format-all--get-unused-port)))
+    (setq format-all--blackd-process
+          (make-process
+           :name "blackd"
+           :connection-type 'pipe
+           :buffer " *blackd*"
+           :coding 'no-conversion
+           :command (list executable
+                          "--bind-host" "localhost"
+                          "--bind-port" format-all--blackd-port)
+           :noquery t))
+    (while (not (format-all--check-port-ready format-all--blackd-port))
+      (when (not (process-live-p format-all--blackd-process))
+        (delete-process format-all--blackd-process)
+        (setq format-all--blackd-process nil)
+        (error "blackd crashed. see buffer ` *blackd*` for more details."))
+      (sleep-for 0.1))))
+
+(eval-when-compile
+  (require 'url-http))
+
+(define-format-all-formatter blackd
+  (:executable "blackd")
+  (:install "pip install black[d]")
+  (:languages "Python")
+  (:features)
+  (:format
+   (let ((is-pyi (format-all--buffer-extension-p "pyi"))
+         (coding buffer-file-coding-system))
+     (format-all--buffer-thunk
+      (lambda (input)
+        (format-all--blackd-ensure-process executable)
+        (let* ((url-request-method "POST")
+               (url-request-data (encode-coding-string input coding))
+               (url (concat "http://localhost:" format-all--blackd-port))
+               (url-request-extra-headers (when is-pyi '(("X-Python-Variant" . "pyi"))))
+               (res (url-retrieve-synchronously url 'silent 'inhibit-cookies))
+               (status (with-current-buffer res (bound-and-true-p url-http-response-status))))
+          (pcase status
+            (204 (progn
+                   (insert input)
+                   (list nil "")))
+            (200 (progn
+                   (url-insert-buffer-contents res url)
+                   (list nil "")))
+            (_ (progn
+                 (list t
+                       (with-temp-buffer
+                         (url-insert-buffer-contents res url)
+                         (buffer-string))))))))))))
+
 (define-format-all-formatter brittany
   (:executable "brittany")
   (:install "stack install brittany")
