@@ -743,7 +743,9 @@ Consult the existing formatters for examples of BODY."
            :connection-type 'pipe
            :buffer " *blackd*"
            :coding 'no-conversion
-           :command (list executable "--bind-port" format-all--blackd-port)
+           :command (list executable
+                          "--bind-host" "localhost"
+                          "--bind-port" format-all--blackd-port)
            :noquery t))
     (while (not (format-all--check-port-ready))
       (when (not (process-live-p format-all--blackd-process))
