@@ -737,8 +737,8 @@ Consult the existing formatters for examples of BODY."
           (plist-get contact :service))
       (delete-process process))))
 
-(defvar format-all--blackd-port nil)
-(defvar format-all--blackd-process nil)
+(defvar format-all--blackd-daemon (cons nil nil)
+  "State for the blackd daemon as a (PROCESS . PORT) cons.")
 
 (defun format-all--check-port-ready (port)
   "Internal helper to test whether localhost is accepting connections on PORT."
@@ -749,33 +749,68 @@ Consult the existing formatters for examples of BODY."
         t)
     (file-error nil)))
 
+(defun format-all--wait-for-port (port process timeout)
+  "Internal helper to block until localhost is accepting connections on PORT.
+
+PROCESS is the daemon being waited for; signal an error if it
+dies before the port becomes ready.  Signal an error if PORT is
+not ready within TIMEOUT seconds."
+  (let ((deadline (+ (float-time) timeout)))
+    (while (not (format-all--check-port-ready port))
+      (unless (process-live-p process)
+        (error "Process %S exited before port %s became ready"
+               (process-name process) port))
+      (when (> (float-time) deadline)
+        (error "Port %s did not become ready within %s seconds"
+               port timeout))
+      (sleep-for 0.1))))
+
+(defun format-all--ensure-daemon (state make-process-fn timeout)
+  "Internal helper to keep a localhost TCP daemon running.
+
+STATE is a (PROCESS . PORT) cons cell that holds the daemon's
+state across calls.  If the process slot is missing or dead, a
+free port is allocated, MAKE-PROCESS-FN is called with that port
+to start a new process, and the function blocks until the daemon
+accepts connections on that port or TIMEOUT seconds elapse.
+MAKE-PROCESS-FN receives the chosen port as a string and must
+return the started process.  Returns STATE."
+  (let ((process (car state)))
+    (when (and process (not (process-live-p process)))
+      (delete-process process)
+      (setcar state nil)))
+  (unless (car state)
+    (let* ((port (number-to-string (format-all--get-unused-port)))
+           (process (funcall make-process-fn port)))
+      (setcar state process)
+      (setcdr state port)
+      (condition-case err
+          (format-all--wait-for-port port process timeout)
+        (error
+         (when (process-live-p process)
+           (delete-process process))
+         (setcar state nil)
+         (signal (car err) (cdr err))))))
+  state)
+
 (defun format-all--blackd-ensure-process (executable)
   "Internal helper to start blackd as EXECUTABLE on a free port if not running.
 
-Updates `format-all--blackd-process' and `format-all--blackd-port',
-and waits until the server is accepting connections."
-  (when (and format-all--blackd-process
-             (not (process-live-p format-all--blackd-process)))
-    (delete-process format-all--blackd-process)
-    (setq format-all--blackd-process nil))
-  (unless format-all--blackd-process
-    (setq format-all--blackd-port (number-to-string (format-all--get-unused-port)))
-    (setq format-all--blackd-process
-          (make-process
-           :name "blackd"
-           :connection-type 'pipe
-           :buffer " *blackd*"
-           :coding 'no-conversion
-           :command (list executable
-                          "--bind-host" "localhost"
-                          "--bind-port" format-all--blackd-port)
-           :noquery t))
-    (while (not (format-all--check-port-ready format-all--blackd-port))
-      (when (not (process-live-p format-all--blackd-process))
-        (delete-process format-all--blackd-process)
-        (setq format-all--blackd-process nil)
-        (error "blackd crashed. see buffer ` *blackd*` for more details."))
-      (sleep-for 0.1))))
+Updates `format-all--blackd-daemon' and waits until the server is
+accepting connections."
+  (format-all--ensure-daemon
+   format-all--blackd-daemon
+   (lambda (port)
+     (make-process
+      :name "blackd"
+      :connection-type 'pipe
+      :buffer " *blackd*"
+      :coding 'no-conversion
+      :command (list executable
+                     "--bind-host" "localhost"
+                     "--bind-port" port)
+      :noquery t))
+   10.0))
 
 (eval-when-compile
   (require 'url-http))
@@ -793,7 +828,7 @@ and waits until the server is accepting connections."
         (format-all--blackd-ensure-process executable)
         (let* ((url-request-method "POST")
                (url-request-data (encode-coding-string input coding))
-               (url (concat "http://localhost:" format-all--blackd-port))
+               (url (concat "http://localhost:" (cdr format-all--blackd-daemon)))
                (url-request-extra-headers (when is-pyi '(("X-Python-Variant" . "pyi"))))
                (res (url-retrieve-synchronously url 'silent 'inhibit-cookies))
                (status (with-current-buffer res (bound-and-true-p url-http-response-status))))
