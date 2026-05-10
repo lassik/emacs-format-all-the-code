@@ -1,3 +1,5 @@
+(require 'cl-lib)
+
 (with-temp-buffer
   (insert-file-contents "../format-all.el")
   (let (forms)
