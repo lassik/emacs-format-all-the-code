@@ -1236,6 +1236,13 @@ accepting connections."
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
+(define-format-all-formatter meson-format
+  (:executable "meson")
+  (:install  "pip install meson")
+  (:languages "Meson")
+  (:features)
+  (:format (format-all--buffer-easy executable "format" "--editor-config" "-")))
+
 (define-format-all-formatter mix-format
   (:executable "mix")
   (:install (macos "brew install elixir"))
@@ -1262,13 +1269,6 @@ accepting connections."
   (:languages "Meson")
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-")))
-
-(define-format-all-formatter meson-format
-  (:executable "meson")
-  (:install  "pip install meson")
-  (:languages "Meson")
-  (:features)
-  (:format (format-all--buffer-easy executable "format" "--editor-config" "-")))
 
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
@@ -1534,6 +1534,13 @@ accepting connections."
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
+(define-format-all-formatter sqlfluff
+  (:executable "sqlfluff")
+  (:install "pip install sqlfluff")
+  (:languages "SQL")
+  (:features)
+  (:format (format-all--buffer-easy executable "fix" "--nocolor" "--dialect=postgres" "-")))
+
 (define-format-all-formatter sqlformat
   (:executable "sqlformat")
   (:install "pip install sqlparse")
@@ -1549,13 +1556,6 @@ accepting connections."
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
      (format-all--buffer-easy executable "--encoding" ienc "-"))))
-
-(define-format-all-formatter sqlfluff
-  (:executable "sqlfluff")
-  (:install "pip install sqlfluff")
-  (:languages "SQL")
-  (:features)
-  (:format (format-all--buffer-easy executable "fix" "--nocolor" "--dialect=postgres" "-")))
 
 (define-format-all-formatter standard
   (:executable "standard")
@@ -1672,18 +1672,18 @@ accepting connections."
     (when (buffer-file-name)
       (list "--stdin-filename" (buffer-file-name))))))
 
+(define-format-all-formatter typstfmt
+  (:executable "typstfmt")
+  (:install (macos "brew install typstfmt"))
+  (:languages "Typst")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
 (define-format-all-formatter typstyle
   (:executable "typstyle")
   (:install
    (macos "brew install typstyle")
    (windows "scoop install typstyle"))
-  (:languages "Typst")
-  (:features)
-  (:format (format-all--buffer-easy executable)))
-
-(define-format-all-formatter typstfmt
-  (:executable "typstfmt")
-  (:install (macos "brew install typstfmt"))
   (:languages "Typst")
   (:features)
   (:format (format-all--buffer-easy executable)))
