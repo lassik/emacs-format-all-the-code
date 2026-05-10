@@ -946,7 +946,6 @@ and waits until the server is accepting connections."
                                '(("JavaScript" . "js")
                                  ("TypeScript" . "ts")
                                  ("JSON5" . "jsonc")
-                                 ("HTML" . "html")                                 
                                  ("Markdown" . "md")))))
               (if pair (cdr pair) (downcase language)))
     "-")))
