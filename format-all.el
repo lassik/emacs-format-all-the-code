@@ -722,11 +722,12 @@ Consult the existing formatters for examples of BODY."
 (defvar format-all--blackd-port nil)
 (defvar format-all--blackd-process nil)
 
-(defun format-all--check-port-ready ()
+(defun format-all--check-port-ready (port)
+  "Internal helper to test whether localhost is accepting connections on PORT."
   (condition-case nil
       (progn
         (delete-process
-         (open-network-stream "server-check" nil "localhost" format-all--blackd-port :type 'plain))
+         (open-network-stream "server-check" nil "localhost" port :type 'plain))
         t)
     (file-error nil)))
 
@@ -747,7 +748,7 @@ Consult the existing formatters for examples of BODY."
                           "--bind-host" "localhost"
                           "--bind-port" format-all--blackd-port)
            :noquery t))
-    (while (not (format-all--check-port-ready))
+    (while (not (format-all--check-port-ready format-all--blackd-port))
       (when (not (process-live-p format-all--blackd-process))
         (delete-process format-all--blackd-process)
         (setq format-all--blackd-process nil)
