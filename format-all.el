@@ -81,7 +81,7 @@
 ;; - Racket (raco-fmt)
 ;; - Reason (bsrefmt)
 ;; - ReScript (rescript)
-;; - Ruby (rubocop, rufo, standardrb, stree)
+;; - Ruby (rubocop, rubyfmt, rufo, standardrb, stree)
 ;; - Rust (rustfmt)
 ;; - Scala (scalafmt)
 ;; - Shell script (beautysh, shfmt)
@@ -1317,6 +1317,18 @@ Consult the existing formatters for examples of BODY."
     "--format" "quiet"
     "--stderr"
     "--stdin" (or (buffer-file-name) (buffer-name)))))
+
+(define-format-all-formatter rubyfmt
+  (:executable "rubyfmt")
+  (:install
+   (macos "brew install rubyfmt"))
+  (:languages "Ruby")
+  (:features)
+  (:format
+   (format-all--buffer-easy
+    executable
+    (when (buffer-file-name)
+      (list "--stdin-filepath" (buffer-file-name))))))
 
 (define-format-all-formatter ruff
   (:executable "ruff")
