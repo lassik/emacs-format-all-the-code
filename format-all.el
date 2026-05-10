@@ -119,6 +119,7 @@
 (require 'cl-lib)
 (require 'inheritenv)
 (require 'language-id)
+(require 'project)
 
 (defgroup format-all nil
   "Lets you auto-format source code."
@@ -1236,6 +1237,13 @@ accepting connections."
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
+(define-format-all-formatter meson-format
+  (:executable "meson")
+  (:install  "pip install meson")
+  (:languages "Meson")
+  (:features)
+  (:format (format-all--buffer-easy executable "format" "--editor-config" "-")))
+
 (define-format-all-formatter mix-format
   (:executable "mix")
   (:install (macos "brew install elixir"))
@@ -1262,13 +1270,6 @@ accepting connections."
   (:languages "Meson")
   (:features)
   (:format (format-all--buffer-easy executable "fmt" "-")))
-
-(define-format-all-formatter meson-format
-  (:executable "meson")
-  (:install  "pip install meson")
-  (:languages "Meson")
-  (:features)
-  (:format (format-all--buffer-easy executable "format" "--editor-config" "-")))
 
 (define-format-all-formatter nginxfmt
   (:executable "nginxfmt")
@@ -1534,6 +1535,13 @@ accepting connections."
   (:features)
   (:format (format-all--buffer-easy executable "-")))
 
+(define-format-all-formatter sqlfluff
+  (:executable "sqlfluff")
+  (:install "pip install sqlfluff")
+  (:languages "SQL")
+  (:features)
+  (:format (format-all--buffer-easy executable "fix" "--nocolor" "--dialect=postgres" "-")))
+
 (define-format-all-formatter sqlformat
   (:executable "sqlformat")
   (:install "pip install sqlparse")
@@ -1549,13 +1557,6 @@ accepting connections."
           (process-environment (cons (concat "PYTHONIOENCODING=" oenc)
                                      process-environment)))
      (format-all--buffer-easy executable "--encoding" ienc "-"))))
-
-(define-format-all-formatter sqlfluff
-  (:executable "sqlfluff")
-  (:install "pip install sqlfluff")
-  (:languages "SQL")
-  (:features)
-  (:format (format-all--buffer-easy executable "fix" "--nocolor" "--dialect=postgres" "-")))
 
 (define-format-all-formatter standard
   (:executable "standard")
@@ -1672,18 +1673,18 @@ accepting connections."
     (when (buffer-file-name)
       (list "--stdin-filename" (buffer-file-name))))))
 
+(define-format-all-formatter typstfmt
+  (:executable "typstfmt")
+  (:install (macos "brew install typstfmt"))
+  (:languages "Typst")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
 (define-format-all-formatter typstyle
   (:executable "typstyle")
   (:install
    (macos "brew install typstyle")
    (windows "scoop install typstyle"))
-  (:languages "Typst")
-  (:features)
-  (:format (format-all--buffer-easy executable)))
-
-(define-format-all-formatter typstfmt
-  (:executable "typstfmt")
-  (:install (macos "brew install typstfmt"))
   (:languages "Typst")
   (:features)
   (:format (format-all--buffer-easy executable)))
@@ -2074,12 +2075,12 @@ The mode is buffer-local and needs to be enabled separately each
 time a file is visited. You may want to use `add-hook' in your
 `user-init-file' to enable the mode based on buffer modes. E.g.:
 
-    (add-hook 'prog-mode-hook 'format-all-mode)
+    (add-hook \\='prog-mode-hook \\='format-all-mode)
 
 To use a default formatter for projects that don't have one, add
 this too:
 
-    (add-hook 'prog-mode-hook 'format-all-ensure-formatter)
+    (add-hook \\='prog-mode-hook \\='format-all-ensure-formatter)
 
 When `format-all-mode' is called as a Lisp function, the mode is
 toggled if ARG is ‘toggle’, disabled if ARG is a negative integer

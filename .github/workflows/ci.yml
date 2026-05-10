@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  prep:
+    name: Discover Emacs versions
+    runs-on: ubuntu-latest
+    outputs:
+      emacs_versions: ${{ steps.discover.outputs.versions }}
+    steps:
+      - id: discover
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api repos/purcell/nix-emacs-ci/contents/flake.nix \
+            --jq '.content' | base64 -d > flake.nix
+          versions="$(grep -oE 'emacs-[0-9]+\.[0-9]+\.tar\.xz' flake.nix \
+            | sed 's/emacs-//;s/\.tar\.xz//' \
+            | awk -F. '{
+                if (!($1 in seen) || $0 > seen[$1]) seen[$1] = $0
+              } END {
+                for (k in seen) print seen[k]
+              }' \
+            | sort -V -r \
+            | head -n 2 \
+            | sort -V \
+            | jq -R -s -c 'split("\n") | map(select(. != ""))')"
+          echo "versions=${versions}" >> "$GITHUB_OUTPUT"
+          echo "Selected Emacs versions: ${versions}"
+
+  test:
+    name: Test (Emacs ${{ matrix.emacs_version }})
+    needs: prep
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs_version: ${{ fromJSON(needs.prep.outputs.emacs_versions) }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Emacs ${{ matrix.emacs_version }}
+        uses: purcell/setup-emacs@v8.0
+        with:
+          version: ${{ matrix.emacs_version }}
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          emacs --batch \
+            --eval "(require 'package)" \
+            --eval "(add-to-list 'package-archives '(\"melpa\" . \"https://melpa.org/packages/\"))" \
+            --eval "(package-initialize)" \
+            --eval "(package-refresh-contents)" \
+            --eval "(package-install 'inheritenv)" \
+            --eval "(package-install 'language-id)"
+
+      - name: Check formatter ordering
+        working-directory: admin
+        run: emacs --batch --script check.el
+
+      - name: Byte-compile
+        run: |
+          set -euo pipefail
+          emacs --batch \
+            --eval "(require 'package)" \
+            --eval "(add-to-list 'package-archives '(\"melpa\" . \"https://melpa.org/packages/\"))" \
+            --eval "(package-initialize)" \
+            --eval "(setq byte-compile-error-on-warn t)" \
+            -f batch-byte-compile format-all.el
