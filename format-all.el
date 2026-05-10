@@ -763,13 +763,13 @@ Consult the existing formatters for examples of BODY."
   (:languages "Python")
   (:features)
   (:format
-   (let ((is-pyi (format-all--buffer-extension-p "pyi")))
+   (let ((is-pyi (format-all--buffer-extension-p "pyi"))
+         (coding buffer-file-coding-system))
      (format-all--buffer-thunk
       (lambda (input)
         (format-all--blackd-ensure-process executable)
         (let* ((url-request-method "POST")
-               ;; this currently use the coding system for the temp buffer rather than the original buffer
-               (url-request-data (encode-coding-string input buffer-file-coding-system))
+               (url-request-data (encode-coding-string input coding))
                (url (concat "http://localhost:" format-all--blackd-port))
                (url-request-extra-headers (when is-pyi '(("X-Python-Variant" . "pyi"))))
                (res (url-retrieve-synchronously url 'silent 'inhibit-cookies))
