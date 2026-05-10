@@ -182,7 +182,7 @@
     ("PHP" prettier)
     ("Protocol Buffer" clang-format)
     ("PureScript" purty)
-    ("Python" black blackd)
+    ("Python" black)
     ("R" styler)
     ("Reason" bsrefmt)
     ("ReScript" rescript)
