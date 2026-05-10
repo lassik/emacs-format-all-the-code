@@ -2075,12 +2075,12 @@ The mode is buffer-local and needs to be enabled separately each
 time a file is visited. You may want to use `add-hook' in your
 `user-init-file' to enable the mode based on buffer modes. E.g.:
 
-    (add-hook 'prog-mode-hook 'format-all-mode)
+    (add-hook \\='prog-mode-hook \\='format-all-mode)
 
 To use a default formatter for projects that don't have one, add
 this too:
 
-    (add-hook 'prog-mode-hook 'format-all-ensure-formatter)
+    (add-hook \\='prog-mode-hook \\='format-all-ensure-formatter)
 
 When `format-all-mode' is called as a Lisp function, the mode is
 toggled if ARG is ‘toggle’, disabled if ARG is a negative integer
