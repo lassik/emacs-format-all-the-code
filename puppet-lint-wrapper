@@ -1,0 +1,7 @@
+#! /bin/sh
+
+t=$(mktemp)
+cat >$t
+puppet-lint --fix $t | egrep -v "^(FIXED|WARNING|ERROR):"
+cat $t
+rm -f $t
