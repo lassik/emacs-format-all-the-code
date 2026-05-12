@@ -51,8 +51,9 @@
 ;; - F# (fantomas)
 ;; - Fish Shell (fish_indent)
 ;; - Fortran Free Form (fprettify)
-;; - Gleam (gleam format)
+;; - GDScript (gdscript-formatter)
 ;; - GLSL (clang-format)
+;; - Gleam (gleam format)
 ;; - Go (gofmt, goimports)
 ;; - GraphQL (prettier, prettierd)
 ;; - Haskell (brittany, fourmolu, hindent, ormolu, stylish-haskell)
@@ -158,6 +159,7 @@
     ("GLSL" clang-format)
     ("Go" gofmt)
     ("GraphQL" prettier)
+    ("GDScript" gdscript-formatter)
     ("Haskell" brittany)
     ("HCL" hclfmt)
     ("HLSL" clang-format)
@@ -1112,6 +1114,13 @@ accepting connections."
   (:languages "Awk")
   (:features)
   (:format (format-all--buffer-easy executable "-f" "-" "--pretty-print=-")))
+
+(define-format-all-formatter gdscript-formatter
+  (:executable "gdscript-formatter")
+  (:install)
+  (:languages "GDScript")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
 
 (define-format-all-formatter gleam
   (:executable "gleam")
