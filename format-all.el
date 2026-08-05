@@ -342,6 +342,7 @@ the rules for an entire source tree can be given in one file.")
     (error "Formatter chain is not a proper list: %S" chain))
   (mapcar #'format-all--normalize-formatter chain))
 
+;;;###autoload
 (defun format-all-valid-formatters-p (formatters)
   "Return t if FORMATTERS is a valid value for `format-all-formatters'."
   (and (format-all--proper-list-p formatters)
@@ -358,6 +359,7 @@ the rules for an entire source tree can be given in one file.")
                 (cdr chain))))
         formatters)))
 
+;;;###autoload
 (put 'format-all-formatters 'safe-local-variable
      'format-all-valid-formatters-p)
 
