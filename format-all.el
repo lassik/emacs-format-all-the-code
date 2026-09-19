@@ -70,6 +70,7 @@
 ;; - LaTeX (latexindent, auctex)
 ;; - Ledger (ledger-mode)
 ;; - Lua (lua-fmt, stylua, prettier plugin)
+;; - Makefile (mbake)
 ;; - Markdown (prettier, prettierd, deno, markdownfmt, mdformat, oxfmt)
 ;; - Meson (muon fmt, meson format)
 ;; - Nginx (nginxfmt)
@@ -124,7 +125,8 @@
 (require 'project)
 
 (defconst format-all--language-id-definitions
-  '(("GDScript" gdscript-mode))
+  '(("GDScript" gdscript-mode)
+    ("Makefile" makefile-mode makefile-gmake-mode))
   "Language definitions not yet available in language-id.")
 
 (cl-loop for (language . modes) in format-all--language-id-definitions
@@ -188,6 +190,7 @@
     ("Less" prettier)
     ("Literate Haskell" brittany)
     ("Lua" lua-fmt)
+    ("Makefile" mbake)
     ("Markdown" prettier)
     ("Meson" muon-fmt)
     ("Nix" nixpkgs-fmt)
@@ -1248,6 +1251,13 @@ accepting connections."
   (:languages "Markdown")
   (:features)
   (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter mbake
+  (:executable "mbake")
+  (:install "pip install mbake")
+  (:languages "Makefile")
+  (:features)
+  (:format (format-all--buffer-easy executable "format" "--stdin")))
 
 (define-format-all-formatter mdformat
   (:executable "mdformat")
