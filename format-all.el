@@ -64,7 +64,8 @@
 ;; - Hy (Emacs)
 ;; - Java (astyle, clang-format, google-java-format)
 ;; - JavaScript/JSON/JSX (prettier, standard, prettierd, deno, oxfmt)
-;; - JSON5 (prettier, deno, oxfmt)
+;; - JSON (fixjson)
+;; - JSON5 (prettier, deno, oxfmt, fixjson)
 ;; - Jsonnet (jsonnetfmt)
 ;; - Kotlin (ktlint)
 ;; - LaTeX (latexindent, auctex)
@@ -1097,6 +1098,13 @@ accepting connections."
   (:executable "fish_indent")
   (:install (macos "brew install fish OR port install fish"))
   (:languages "Fish")
+  (:features)
+  (:format (format-all--buffer-easy executable)))
+
+(define-format-all-formatter fixjson
+  (:executable "fixjson")
+  (:install "npm install --global fixjson")
+  (:languages "JSON" "JSON5")
   (:features)
   (:format (format-all--buffer-easy executable)))
 
